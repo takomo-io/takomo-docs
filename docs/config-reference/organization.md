@@ -7,15 +7,16 @@ keywords:
   - configuration
 ---
 
-This page describes properties available in organization configuration file.
+import OrgConfigReferenceTable from '@site/src/components/OrgConfigReferenceTable';
+import { awsServicePrincipals } from '@site/src/components/Constants';
 
-### Available Properties
-
-Here are the available properties: 
+This page describes properties available in an organization configuration file.
 
 - [accountAdminRoleName](#accountadminrolename)
 - [accountBootstrapRoleName](#accountbootstraprolename)
 - [accountCreation](#accountcreation)
+- [aiServicesOptOutPolicies](#aiservicesoptoutpolicies)
+- [backupPolicies](#backuppolicies)
 - [configSets](#configsets)
 - [masterAccountId](#masteraccountid)
 - [organizationAdminRoleName](#organizationadminrolename)
@@ -25,39 +26,18 @@ Here are the available properties:
 - [trustedAwsServices](#trustedawsservices)
 - [vars](#vars)
 
-### Property Documentation
-
-Following information is documented for each property:
-
-#### Type
-
-Allowed type or types for the property value. Possible values: `string`, `number`, `boolean`, `object` or array of the aforementioned, e.g. `string[]`, or `any` which can be any other type except an array.
-
-#### Required
-
-Is the property required. Possible values: `yes`, `no` or `conditional`.
-
-#### Default value
-
-If no value is given for the property, this value will be used. If this is set as `computed`, then detailed information on how the default value is computed is found under the property's description.
-
-#### Requirements
-
-What requirements the property value must satisfy.
-
-#### Since
-
-In which Takomo version the property was introduced. If omitted, then the property was introduced in Takomo 1.0.0.
-
 ## accountAdminRoleName
 
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-- Requirements:
-  - Must be a valid role name
-
 The default IAM role name to be used to [deploy](../command-line-usage/organization-accounts.md#deploy-accounts) and [undeploy](../command-line-usage/organization-accounts.md#undeploy-accounts) accounts. Organizational units and individual accounts can override this value.
+
+<OrgConfigReferenceTable 
+    required={false} 
+    types='string'
+    defaultValue='computed (see below)' 
+    requirements='Must be a valid role name'
+/>
+
+### Default value
 
 If no value is given, value from [accountCreation.defaults.roleName](#accountcreation-defaults-rolename) is used, and if that is not defined, `OrganizationAccountAccessRole` is used.
 
@@ -71,13 +51,16 @@ accountAdminRoleName: MyDeployerRole
 
 ## accountBootstrapRoleName
 
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-- Requirements:
-  - Must be a valid role name
-
 The default IAM role name to be used to [bootstrap](../command-line-usage/organization-accounts.md#bootstrap-accounts) and [tear down](../command-line-usage/organization-accounts.md#tear-down-accounts) accounts. Organizational units and individual accounts can override this value.
+
+<OrgConfigReferenceTable 
+    required={false} 
+    types='string'
+    defaultValue='computed (see below)' 
+    requirements='Must be a valid role name'
+/>
+
+### Default value
 
 If no value is given, value from [accountCreation.defaults.roleName](#accountcreation-defaults-rolename) is used, and if that is not defined, `OrganizationAccountAccessRole` is used.
 
@@ -91,72 +74,38 @@ accountBootstrapRoleName: MyBootstrapRole
 
 ## accountCreation
 
-- Type: `object`
-- Required: `no`
-- Default value:
-  ```yaml
-  defaults:
-    iamUserAccessToBilling: true
-    roleName: OrganizationAccountAccessRole
-  ```
-
 Constraints and default values used with account creation. 
  
-#### accountCreation.defaults
+<OrgConfigReferenceTable 
+    required={false} 
+    types={<a href='#account-creation-object'>Account Creation Object</a>}
+    defaultValue='computed (see below)' 
+/> 
 
-- Type: `object`
-- Required: `no`
-- Default value:  
-  ```yaml
-  iamUserAccessToBilling: true
-  roleName: OrganizationAccountAccessRole
-  ```
+### Account Creation Object
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| defaults    | no | [Account Creation Defaults Object](#account-creation-defaults-object) | Default settings for account creation, used when creating new accounts. |
+| constraints | no | [Account Creation Constraints Object](#account-creation-constraints-object) | Account creation constraints used to validate input values given when a new account is being created. |
+ 
+### Account Creation Defaults Object
 
 Default settings for account creation, used when creating new accounts.
 
-#### accountCreation.defaults.iamUserAccessToBilling
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| iamUserAccessToBilling | no | boolean | Boolean defining if IAM user access account billing information should be enabled. Defaults to **true**. |
+| roleName | no | string | Name of the IAM role used to manage the new accounts. Defaults to **OrganizationAccountAccessRole** |
 
-- Type: `boolean`
-- Required: `no`
-- Default value: `true`
-
-Boolean defining if IAM user access account billing information should be enabled.
-
-#### accountCreation.defaults.roleName
-
-- Type: `string`
-- Required: `no`
-- Default value: `OrganizationAccountAccessRole`
-
-Name of the IAM role used to manage the new accounts.
-
-#### accountCreation.constraints
-
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
+### Account Creation Constraints Object
 
 Account creation constraints used to validate input values given when a new account is being created.
 
-#### accountCreation.constraints.namePattern
-
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-- Requirements:
-  - Must be a valid regex expression
-
-A regex pattern to validate name of the new account being created.
-
-#### accountCreation.constraints.emailPattern
-
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-- Requirements:
-  - Must be a valid regex expression
-
-A regex pattern to validate email of the new account being created.
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| namePattern | no | string | A regex pattern to validate name of the new account being created. |
+| emailPattern | no | string | A regex pattern to validate email of the new account being created. |
 
 ### Examples
 
@@ -172,59 +121,138 @@ accountCreation:
     emailPattern: ^.*@acme.com$
 ```
 
-## configSets
+## aiServicesOptOutPolicies
 
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
+AI Services Opt-Out policies.
 
-Configuration for config sets.
+<OrgConfigReferenceTable 
+    since='v2.5.0'
+    required={false}
+    types={<a href='#ai-services-opt-out-policies-object'>AI Services Opt-Out Policies Object</a>}
+    defaultValue='undefined'
+/>    
 
-Config sets configuration is an object where keys are names for the config sets and values are configuration objects for the corresponding config set.
+### AI Services Opt-Out Policies Object
 
-#### configSets.&lt;name&gt;
+AI services opt-out policies configuration is an object where keys are names for the AI services opt-out policies and values are configuration objects for the corresponding policy. The AI services opt-out policy name is used to find the actual policy file from the `organization/ai-services-opt-out-policies` directory.
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements:
-  - minimun length is 1
-  - maximum length is 60
-  - must match pattern `/^[a-zA-Z_]+[a-zA-Z0-9-_]*$/`
-  - must be unique among config sets
+Requirements for AI services opt-out policy names:
 
-Name of the config set. Used to refer to the config set from organizational units and accounts. 
+- minimum minimum length is 1
+- maximum length is 128
+- must match pattern `/^[a-zA-Z0-9_-]+$/`
+- must be unique among AI services opt-out policies
 
-#### configSets.&lt;name&gt;.description
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {ai&nbsp;services&nbsp;opt-outpolicy&nbsp;name} | yes | [AI Services Opt-out Policy Object](#ai-services-opt-out-policy-object) | Configuration for the AI services opt-out policy. |
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
+### AI Services Opt-out Policy Object
 
-Mandatory description for the config set.
+Configuration for a single AI services opt-out policy.
 
-#### configSets.&lt;name&gt;.projectDir
-
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-- Since: `v2.1.0` 
-
-Optional file path to a directory containing Takomo configuration. Default value is the current project directory.
-
-#### configSets.&lt;name&gt;.commandPaths
-
-- Type: `string[]`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements:
-  - List values must be valid command paths
-
-A list of command paths that are executed when the config set is deployed/undeployed or bootstrapped/teared down.
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| description | yes | string | Mandatory description for the AI services opt-out policy. |
+| awsManaged | no | string | Optional boolean defining if the policy is managed by AWS. Defaults to **false**. |
 
 ### Examples
 
-Two config sets named `basic` and `cloudtrail`:
+Two AI services opt-out policies:
+
+```yaml
+aiServicesOptOutPolicies:
+  FooPolicy:
+    description: Some policy 
+  BarPolicy:
+    description: Another policy
+```
+
+## backupPolicies
+
+Organization backup policies.
+
+<OrgConfigReferenceTable 
+    since='v2.5.0'
+    required={false}
+    types={<a href='#backup-policies-object'>Backup Policies Object</a>}
+    defaultValue='undefined'
+/>    
+
+### Backup Policies Object
+
+Backup policies configuration is an object where keys are names for the backup policies and values are configuration objects for the corresponding policy. The backup policy name is used to find the actual policy file from the `organization/backup-policies` directory.
+
+Requirements for backup policy names:
+
+- minimum minimum length is 1
+- maximum length is 128
+- must match pattern `/^[a-zA-Z0-9_-]+$/`
+- must be unique among backup policies
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {backup&nbsp;policy&nbsp;name} | yes | [Backup Policy Object](#backup-policy-object) | Configuration for the backup policy. |
+
+### Backup Policy Object
+
+Configuration for a single backup policy.
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| description | yes | string | Mandatory description for the backup policy. |
+| awsManaged | no | string | Optional boolean defining if the policy is managed by AWS. Defaults to **false**. |
+
+### Examples
+
+Two backup policies:
+
+```yaml
+backupPolicies:
+  myBackupPolicy:
+    description: My backup policy 
+  anotherBackupPolicy:
+    description: Some backup policy
+```
+
+## configSets
+
+Configuration for config sets.
+
+<OrgConfigReferenceTable 
+    required={false} 
+    types={<a href='#config-sets-object'>Config Sets Object</a>}
+    defaultValue='undefined' 
+/> 
+
+### Config Sets Object
+
+Config sets configuration is an object where keys are names for the config sets and values are configuration objects for the corresponding config set. Config set names are used to refer to the config set from organizational units and accounts. 
+
+Requirements for config set names:
+
+- minimun length is 1
+- maximum length is 60
+- must match pattern `/^[a-zA-Z_]+[a-zA-Z0-9-_]*$/`
+- must be unique among config sets
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {config&nbsp;set&nbsp;name} | yes | [Config Set Object](#config-set-object) | Configuration for the config set. |
+
+### Config Set Object
+
+Configuration for a config set.
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| description | yes | string | Mandatory description for the config set. |
+| commandPaths | yes | string[] | A list of command paths that are executed when the config set is deployed/undeployed or bootstrapped/teared down. |
+| projectDir | no | string | Optional file path to a directory containing Takomo configuration. Defaults to the current project directory. Since Takomo v2.1.0. |
+
+### Examples
+
+Two config sets named **basic** and **cloudtrail**:
 
 ```yaml
 configSets:
@@ -252,18 +280,18 @@ configSets:
 
 ## masterAccountId
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements:
-  - Must be a valid AWS account id
+Organization master account id. Used to ensure that organization management operations target the correct AWS organization.
   
-Organization master account id. Used to ensure that organization management 
-operations target the correct AWS organization.
-  
+<OrgConfigReferenceTable 
+    required={true}
+    types='string'
+    defaultValue='undefined' 
+    requirements='Must be a valid AWS account id'
+/>  
+
 ### Examples
 
-Master account id `111111111111`.
+Master account id **111111111111**.
 
 ```yaml
 masterAccountId: "111111111111"
@@ -271,17 +299,16 @@ masterAccountId: "111111111111"
   
 ## organizationAdminRoleName
 
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-- Requirements:
-  - Must be a valid role name
-  
-Name of the IAM role used to perform organization management operations againts the 
-organization. 
+Name of the IAM role used to perform organization management operations against the organization. If no value is given, the current AWS credentials in terminal session are used.
+                                                                                                    
+<OrgConfigReferenceTable 
+    required={false}
+    types='string'
+    defaultValue='undefined' 
+    requirements='Must be a valid role name'
+/>    
 
-If no value is given, the current AWS credentials in terminal session are used.
-  
+
 ### Examples
 
 Use role name `MyOrganizationAdminRole`.
@@ -292,211 +319,83 @@ organizationAdminRoleName: MyOrganizationAdminRole
 
 ## organizationalUnits
 
-- Type: `object`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements: 
-  - At least `Root` organizational unit must be defined
-
 Organizational units.
+
+<OrgConfigReferenceTable 
+    required={true} 
+    types={<a href='#organizational-units-object'>Organizational Units Object</a>}
+    defaultValue='undefined' 
+    requirements='At least the "Root" organizational unit must be defined'
+/> 
+
+### Organizational Units Object
 
 Configuration is an object where keys are paths for the organizational units and values are configuration objects for the corresponding organizational units.
 
-#### organizationalUnits.&lt;path&gt;
-
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements:
-  - Must match regex `/^Root(\/[a-zA-Z0-9-_/ ]+)?$/`
-  - Max depth for organization hierarchy is 5
-
-Path of the organizational unit.
-
-#### organizationalUnits.&lt;path&gt;.accountAdminRoleName
-
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-
-The IAM role name to be used to manage accounts belonging to the organizational unit. If no value is given, then value from the top-level [accountAdminRoleName](#accountadminrolename) is used.
-
-#### organizationalUnits.&lt;path&gt;.accountBootstrapRoleName
-
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-
-The IAM role name to be used to bootstrap accounts belonging to the organizational unit. If no value is given, then value from the top-level [accountBootstrapRoleName](#accountbootstraprolename) is used.
-
-#### organizationalUnits.&lt;path&gt;.accounts
-
-- Type: `any[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of accounts that belong to the organizational unit. Values in the list can be either plain account ids or objects.
-
-#### organizationalUnits.&lt;path&gt;.accounts.accountAdminRoleName
-
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-
-The IAM role name to be used to manage the account. If no value is given, then value from the parent organizational unit's [accountAdminRoleName](#organizationalunits-path-accountadminrolename) is used.
-
-#### organizationalUnits.&lt;path&gt;.accounts.accountBootstrapRoleName
-
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-
-The IAM role name to be used to bootstrap the account. If no value is given, then value from the parent organizational unit's [accountBootstrapRoleName](#organizationalunits-path-accountbootstraprolename) is used.
-
-#### organizationalUnits.&lt;path&gt;.accounts.bootstrapConfigSets
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of config sets to run when the account is bootstrapped.
-
-#### organizationalUnits.&lt;path&gt;.accounts.configSets
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of config sets to run when the account is deployed.
-
-#### organizationalUnits.&lt;path&gt;.accounts.description
-
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-
-Description for the account.
-
-#### organizationalUnits.&lt;path&gt;.accounts.email
-
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-
-Root email of the account.
-
-#### organizationalUnits.&lt;path&gt;.accounts.id
-
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
-
-Id of the account.
-
-#### organizationalUnits.&lt;path&gt;.accounts.name
-
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-
-Name of the account.
-
-#### organizationalUnits.&lt;path&gt;.accounts.serviceControlPolicies
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of service control policies to attach to the account.
-
-#### organizationalUnits.&lt;path&gt;.accounts.status
-
-- Type: `string`
-- Required: `no`
-- Default value: `active`
-- Requirements:
-  - Allowed values:
-    - `active` - The account is included to organization accounts operations
-    - `disabled` - The account is excluded from organization accounts operations
-    - `suspended` - The account is suspended and excluded from organization accounts operations 
-
-Account status. Used to define if the account should be included in organization accounts deploy/undeploy and bootstrap/tear down operations.
-
-#### organizationalUnits.&lt;path&gt;.accounts.tagPolicies
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of tag policies to attach to the account.
-
-#### organizationalUnits.&lt;path&gt;.accounts.vars
-
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
-
-Variables object.
-
-#### organizationalUnits.&lt;path&gt;.bootstrapConfigSets
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of config sets to run when accounts belonging to the organizational unit are bootstrapped.
-
-#### organizationalUnits.&lt;path&gt;.configSets
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of config sets to run when accounts belonging to the organizational unit are deployed.
-
-#### organizationalUnits.&lt;path&gt;.priority
-
-- Type: `number`
-- Required: `no`
-- Default value: `undefined`
-
-Number used to define the launch order of organizational unit directly under the same parent.
-
-#### organizationalUnits.&lt;path&gt;.serviceControlPolicies
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of service control policies to attach to the organizational unit.
-
-#### organizationalUnits.&lt;path&gt;.status
-
-- Type: `string`
-- Required: `no`
-- Default value: `undefined`
-- Requirements:
-  - Allowed values:
-    - `active` - Accounts are included to organization accounts operations
-    - `disabled` - Accounts are excluded from organization accounts operations
-
-Organizational unit status. Used to define if the accounts belonging to the organizational unit should be included in organization accounts deploy/undeploy and bootstrap/tear down operations.
-
-#### organizationalUnits.&lt;path&gt;.tagPolicies
-
-- Type: `string`, `string[]`
-- Required: `no`
-- Default value: `undefined`
-
-List of tag policies to attach to the organizational unit.
-
-#### organizationalUnits.&lt;path&gt;.vars
-
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
-
-Variables object.
+Requirements for organizational unit paths:
+
+- Must match regex `/^Root(\/[a-zA-Z0-9-_/ ]+)?$/`
+- Max depth for organization hierarchy is 5
+  
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {organizational&nbsp;unit&nbsp;path} | yes | [Organizational Unit Object](#organizational-unit-object) | Configuration for the organizational unit. |
+
+### Organizational Unit Object
+
+Configuration for a single organizational unit.
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| accountAdminRoleName | no | string | The IAM role name to be used to manage accounts belonging to the organizational unit. If no value is given, then value from the top-level [accountAdminRoleName](#accountadminrolename) is used. |
+| accountBootstrapRoleName | no | string | The IAM role name to be used to bootstrap accounts belonging to the organizational unit. If no value is given, then value from the top-level [accountBootstrapRoleName](#accountbootstraprolename) is used. |
+| accounts | no | mixed list of strings and [Account Objects](#account-object). | List of accounts that belong to the organizational unit. Values in the list can be either plain account ids or [Account Objects](#account-object). |
+| aiServicesOptOutPolicies | no | string, string[] | List of AI services opt-out policies to attach to the organizational unit. |
+| backupPolicies | no | string, string[] | List of backup policies to attach to the organizational unit. |
+| bootstrapConfigSets | no | string, string[] | List of config sets to run when accounts belonging to the organizational unit are bootstrapped. |
+| configSets | no | string, string[] | List of config sets to run when accounts belonging to the organizational unit are deployed. |
+| priority | no | number | Number used to define the launch order of organizational unit directly under the same parent. |
+| serviceControlPolicies | no | string, string[] | List of service control policies to attach to the organizational unit. |
+| status | no | string | Organizational unit status. Used to define if the accounts belonging to the organizational unit should be included in organization accounts deploy/undeploy and bootstrap/tear down operations.<br/><br/>Allowed values:<br/><ul><li>**active** - Accounts are included to organization accounts operations</li><li>**disabled** - Accounts are excluded from organization accounts operations</li></ul> |
+| tagPolicies | no | string, string[] | List of tag policies to attach to the organizational unit. |
+| vars | no | [Organizational Unit Vars Object](#organizational-unit-vars-object) | Variables object. |
+
+### Organizational Unit Vars Object
+
+An object where keys are names for the variables and values are the variables themselves. 
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {variable&nbsp;name} | yes | any | Variable value. |
+
+### Account Object
+
+Configuration for a single account.
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| accountAdminRoleName | no | string | The IAM role name to be used to manage the account. If no value is given, then value from the parent organizational unit's [accountAdminRoleName](#organizationalunits-path-accountadminrolename) is used. |
+| accountBootstrapRoleName | no | string | The IAM role name to be used to bootstrap the account. If no value is given, then value from the parent organizational unit's [accountBootstrapRoleName](#organizationalunits-path-accountbootstraprolename) is used. |
+| aiServicesOptOutPolicies | no | string, string[] | List of AI services opt-out policies to attach to the account. |
+| backupPolicies | no | string, string[] | List of backup policies to attach to the account. |
+| bootstrapConfigSets | no | string, string[] | List of config sets to run when the account is bootstrapped. |
+| configSets | no | string, string[] | List of config sets to run when the account is deployed. |
+| description | no | string | Description for the account. |
+| email | no | string | Root email of the account. |
+| id | no | string | Id of the account. |
+| name | no | string | Name of the account. |
+| serviceControlPolicies | no | string, string[] | List of service control policies to attach to the account. |
+| status | no | string | Account status. Used to define if the account should be included in organization accounts deploy/undeploy and bootstrap/tear down operations.<br/><br/>Allowed values:<br/><ul><li>**active** - The account is included to organization accounts operations</li><li>**disabled** - The account is excluded from organization accounts operations</li><li>**suspended** - The account is suspended and excluded from organization accounts operations </li></ul>Defaults to **active**. |
+| tagPolicies | no | string, string[] | List of tag policies to attach to the account. |
+| vars | no | [Account Vars Object](#account-vars-object) | Variables object. |
+
+### Account Vars Object
+
+An object where keys are names for the variables and values are the variables themselves. 
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {variable&nbsp;name} | yes | any | Variable value. |
 
 ### Examples
 
@@ -529,42 +428,37 @@ organizationalUnits:
 
 ## serviceControlPolicies
 
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
-
 Organization service control policies.
 
-Service control policies configuration is an object where keys are names for the service control policies and values are configuration objects for the corresponding policy.
+<OrgConfigReferenceTable 
+    required={false}
+    types={<a href='#service-control-policies-object'>Service Control Policies Object</a>}
+    defaultValue='undefined'
+/>    
 
-#### serviceControlPolicies.&lt;name&gt;
+### Service Control Policies Object
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements:
-  - minimum minimum length is 1
-  - maximum length is 128
-  - must match pattern `/^[a-zA-Z0-9_-]+$/`
-  - must be unique among service control policies
+Service control policies configuration is an object where keys are names for the service control policies and values are configuration objects for the corresponding policy. The service control policy name is used to find the actual policy file from the `organization/service-control-policies` directory.
 
-Name for the service control policy. Used to refer to the service control policy from organizational units and accounts. The service control policy name is used to find the actual policy file from the `organization/service-control-policies` directory.
+Requirements for service control policy names:
 
-#### serviceControlPolicies.&lt;name&gt;.description
+- minimum minimum length is 1
+- maximum length is 128
+- must match pattern `/^[a-zA-Z0-9_-]+$/`
+- must be unique among service control policies
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {service&nbsp;control&nbsp;policy&nbsp;name} | yes | [Service Control Policy Object](#service-control-policy-object) | Configuration for the service control policy. |
 
-Mandatory description for the policy.
+### Service Control Policy Object
 
-#### serviceControlPolicies.&lt;name&gt;.awsManaged
+Configuration for a single service control policy.
 
-- Type: `boolean`
-- Required: `no`
-- Default value: `false`
-
-Optional boolean defining if the policy is managed by AWS.
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| description | yes | string | Mandatory description for the service control policy. |
+| awsManaged | no | string | Optional boolean defining if the policy is managed by AWS. Defaults to **false**. |
 
 ### Examples
 
@@ -581,42 +475,37 @@ serviceControlPolicies:
 
 ## tagPolicies
 
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
-
 Organization tag policies.
+
+<OrgConfigReferenceTable 
+    required={false}
+    types={<a href='#tag-policies-object'>Tag Policies Object</a>}
+    defaultValue='undefined'
+/>    
+
+### Tag Policies Object
 
 Tag policies configuration is an object where keys are names for the tag policies and values are configuration objects for the corresponding policy. The tag policy name is used to find the actual policy file from the `organization/tag-policies` directory.
 
-#### tagPolicies.&lt;name&gt;
+Requirements for tag policy names:
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
-- Requirements:
-  - minimum minimum length is 1
-  - maximum length is 128
-  - must match pattern `/^[a-zA-Z0-9_-]+$/`
-  - must be unique among tag policies
+- minimum minimum length is 1
+- maximum length is 128
+- must match pattern `/^[a-zA-Z0-9_-]+$/`
+- must be unique among tag policies
 
-Name for the tag policy. Used to refer to the tag policy from organizational units and accounts. 
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {tag&nbsp;policy&nbsp;name} | yes | [Tag Policy Object](#tag-policy-object) | Configuration for the tag policy. |
 
-#### tagPolicies.&lt;name&gt;.description
+### Tag Policy Object
 
-- Type: `string`
-- Required: `yes`
-- Default value: `undefined`
+Configuration for a single tag policy.
 
-Mandatory description for the tag policy.
-
-#### tagPolicies.&lt;name&gt;.awsManaged
-
-- Type: `boolean`
-- Required: `no`
-- Default value: `false`
-
-Optional boolean defining if the policy is managed by AWS.
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| description | yes | string | Mandatory description for the tag policy. |
+| awsManaged | no | string | Optional boolean defining if the policy is managed by AWS. Defaults to **false**. |
 
 ### Examples
 
@@ -632,26 +521,14 @@ tagPolicies:
 
 ## trustedAwsServices
 
-- Type: `string[]`
-- Required: `no`
-- Default value: A list containing all AWS service principals
-- Requirements:
-  - Allowed values:
-    - aws-artifact-account-sync.amazonaws.com
-    - cloudtrail.amazonaws.com
-    - compute-optimizer.amazonaws.com
-    - config.amazonaws.com
-    - ds.amazonaws.com
-    - fms.amazonaws.com
-    - license-manager.amazonaws.com
-    - member.org.stacksets.cloudformation.amazonaws.com
-    - ram.amazonaws.com
-    - servicecatalog.amazonaws.com
-    - ssm.amazonaws.com
-    - sso.amazonaws.com
-    - tagpolicies.tag.amazonaws.com
-
 List of trusted AWS service principals.
+
+<OrgConfigReferenceTable 
+    required={false}
+    types='string[]'
+    defaultValue='A list containing all AWS service principals'
+    requirements={<div>Allowed AWS service principals:{ awsServicePrincipals() }</div>}
+/>    
 
 ### Examples
 
@@ -666,11 +543,21 @@ trustedAwsServices:
 
 ## vars
 
-- Type: `object`
-- Required: `no`
-- Default value: `undefined`
-
 Variables available in the accounts.
+
+<OrgConfigReferenceTable 
+    required={false}
+    types={<a href='#vars-object'>Vars Object</a>}
+    defaultValue='undefined' 
+/>    
+
+### Vars Object
+
+An object where keys are names for the variables and values are the variables themselves. 
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| {variable&nbsp;name} | yes | any | Variable value. |
 
 ### Examples
 

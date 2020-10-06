@@ -35,7 +35,7 @@ const getDefineIn = (value) => {
 }
 
 export default ({ children, required, types, defaultValue, inherited, overriding, since, requirements, defineIn }) => (
-    <table>
+    <table class={'config-reference-table'}>
         <tr>
             <th>Since</th>
             <td>{ since ? since : 'v1.0.0' }</td>
