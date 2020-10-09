@@ -7,6 +7,9 @@ keywords:
   - CLI
 ---
 
+import CliOptionsTable from '@site/src/components/CliOptionsTable';
+import CliOption from '@site/src/components/CliOption';
+
 Commands to manage organization member accounts:
 
 - [List Accounts](#list-accounts)
@@ -43,7 +46,57 @@ Create a new account into the organization.
 You must provide the account name and email.
 
 ```
-tkm org accounts create --name <account name> --email <account email>
+tkm org accounts create \
+  --name <account name> \
+  --email <account email> \
+  [--iam-user-access-to-billing <IAM user access to billing>] \
+  [--role-name <account admin role> ] \
+  [--alias <account alias>]
+```
+
+### Options
+
+<CliOptionsTable>
+    <CliOption name='--name' required={true}>
+        The friendly name of the member account.
+    </CliOption>
+    <CliOption name='--email' required={true}>
+        The email address of the owner to assign to the new member account. This email address
+        must not already be associated with another AWS account. You must use a valid email 
+        address to complete account creation. You can't access the root user of the account 
+        or remove an account that was created with an invalid email address.
+    </CliOption>
+    <CliOption name='--iam-user-access-to-billing' required={false}>
+        If set to true, the new account enables IAM users to access account billing information
+        if they have the required permissions. Otherwise, only the root user of the new account 
+        can access account billing information. Defaults to true.
+    </CliOption>
+    <CliOption name='--role-name' required={false}>
+        The name of an IAM role that AWS Organizations automatically preconfigures in the new 
+        member account. This role trusts the master account, allowing users in the master account
+        to assume the role, as permitted by the master account administrator. The role has 
+        administrator permissions in the new member account.
+        <br/><br/>
+        If you don't specify this parameter, the role name defaults to OrganizationAccountAccessRole.
+    </CliOption>
+    <CliOption name='--alias' required={false}>
+        The account alias to create. Added in Takomo v.2.9.0.
+    </CliOption>
+</CliOptionsTable>
+
+### IAM Permissions
+
+This command must be run using credentials pointing to the organization master account.
+
+```yaml
+Statement:
+  - Effect: Allow
+    Action:
+      - organizations:DescribeOrganization
+      - organizations:CreateAccount
+      - organizations:DescribeCreateAccountStatus
+      - iam:CreateAccountAlias
+    Resource: "*"
 ```
 
 ### Examples

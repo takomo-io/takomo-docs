@@ -79,6 +79,44 @@ module.exports = {
           ],
         },
         {
+          title: 'Docs',
+          items: [
+            {
+              label: 'Stacks',
+              to: 'docs/stacks/introduction',
+            },
+            {
+              label: 'Deployment Targets',
+              to: 'docs/deployment-targets/introduction',
+            },
+            {
+              label: 'Organization',
+              to: 'docs/organizations/introduction',
+            },
+            {
+              label: 'Config Reference',
+              to: 'docs/config-reference/project',
+            },
+            {
+              label: 'CLI',
+              to: 'docs/command-line-usage/common-options',
+            },
+          ],
+        },
+        {
+          title: 'Development',
+          items: [
+            {
+              label: 'GitHub',
+              to: 'https://github.com/takomo-io/takomo',
+            },
+            {
+              label: 'NPM',
+              to: 'https://www.npmjs.com/package/takomo',
+            },
+          ],
+        },
+        {
           title: 'Support',
           items: [
             {

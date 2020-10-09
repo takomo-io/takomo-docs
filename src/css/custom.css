@@ -56,6 +56,10 @@ table.config-reference-table th {
   text-align: right;
 }
 
+table.cli-options-table td.name {
+  white-space: nowrap;
+}
+
 table thead tr {
   border-top: none;
   border-bottom: var(--ifm-table-border-width) solid var(--ifm-table-border-color);
