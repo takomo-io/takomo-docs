@@ -47,6 +47,7 @@ module.exports = {
       "command-line-usage/project",
       "command-line-usage/stacks",
       "command-line-usage/stack-secrets",
+      "command-line-usage/stack-inspect",
       "command-line-usage/organization",
       "command-line-usage/organization-accounts",
       "command-line-usage/deployment-targets",
