@@ -7,6 +7,7 @@ keywords:
   - CLI
 ---
 
+import CommonCliOptionsTable from '@site/src/components/CommonCliOptionsTable';
 import CliOptionsTable from '@site/src/components/CliOptionsTable';
 import CliOption from '@site/src/components/CliOption';
 
@@ -16,7 +17,7 @@ Commands to inspect stacks:
 
 ## Show dependency graph
 
-Show dependency graph of stacks within the given command path. The dependency graph is shown in [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) format.
+Print dependency graph of stacks within the given command path in [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) format.
 
 If no command path is given, the root stack group path is used. 
 
@@ -30,19 +31,25 @@ tkm stacks inspect dependency-graph [command-path]
 
 <CliOptionsTable>
     <CliOption name='command-path' required={false}>
-        Show dependency graph of stacks within this command path.
+        Print dependency graph of stacks within this command path. Defaults to the root stack group path ("/").
     </CliOption>
 </CliOptionsTable>
 
+### Common Options
+
+This command supports the following common options.
+
+<CommonCliOptionsTable />
+
 ### Examples
 
-Show dependency graph of all stacks:
+Print dependency graph of all stacks:
 
 ```
 tkm stacks inspect dependency-graph
 ```
 
-Show dependency graph of stacks within **/dev** command path:
+Print dependency graph of stacks within **/dev** command path:
 
 ```
 tkm stacks inspect dependency-graph /dev

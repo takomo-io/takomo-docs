@@ -2,7 +2,7 @@ import React from 'react';
 
 export default ({ children }) => {
     return (
-        <table  class={'cli-options-table'}>
+        <table className='cli-options-table'>
             <thead>
                 <tr>
                     <th>Option</th>

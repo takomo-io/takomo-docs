@@ -7,6 +7,10 @@ keywords:
   - CLI
 ---
 
+import CommonCliOptionsTable from '@site/src/components/CommonCliOptionsTable';
+import CliOptionsTable from '@site/src/components/CliOptionsTable';
+import CliOption from '@site/src/components/CliOption';
+
 ## Initialize a New Project
 
 Initialize a new Takomo project. Creates standard Takomo project structure and minimal configuration files.
@@ -17,14 +21,28 @@ Initialize a new Takomo project. Creates standard Takomo project structure and m
 tkm init [--create-samples] [--project] [--regions]
 ```
 
-### Choosing Project Name and Regions
+### Options
 
-Optionally, you can use `--project` to specify the project name, and `--regions` to specify the regions. This information will be prompted if not given from the command line.
+This command supports the following options.
 
-### Creating Sample Stacks
+<CliOptionsTable>
+    <CliOption name='--create-samples' required={false}>
+        Create sample configuration files.
+    </CliOption>
+    <CliOption name='--project' required={false}>
+        Name of the project. If this option is omitted, the project name will be prompted.
+    </CliOption>
+    <CliOption name='--regions' required={false}>
+        Regions of the project. This option can be used multiple times to set more than one region.
+        If this option is omitted, the regions will be prompted.
+    </CliOption>
+</CliOptionsTable>
 
-Pass `--create-samples` option to create sample stacks used also in Quick Start.
+### Common Options
 
+This command supports the following common options.
+
+<CommonCliOptionsTable notSupported={['yes']} />
 
 ### Examples
 
