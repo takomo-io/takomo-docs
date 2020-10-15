@@ -40,14 +40,14 @@ const sdkOption = () => (
 )
 
 const varOption = () => (
-    <CliOption key={'7'} name='--var} name=VALUE' required={false}>
+    <CliOption key={'7'} name='--var name=VALUE' required={false}>
         Set variable that can be referenced in configuration files.
         This option can be used multiple times to set multiple variables.
     </CliOption>
 )
 
 const varFileOption = () => (
-    <CliOption key={'8'} name={['--var-file FILE', '--var-file} name=FILE']} required={false}>
+    <CliOption key={'8'} name={['--var-file FILE', '--var-file name=FILE']} required={false}>
         Load variables from a file. The variables can be referenced in configuration files.
         This option can be used multiple times to load variables from multiple files.
         If NAME is given, variables are loaded to a variable with that name.

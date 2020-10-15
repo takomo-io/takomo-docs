@@ -1,7 +1,7 @@
 ---
-id: stack-inspect
-title: Stack Inspect
-description: CLI commands to inspect stacks
+id: stacks-inspect-dependency-graph
+title: stacks inspect dependency graph
+description: Inspect stacks dependency graph
 keywords:
   - Takomo
   - CLI
@@ -10,12 +10,6 @@ keywords:
 import CommonCliOptionsTable from '@site/src/components/CommonCliOptionsTable';
 import CliOptionsTable from '@site/src/components/CliOptionsTable';
 import CliOption from '@site/src/components/CliOption';
-
-Commands to inspect stacks:
-
-- [Show dependency graph](#show-dependency-graph)
-
-## Show dependency graph
 
 Print dependency graph of stacks within the given command path in [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) format.
 
@@ -34,6 +28,10 @@ tkm stacks inspect dependency-graph [command-path]
         Print dependency graph of stacks within this command path. Defaults to the root stack group path ("/").
     </CliOption>
 </CliOptionsTable>
+
+### Options
+
+This command has no command-specific options.
 
 ### Common Options
 

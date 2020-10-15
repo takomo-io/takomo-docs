@@ -89,8 +89,8 @@ This way, all the stack secrets are found from the Parameter Store under the sam
 ## See Also
 
 - [Config reference > secrets property](/docs/config-reference/stacks#secrets) 
-- [Command line usage > Set secret](/docs/command-line-usage/stack-secrets#set-secret)
-- [Command line usage > Get secret](/docs/command-line-usage/stack-secrets#get-secret)
-- [Command line usage > Sync secrets](/docs/command-line-usage/stack-secrets#sync-secrets)
-- [Command line usage > Diff secrets](/docs/command-line-usage/stack-secrets#diff-secrets)
-- [Command line usage > List secrets](/docs/command-line-usage/stack-secrets#list-secrets)
+- [Command line usage > Set secret](/docs/command-line-usage/stack-secrets-set)
+- [Command line usage > Get secret](/docs/command-line-usage/stack-secrets-get)
+- [Command line usage > Sync secrets](/docs/command-line-usage/stack-secrets-sync)
+- [Command line usage > Diff secrets](/docs/command-line-usage/stack-secrets-diff)
+- [Command line usage > List secrets](/docs/command-line-usage/stack-secrets-list)

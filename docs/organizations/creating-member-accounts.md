@@ -7,7 +7,7 @@ keywords:
   - organization
 ---
 
-You can create new accounts with the [create account](/docs/command-line-usage/organization-accounts#create-account) command. Once an account has been created, it must be added manually to the organization configuration file under the appropriate organizational unit.
+You can create new accounts with the [create account](/docs/command-line-usage/org-accounts-create) command. Once an account has been created, it must be added manually to the organization configuration file under the appropriate organizational unit.
 
 #### Example: Creating new account
 
@@ -46,5 +46,5 @@ accountCreation:
 
 ## See Also
 
-- [Command line usage > Create account](/docs/command-line-usage/organization-accounts#create-account)
+- [Command line usage > Create account](/docs/command-line-usage/org-accounts-create)
 - [Config reference > accountCreation](/docs/config-reference/organization#accountcreation)

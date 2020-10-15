@@ -99,7 +99,7 @@ module.exports = {
             },
             {
               label: 'CLI',
-              to: 'docs/command-line-usage/common-options',
+              to: 'docs/command-line-usage/overview',
             },
           ],
         },
@@ -126,7 +126,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Takomo. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Henri Meltaus. Built with <a href='https://v2.docusaurus.io/'>Docusaurus</a>.`,
     },
   },
   presets: [

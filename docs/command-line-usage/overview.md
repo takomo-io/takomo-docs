@@ -1,31 +1,62 @@
 ---
-id: common-options
-title: Common Options
-description: Common options for Takomo command line
+id: overview
+title: Overview
+description: Overview of Takomo commands
 keywords:
   - Takomo
   - CLI
 ---
 
+## Available Commands
+
+Here is a list of available CLI commands.
+
+- [init](init.md)
+- [overview](overview.md)
+- [init](init.md)
+- [stacks-deploy](stacks-deploy.md)
+- [stacks-undeploy](stacks-undeploy.md)
+- [stacks-list](stacks-list.md)
+- [stack-secrets-list](stack-secrets-list.md)
+- [stack-secrets-diff](stack-secrets-diff.md)
+- [stack-secrets-sync](stack-secrets-sync.md)
+- [stack-secrets-get](stack-secrets-get.md)
+- [stack-secrets-set](stack-secrets-set.md)
+- [stacks-inspect-dependency-graph](stacks-inspect-dependency-graph.md)
+- [org-create](org-create.md)
+- [org-describe](org-describe.md)
+- [org-deploy](org-deploy.md)
+- [org-accounts-list](org-accounts-list.md)
+- [org-accounts-create](org-accounts-create.md)
+- [org-accounts-deploy](org-accounts-deploy.md)
+- [org-accounts-undeploy](org-accounts-undeploy.md)
+- [org-accounts-bootstrap](org-accounts-bootstrap.md)
+- [org-accounts-tear-down](org-accounts-tear-down.md)
+- [targets-deploy](targets-deploy.md)
+- [targets-undeploy](targets-undeploy.md)
+
+
+## Common Options
+
 These options are supported by all CLI commands unless stated otherwise.
 
-## Assume Yes
+### Assume Yes
 
 Pass `--yes` or `-y` option to answer yes to all questions.
 
-## AWS Profile
+### AWS Profile
 
 Use `--profile <profile>` option to choose which AWS profile to use.
 
-## Display Help
+### Display Help
 
 Pass `--help` option to display help. Command specific helps include also the minimum IAM permissions needed to run the command.
 
-## Display Takomo Version
+### Display Takomo Version
 
 Pass `--version` option to print version information.
 
-## Environment Variables
+### Environment Variables
 
 Use `--env-file <path-to-environment-variables-file>` to load environment variables from a file. The loaded variables override existing variables with the same name. This option can be used multiple times.
 
@@ -37,15 +68,15 @@ DB_USER=root
 DB_PASS=s1mpl3
 ```
 
-## Load AWS SDK Config
+### Load AWS SDK Config
 
 Use --load-aws-sdk-config to prefer loading credentials from configuration file over the credentials file. Passing this option will enable loading the profile from **~/.aws/config** file.
 
-## Log Confidential Information
+### Log Confidential Information
 
 By default, environment variables and confidential parameter values are concealed from logs. Override this default by passing `--log-confidential-info`.
 
-## Logging Level
+### Logging Level
 
 Use `--log <level>` option to choose the logging level.
 
@@ -57,15 +88,15 @@ Supported values are:
 - warn
 - error
 
-## Project Dir
+### Project Dir
 
 Use `--dir <directory>` or `-d <directory>` option to define the directory from where Takomo loads configuration.
 
-## Statistics
+### Statistics
 
 Use `--stats` option to print statistics information of the executed command.
 
-## Variables
+### Variables
 
 Pass `--var` option to provide variables that can be used in Handlebars templates. This option can be used multiple times.
 
