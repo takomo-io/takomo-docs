@@ -82,13 +82,13 @@ organizationalUnits:
 
 ## Command Line Usage
 
-The bootstrap config sets are deployed using [bootstrap accounts](/docs/command-line-usage/organization-accounts#bootstrap-accounts) command.
+The bootstrap config sets are deployed using [bootstrap accounts](/docs/command-line-usage/org-accounts-bootstrap) command.
 
 ```
 tkm org accounts bootstrap
 ```
 
-The bootstrap configs are removed using [teardown accounts](/docs/command-line-usage/organization-accounts#tear-down-accounts) command.
+The bootstrap configs are removed using [teardown accounts](/docs/command-line-usage/org-accounts-tear-down) command.
 
 ```
 tkm org accounts teardown
@@ -98,5 +98,5 @@ Both commands lets you review the deployment plan and decide whether you want to
 
 ## See Also
 
-- [Command line usage > Bootstrap accounts](/docs/command-line-usage/organization-accounts#bootstrap-accounts)
-- [Command line usage > Teardown accounts](/docs/command-line-usage/organization-accounts#teardown-accounts)
+- [Command line usage > Bootstrap accounts](/docs/command-line-usage/org-accounts-bootstrap)
+- [Command line usage > Teardown accounts](/docs/command-line-usage/org-accounts-tear-down)

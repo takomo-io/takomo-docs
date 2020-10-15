@@ -8,7 +8,7 @@ keywords:
   - Takomo
 ---
 
-This example demonstrates how to manage an AWS organization with [organization](/docs/command-line-usage/organization) and [organization accounts](/docs/command-line-usage/organization-accounts) commands.
+This example demonstrates how to manage an AWS organization.
 
 See the complete example at [GitHub](https://github.com/takomo-io/takomo-examples/tree/master/organization).
 
@@ -154,11 +154,11 @@ Variables used as inputs for config sets are defined with **vars** property whic
 
 ## Deploy Organization
 
-The organization basic configuration, including service control policies, tag policies, trusted AWS services and organizational units, is deployed with [deploy organization command](/docs/command-line-usage/organization#deploy-organization). It also relocates member accounts under correct organizational units. 
+The organization basic configuration, including service control policies, tag policies, trusted AWS services and organizational units, is deployed with [deploy organization command](/docs/command-line-usage/org-deploy). It also relocates member accounts under correct organizational units. 
 
 ## Deploy Organization Accounts
 
-Infrastucture for the member accounts is deployed using [deploy organization accounts command](/docs/command-line-usage/organization-accounts#deploy-accounts).
+Infrastucture for the member accounts is deployed using [deploy organization accounts command](/docs/command-line-usage/org-accounts-deploy).
 
 In this example, stacks **/master/budgets.yml** and **/master/cloudtrail.yml** are deployed to the member accounts that belong to **Root/Master** organizational unit, and stack **/examples/budgets.yml** is deployed to the accounts of organizational unit **Root/Examples**.
 
@@ -166,6 +166,4 @@ In this example, stacks **/master/budgets.yml** and **/master/cloudtrail.yml** a
 
 Find more information from the documentation:
 
-- [Organization commands](/docs/command-line-usage/organization)
-- [Organization accounts command](/docs/command-line-usage/organization-accounts)
 - [Organization configuration reference](/docs/config-reference/organization)

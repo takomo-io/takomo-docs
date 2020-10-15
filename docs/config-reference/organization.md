@@ -28,7 +28,7 @@ This page describes properties available in an organization configuration file.
 
 ## accountAdminRoleName
 
-The default IAM role name to be used to [deploy](../command-line-usage/organization-accounts.md#deploy-accounts) and [undeploy](../command-line-usage/organization-accounts.md#undeploy-accounts) accounts. Organizational units and individual accounts can override this value.
+The default IAM role name to be used to [deploy](../command-line-usage/org-accounts-deploy) and [undeploy](../command-line-usage/org-accounts-undeploy) accounts. Organizational units and individual accounts can override this value.
 
 <OrgConfigReferenceTable 
     required={false} 
@@ -51,7 +51,7 @@ accountAdminRoleName: MyDeployerRole
 
 ## accountBootstrapRoleName
 
-The default IAM role name to be used to [bootstrap](../command-line-usage/organization-accounts.md#bootstrap-accounts) and [tear down](../command-line-usage/organization-accounts.md#tear-down-accounts) accounts. Organizational units and individual accounts can override this value.
+The default IAM role name to be used to [bootstrap](../command-line-usage/org-accounts-bootstrap) and [tear down](../command-line-usage/org-accounts-tear-down) accounts. Organizational units and individual accounts can override this value.
 
 <OrgConfigReferenceTable 
     required={false} 

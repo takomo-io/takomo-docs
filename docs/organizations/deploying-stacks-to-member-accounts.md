@@ -219,13 +219,13 @@ organizationalUnits:
 
 ## Command Line Usage
 
-The config sets are deployed to member accounts with [deploy accounts](/docs/command-line-usage/organization-accounts#deploy-accounts) command.
+The config sets are deployed to member accounts with [deploy accounts](/docs/command-line-usage/org-accounts-deploy) command.
 
 ```
 tkm org accounts deploy
 ```
 
-The config sets are undeployed, i.e. the stacks defined in the config sets are removed, with [undeploy accounts](/docs/command-line-usage/organization-accounts#undeploy-accounts) command.
+The config sets are undeployed, i.e. the stacks defined in the config sets are removed, with [undeploy accounts](/docs/command-line-usage/org-accounts-undeploy) command.
 
 ```
 tkm org accounts undeploy
@@ -235,5 +235,5 @@ Both commands lets you review the deployment plan and decide whether you want to
 
 ## See Also
 
-- [Command line usage > Deploy accounts](/docs/command-line-usage/organization-accounts#deploy-accounts)
-- [Command line usage > Undeploy accounts](/docs/command-line-usage/organization-accounts#undeploy-accounts)
+- [Command line usage > Deploy accounts](/docs/command-line-usage/org-accounts-deploy)
+- [Command line usage > Undeploy accounts](/docs/command-line-usage/org-accounts-undeploy)

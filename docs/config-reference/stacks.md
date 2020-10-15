@@ -318,7 +318,7 @@ For example, if the stack's project is **example** and stack path is
 :::caution Changing the stack name
 Changing the name will cause Takomo to look for the stack with the new name. As Takomo does not store the state anywhere, it can't know that the stack still exists with the old name.
 
-If you need to change the name of an existing stack, you should first decide if you need to remove the old stack before or after changing the name in stack configuration file. Then use [stacks undeploy](../command-line-usage/stacks.md#undeploy-stacks) command to remove the old stack.
+If you need to change the name of an existing stack, you should first decide if you need to remove the old stack before or after changing the name in stack configuration file. Then use [stacks undeploy](../command-line-usage/stacks-undeploy) command to remove the old stack.
 :::
 
 ### Examples
@@ -467,7 +467,7 @@ Adding new regions to an existing stack does not require any special actions.
 
 If an existing stack has only one region and that region is changed, then Takomo will start looking for the stack from the new region and forget that it still exists in the old region.
 
-If one or more regions need to be removed from a stack, use [stacks undeploy](/docs/command-line-usage/stacks#undeploy-stacks) command to remove the stack from the regions in question, and then update corresponding stack or stack group configuration files.
+If one or more regions need to be removed from a stack, use [stacks undeploy](/docs/command-line-usage/stacks-undeploy) command to remove the stack from the regions in question, and then update corresponding stack or stack group configuration files.
 :::
 
 ### Examples
@@ -545,7 +545,6 @@ secrets:
 ### See also
 
 - [Secret parameter resolver](/docs/stacks/parameter-resolvers#secret)
-- [Secrets CLI commands](/docs/command-line-usage/stack-secrets)
 
 ## tags
 

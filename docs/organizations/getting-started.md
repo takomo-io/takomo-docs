@@ -11,7 +11,7 @@ Takomo can be used to manage any existing AWS organization. You can also create 
 
 ## Getting Started with a New Organization
 
-If you don't have an existing organization, you can create one using [create organization](/docs/command-line-usage/organization#create-organization) command:
+If you don't have an existing organization, you can create one using [create organization](/docs/command-line-usage/org-create) command:
 
 ```
 tkm org create
@@ -41,14 +41,14 @@ organizationalUnits:
 
 If you have an existing organization, you will need to create the required configuration files manually. You can start by copy-pasting the contents of the **organization.yml** file shown above and setting the [masterAccountId](/docs/config-reference/organization#masteraccountid) with your organization master account's id.
 
-Next, you will need to make your local configuration to match with the current organization state. You need to describe all organizational units, policies and member accounts in the **organization.yml** file, which can be quite an effort, but [deploy organization command](/docs/command-line-usage/organization#deploy-organization) will show you differences between your local configuration and the actual organization state. Once there are no changes to be executed, your configuration is completed.
+Next, you will need to make your local configuration to match with the current organization state. You need to describe all organizational units, policies and member accounts in the **organization.yml** file, which can be quite an effort, but [deploy organization command](/docs/command-line-usage/org-deploy) will show you differences between your local configuration and the actual organization state. Once there are no changes to be executed, your configuration is completed.
 
 ## Organization Feature Set
 
 AWS Organizations allows you to choose what features you want to have enabled. There are two options: **ALL** and **CONSOLIDATED_BILLING**. In most cases, **ALL** should be chosen because it enables many useful features such as authorization and management policies. The feature set is chosen when the organization is created and can be changed at any time.
 
 :::tip
-If you create a new organization using [create organization](/docs/command-line-usage/organization#create-organization) command, you can specify which feature set to use. Once the organization is created, you can change the feature set from AWS console or using AWS CLI.
+If you create a new organization using [create organization](/docs/command-line-usage/org-create) command, you can specify which feature set to use. Once the organization is created, you can change the feature set from AWS console or using AWS CLI.
 :::
 
 ## Master Account Id
@@ -79,7 +79,7 @@ Please note that **organizationAdminRoleName** accepts a role name and not full 
 
 ## See Also
 
-- [Command line usage > Create organization](/docs/command-line-usage/organization#create-organization)
+- [Command line usage > Create organization](/docs/command-line-usage/org-create)
 - [Config reference > masterAccountId property](/docs/config-reference/organization#masteraccountid)
 - [Config reference > organizationAdminRoleName property](/docs/config-reference/organization#organizationadminrolename)
 - [AWS documentation > Creating and managing an organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org.html)

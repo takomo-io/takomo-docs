@@ -204,13 +204,13 @@ organizationalUnits:
 
 ## Command Line Usage
 
-The config sets are deployed to deployment targets [deploy targets](/docs/command-line-usage/deployment-targets#deploy-targets) command.
+The config sets are deployed to deployment targets [deploy targets](/docs/command-line-usage/targets-deploy) command.
 
 ```
 tkm targets deploy
 ```
 
-The config sets are undeployed, i.e. the stacks defined in the config sets are removed, with [undeploy targets](/docs/command-line-usage/deployment-targets#undeploy-targets) command.
+The config sets are undeployed, i.e. the stacks defined in the config sets are removed, with [undeploy targets](/docs/command-line-usage/targets-undeploy) command.
 
 ```
 tkm targets undeploy
@@ -220,5 +220,5 @@ Both commands lets you review the deployment plan and decide whether you want to
 
 ## See Also
 
-- [Command line usage > Deploy targets](/docs/command-line-usage/deployment-targets#deploy-targets)
-- [Command line usage > Undeploy targets](/docs/command-line-usage/deployment-targets#undeploy-targets)
+- [Command line usage > Deploy targets](/docs/command-line-usage/targets-deploy)
+- [Command line usage > Undeploy targets](/docs/command-line-usage/targets-undeploy)

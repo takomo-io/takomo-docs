@@ -1,7 +1,7 @@
 ---
-id: project
-title: Project
-description: CLI commands to manage Takomo project
+id: init
+title: init
+description: Initialize new Takomo project
 keywords:
   - Takomo
   - CLI
@@ -11,19 +11,19 @@ import CommonCliOptionsTable from '@site/src/components/CommonCliOptionsTable';
 import CliOptionsTable from '@site/src/components/CliOptionsTable';
 import CliOption from '@site/src/components/CliOption';
 
-## Initialize a New Project
+Initialize a new Takomo project with standard project structure and minimal configuration files.
 
-Initialize a new Takomo project. Creates standard Takomo project structure and minimal configuration files.
-
-### Usage
+## Usage
 
 ```
 tkm init [--create-samples] [--project] [--regions]
 ```
 
-### Options
+## Positional arguments
 
-This command supports the following options.
+This command has no positional arguments.
+
+## Options
 
 <CliOptionsTable>
     <CliOption name='--create-samples' required={false}>
@@ -38,13 +38,11 @@ This command supports the following options.
     </CliOption>
 </CliOptionsTable>
 
-### Common Options
-
-This command supports the following common options.
+## Common Options
 
 <CommonCliOptionsTable notSupported={['yes']} />
 
-### Examples
+## Examples
 
 Initialize a new project to the current directory:
 
