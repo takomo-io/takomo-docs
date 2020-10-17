@@ -63,6 +63,8 @@ module.exports = {
       "command-line-usage/org-accounts-undeploy",
       "command-line-usage/org-accounts-bootstrap",
       "command-line-usage/org-accounts-tear-down",
+      "command-line-usage/org-accounts-create-alias",
+      "command-line-usage/org-accounts-delete-alias",
       "command-line-usage/targets-deploy",
       "command-line-usage/targets-undeploy",
     ],

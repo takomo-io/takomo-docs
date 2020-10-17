@@ -54,7 +54,7 @@ This command has no positional arguments.
         If you don't specify this parameter, the role name defaults to OrganizationAccountAccessRole.
     </CliOption>
     <CliOption name='--alias' required={false}>
-        The account alias to create. Added in Takomo v.2.9.0.
+        The account alias to create.
     </CliOption>
 </CliOptionsTable>
 
@@ -64,7 +64,8 @@ This command has no positional arguments.
 
 ## IAM Permissions
 
-This command must be run using credentials pointing to the organization master account.
+This command must be run using credentials of the organization master account 
+with the following permissions.
 
 ```yaml
 Statement:
@@ -73,7 +74,6 @@ Statement:
       - organizations:DescribeOrganization
       - organizations:CreateAccount
       - organizations:DescribeCreateAccountStatus
-      - iam:CreateAccountAlias
     Resource: "*"
 ```
 
