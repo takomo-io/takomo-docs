@@ -53,7 +53,18 @@ templateBucket:
   keyPrefix: my-templates/project-x/
 ```
 
+## Dynamic Templates
+
+You can turn static template files into dynamic templates by using one of the following file extension:
+
+- .hbs
+- .hbs.yml
+- .hbs.json
+
+Takomo processes the dynamic template files with Handlebars templating engine. In dynamic templates, you can use all Handlebars features.
+
 ## See Also
 
 - [Config reference > template property](/docs/config-reference/stacks#template)
 - [Config reference > templateBucket property](/docs/config-reference/stacks#templatebucket)
+- [Templating with Handlebars](/docs/stacks/templating-with-handlebars)

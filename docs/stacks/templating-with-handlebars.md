@@ -10,7 +10,11 @@ keywords:
 
 Sometimes static configuration files and templates are not enough to solve the real-life problems we might face. To help overcome those trickier challenges and avoid tedious and error-prone repeating of configuration, Takomo supports dynamic templating with [Handlebars](https://handlebarsjs.com/). All standard Handlebars features are available, which means you can use loops, if-conditions, partial includes, helpers, variables to streamline your configuration.
 
-Stack and stack group configuration files are always processed as dynamic Handlebars templates. By default, stack template files in the **templates** directory are not treated as dynamic Handlebars templates, but you can enable it by using **.hbs** file extension.
+Stack and stack group configuration files are always processed as dynamic Handlebars templates. By default, stack template files in the **templates** directory are not treated as dynamic Handlebars templates, but you can enable it by using one of the following file extensions:
+ 
+ - .hbs
+ - .hbs.yml
+ - .hbs.json
 
 ## Partials
 
@@ -221,14 +225,14 @@ The following variables are available in stack group configuration files.
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| var | object | Variables from the command line. |
 | env | object |Environment variables. |
 | context | object | An object containing context variables. |
 | context.projectDir | string | Current project directory. |
 | stackGroup | object | An object representing the current stack group. |
+| stackGroup.name | string | Name of the stack group. |
 | stackGroup.path | string | Path of the stack group. |
 | stackGroup.pathSegments | string[] | Path of the stack group split into an array using **/** as a separator. |
-| stackGroup.name | string | Name of the stack group. |
+| var | object | Variables from the command line. |
 
 ### Stack Configuration
 
@@ -236,36 +240,36 @@ The following variables are available in stack configuration files.
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| var | object | Variables from the command line. |
-| env | object | Environment variables. |
 | context | object |  An object containing context variables. |
 | context.projectDir | string | Current project directory. |
+| env | object | Environment variables. |
 | stackGroup | object | An object representing the stack group where the stack belongs to. |
+| stackGroup.accountIds | string[] | Account ids of the stack group. |
+| stackGroup.capabilities | string[] | Capabilities of the stack group. |
+| stackGroup.commandRole | string | Command role of the stack group. |
+| stackGroup.data | object | Data object of the stack group. |
+| stackGroup.isRoot | boolean | Is the stack group the root. |
+| stackGroup.name | string | Name of the stack group. |
 | stackGroup.path | string | Path of the stack group. |
 | stackGroup.pathSegments | string[] | Path of the stack group split into an array using **/** as a separator. |
-| stackGroup.name | string | Name of the stack group. |
 | stackGroup.project | string | Project of the stack group. |
 | stackGroup.regions | string | Regions of the stack group. |
-| stackGroup.commandRole | string | Command role of the stack group. |
-| stackGroup.capabilities | string[] | Capabilities of the stack group. |
-| stackGroup.isRoot | boolean | Is the stack group the root. |
+| stackGroup.tags | object | Stack tags of the stack group. |
 | stackGroup.templateBucket | object | Template bucket configuration of the stack group. |
 | stackGroup.templateBucket.name | string | Name of the template bucket. |
 | stackGroup.templateBucket.keyPrefix | string | Key prefix of the template bucket. |
 | stackGroup.timeout | object | Timeout configuration of the stack group. |
 | stackGroup.timeout.create | number | Create timeout in seconds. |
 | stackGroup.timeout.update | number | Update timeout in seconds. |
-| stackGroup.data | object | Data object of the stack group. |
-| stackGroup.tags | object | Stack tags of the stack group. |
-| stackGroup.accountIds | string[] | Account ids of the stack group. |
 | stack | object | An object representing the stack. |
+| stack.configFile | object | An object representing configuration file of the stack. |
+| stack.configFile.basename | string | Name of the stack configuration file including the file extension |
+| stack.configFile.dirPath | string | File path to the directory containing the stack configuration file relative to stack directory. |
+| stack.configFile.filePath | string | File path of the stack configuration file relative to stack directory. |
+| stack.configFile.name | string | Name of the stack configuration file without the file extension. |
 | stack.path | string | Path of the stack without the region specified. |
 | stack.pathSegments | string[] | Path of the stack without the region specified split into an array using **/** as a separator.  |
-| stack.configFile | object | An object representing configuration file of the stack. |
-| stack.configFile.name | string | Name of the stack configuration file without the file extension. |
-| stack.configFile.basename | string | Name of the stack configuration file including the file extension |
-| stack.configFile.filePath | string | File path of the stack configuration file relative to stack directory. |
-| stack.configFile.dirPath | string | File path to the directory containing the stack configuration file relative to stack directory. |
+| var | object | Variables from the command line. |
 
 ### CloudFormation Template
 
@@ -273,18 +277,29 @@ The following variables are available in CloudFormation template files with **.h
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| var | object | Variables from the command line. |
-| env | object | Environment variables. |
 | context | object |  An object containing context variables. |
 | context.projectDir | string | Current project directory. |
+| env | object | Environment variables. |
 | hooks | object | An object containing values returned by hooks |
 | stack | object | An object representing the current stack |
+| stack.accountIds | string[] | Account ids of the stack. |
+| stack.commandRole | string | Command role of the stack. |
+| stack.configFile | object | An object representing configuration file of the stack. |
+| stack.configFile.basename | string | Name of the stack configuration file including the file extension |
+| stack.configFile.dirPath | string | File path to the directory containing the stack configuration file relative to stack directory. |
+| stack.configFile.filePath | string | File path of the stack configuration file relative to stack directory. |
+| stack.configFile.name | string | Name of the stack configuration file without the file extension. |
+| stack.data | object | Data object of the stack. |
+| stack.depends | string[] | Dependencies of the stack. |
+| stack.name | string | Name of the stack. |
 | stack.path | string | Path of the stack. |
 | stack.pathSegments | string[] | Path of the stack split into an array using **/** as a separator. |
+| stack.parameters | object[] | Parameters of the stack |
+| stack.parameters[].key | string | Parameters key |
+| stack.parameters[].value | string | Parameters value |
 | stack.project | string | Project of the stack. |
-| stack.name | string | Name of the stack. |
 | stack.region | string | Region of the stack. |
-| stack.commandRole | string | Command role of the stack. |
+| stack.tags | object | Stack tags of the stack. |
 | stack.template | string | Template of the stack. |
 | stack.templateBucket | object | Template bucket configuration of the stack. |
 | stack.templateBucket.name | string | Name of the template bucket. |
@@ -292,13 +307,4 @@ The following variables are available in CloudFormation template files with **.h
 | stack.timeout | object | Timeout configuration of the stack. |
 | stack.timeout.create | number | Create timeout in seconds. |
 | stack.timeout.update | number | Update timeout in seconds. |
-| stack.data | object | Data object of the stack. |
-| stack.tags | object | Stack tags of the stack. |
-| stack.accountIds | string[] | Account ids of the stack. |
-| stack.depends | string[] | Dependencies of the stack. |
-| stack.configFile | object | An object representing configuration file of the stack. |
-| stack.configFile.name | string | Name of the stack configuration file without the file extension. |
-| stack.configFile.basename | string | Name of the stack configuration file including the file extension |
-| stack.configFile.filePath | string | File path of the stack configuration file relative to stack directory. |
-| stack.configFile.dirPath | string | File path to the directory containing the stack configuration file relative to stack directory. |
-
+| var | object | Variables from the command line. |
