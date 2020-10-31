@@ -26,6 +26,12 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: takomo-website-versioned
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - '*'
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -106,6 +112,8 @@ Resources:
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:
               QueryString: false
+              Headers:
+                - Origin
               Cookies:
                 Forward: none
             AllowedMethods:
