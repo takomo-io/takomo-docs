@@ -1,13 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-const versions = ["2.8.0", "1.5.1", "0.2.0"]
+const sortVersions = (versions) => {
+    return versions.map(a => a.split('.').map(n => +n+100000).join('.')).sort()
+        .map(a => a.split('.').map(n => +n-100000).join('.')).reverse();
+}
+
 function Version() {
-    const latestVersion = versions[0];
-    const pastVersions = versions.filter((version) => version !== latestVersion);
+
+    const [error, setError] = useState(null);
+    const [versions, setVersions] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            fetch("https://takomo.io/docs/release/versions.txt")
+                .then(res => res.text())
+                .then(res => {
+                   setVersions(sortVersions(res.split("\n").filter(v => v.trim() !== "")))
+                })
+                .catch(e => setError(e))
+        };
+
+        fetchData();
+    }, []);
+
+    if (error) {
+        return (
+            <Layout
+                title="Versions"
+                permalink="/versions"
+                description="Takomo documentation">
+                <main className="container margin-vert--lg">
+                    <h1>Takomo documentation versions</h1>
+                    <p>Failed to load versions</p>
+                </main>
+            </Layout>
+        );
+    }
+
+    if (versions.length === 0) {
+        return (
+            <Layout
+                title="Versions"
+                permalink="/versions"
+                description="Takomo documentation">
+                <main className="container margin-vert--lg">
+                    <h1>Takomo documentation versions</h1>
+                    <p>Loading...</p>
+                </main>
+            </Layout>
+        );
+    }
+
+    const latestVersion = versions.length > 0 ? versions[0] : undefined
+    const pastVersions = versions.filter((version) => version !== latestVersion)
+
     return (
         <Layout
             title="Versions"

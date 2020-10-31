@@ -4,10 +4,10 @@ aws s3 ls s3://takomo-website-versioned/docs/release/ \
   --recursive \
   | grep -E 'docs/release/v\d+-\d+-\d+/index.html$' \
   | tr -s ' ' \
-  | cut -d ' '  -f 4 \
+  | cut -d ' ' -f 4 \
   | cut -d '/' -f 3 \
   | tr - . \
-  | tr v ' ' > versions.txt
+  | tr -d v > versions.txt
 
 aws s3 cp \
   versions.txt \
