@@ -359,6 +359,7 @@ Parameter value must be given as object when the parameter value is resolved usi
 | --- | -------- | ---- | ----------- |
 | resolver     | yes | string  | Name of parameter resolver used to resolve the value for the parameter |
 | confidential | no  | boolean | Boolean determining if the parameter value should be concealed from the logs. Defaults to false. |
+| immutable    | no  | boolean | Boolean determining if the parameter value should be immutable. Updating an immutable parameter value is not allowed. Defaults to false.<br/><br/>Parameters marked with NoEcho can't be immutable. |
 
 In addition to the standard properties documented above, different parameter resolvers can have properties of their own.
 
@@ -369,6 +370,15 @@ A simple parameter:
 ```yaml
 parameters:
   VpcId: vpc-06e4ab6c6c
+```
+
+A simple immutable parameter:
+
+```yaml
+parameters:
+  VpcId: 
+    value: vpc-06e4ab6c6c
+    immutable: true
 ```
 
 A list parameter:
@@ -400,16 +410,6 @@ parameters:
     output: vpcId
     region: eu-west-1
     commandRole: arn:aws:iam::123456789012:role/deployer
-```
-
-A parameter whose value is resolved from a stack secret of a stack within the same Takomo project using the [secret resolver](/docs/stacks/parameter-resolvers#secret):
-
-```yaml
-parameters:
-  DatabasePassword:
-    resolver: secret
-    stack: /rds.yml
-    secret: password
 ```
 
 ### See also

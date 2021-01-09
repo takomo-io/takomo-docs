@@ -10,11 +10,7 @@ keywords:
 
 Sometimes static configuration files and templates are not enough to solve the real-life problems we might face. To help overcome those trickier challenges and avoid tedious and error-prone repeating of configuration, Takomo supports dynamic templating with [Handlebars](https://handlebarsjs.com/). All standard Handlebars features are available, which means you can use loops, if-conditions, partial includes, helpers, variables to streamline your configuration.
 
-Stack and stack group configuration files are always processed as dynamic Handlebars templates. By default, stack template files in the **templates** directory are not treated as dynamic Handlebars templates, but you can enable it by using one of the following file extensions:
- 
- - .hbs
- - .hbs.yml
- - .hbs.json
+Takomo processes all stack configuration, stack group configuration and template files using Handlebars.
 
 ## Partials
 
@@ -254,7 +250,9 @@ The following variables are available in stack configuration files.
 | stackGroup.pathSegments | string[] | Path of the stack group split into an array using **/** as a separator. |
 | stackGroup.project | string | Project of the stack group. |
 | stackGroup.regions | string | Regions of the stack group. |
-| stackGroup.tags | object | Stack tags of the stack group. |
+| stackGroup.tags | object[] | Stack tags of the stack group. |
+| stackGroup.tags[].key | string | Tag key. |
+| stackGroup.tags[].value | string | Tag value. |
 | stackGroup.templateBucket | object | Template bucket configuration of the stack group. |
 | stackGroup.templateBucket.name | string | Name of the template bucket. |
 | stackGroup.templateBucket.keyPrefix | string | Key prefix of the template bucket. |
@@ -299,7 +297,9 @@ The following variables are available in CloudFormation template files with **.h
 | stack.parameters[].value | string | Parameters value |
 | stack.project | string | Project of the stack. |
 | stack.region | string | Region of the stack. |
-| stack.tags | object | Stack tags of the stack. |
+| stack.tags | object[] | Stack tags of the stack. |
+| stack.tags[].key | string | Tag key. |
+| stack.tags[].value | string | Tag value. |
 | stack.template | string | Template of the stack. |
 | stack.templateBucket | object | Template bucket configuration of the stack. |
 | stack.templateBucket.name | string | Name of the template bucket. |

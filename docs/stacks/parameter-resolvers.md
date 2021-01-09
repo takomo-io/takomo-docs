@@ -21,7 +21,6 @@ There are four built-in parameter resolvers:
 - [Stack output](#stack-output)
 - [External stack output](#external-stack-output)
 - [Command](#command)
-- [Secret](#secret)
 
 ### Stack Output
 
@@ -43,6 +42,7 @@ Here are the properties available for the **stack-output** resolver.
 | stack    | yes | string | Stack path of the source stack. |
 | output   | yes | string | Name of the stack output whose value is read. |
 | confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false** |
+| immutable    | no | boolean | Mark the parameter as immutable, defaults to **false** |
 
 #### Example
 
@@ -88,6 +88,7 @@ Here are the properties available for the **external-stack-output** resolver.
 | region      | no  | string | Region of the source stack. Region is optional. By default, the region of the target stack is used. |
 | commandRole | no  | string | IAM role used to access the stack output. Command role is optional. By default, credentials associated with the target stack are used. |
 | confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false** |
+| immutable    | no | boolean | Mark the parameter as immutable, defaults to **false** |
 
 #### Example
 
@@ -143,6 +144,7 @@ Here are the properties available for the **command** resolver.
 | resolver | yes | string | Resolver name, this must be **cmd**. |
 | command  | yes | string | Shell command to execute. |
 | confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false** |
+| immutable    | no | boolean | Mark the parameter as immutable, defaults to **false** |
 
 ## Implementing Custom Parameter Resolvers
 

@@ -40,3 +40,12 @@ configSets:
       - /
 ```
 
+All CloudFormation template files are processed with Handlebars templating engine regardless the file extension. Before, one had to explicitly enable Handlebars processing by using `.hbs` file extension.
+
+Expose stack tags in CloudFormation template files as an array instead of an object.
+
+## Breaking Changes to APIs
+
+Major refactoring and clean up of the TypeScript codebase in order to provide easier development.
+
+

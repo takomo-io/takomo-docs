@@ -9,6 +9,7 @@ module.exports = {
   url: 'https://takomo.io',
   baseUrl: process.env.DOCS_BASE || '/',
   onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'takomo-io',
   projectName: 'Takomo',
