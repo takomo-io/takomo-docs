@@ -130,25 +130,6 @@ For the **SrcBucket** parameter, we need to specify the **commandRole** property
 
 For the **AssetsBucket** parameter, we must specify the **region** but not the **commandRole** because the stacks are located in the same account but different regions.
 
-### Secret
-
-Secret resolver reads a value from a stack secret configured within the same Takomo project. The stack that defines the secret is referred to as the source stack, and the stack using the resolver is referred to as the target stack.
-
-The source stack automatically becomes the target stack's dependency.
-
-The secret value is read using credentials associated with the source stack.
-
-#### Properties
-
-Here are the properties available for the **secret** resolver.
-
-| Key | Required | Type | Description |
-| --- | -------- | ---- | ----------- |
-| resolver | yes | string | Resolver name, this must be **secret**. |
-| stack    | yes | string | Stack path of the source stack.  |
-| secret   | yes | string | Name of the secret. |
-| confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false** |
-
 ### Command
 
 The command resolver reads a value from the output of a shell command.

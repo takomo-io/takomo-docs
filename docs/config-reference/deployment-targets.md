@@ -72,15 +72,6 @@ Name of the config set. Used to refer to the config set from deployment groups a
 
 Mandatory description for the config set.
 
-#### configSets.&lt;name&gt;.projectDir
-
-- Type: `string`
-- Required: `no`
-- Default value: `computed`
-- Since: `v2.1.0` 
-
-Optional file path to a directory containing Takomo configuration. Default value is the current project directory.
-
 #### configSets.&lt;name&gt;.commandPaths
 
 - Type: `string[]`
@@ -106,17 +97,6 @@ configSets:
     commandPaths:
       - /audit/cloudtrail.yml/eu-west-1
       - /audit/cloudtrail.yml/eu-central-1
-```
-
-A config set with custom `projectDir`.
-
-```yaml
-configSets:
-  myConfigSet:
-    description: This config set is located in custom location
-    projectDir: /home/ec2-user/takomo-configs
-    commandPaths:
-      - /
 ```
 
 ## deploymentGroups

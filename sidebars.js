@@ -22,7 +22,6 @@ module.exports = {
       "stacks/dependencies-between-stacks",
       "stacks/hooks",
       "stacks/templating-with-handlebars",
-      "stacks/managing-secrets",
       "stacks/deploying-stacks",
     ],
     "Organizations": [
@@ -48,11 +47,6 @@ module.exports = {
       "command-line-usage/stacks-deploy",
       "command-line-usage/stacks-undeploy",
       "command-line-usage/stacks-list",
-      "command-line-usage/stack-secrets-list",
-      "command-line-usage/stack-secrets-diff",
-      "command-line-usage/stack-secrets-sync",
-      "command-line-usage/stack-secrets-get",
-      "command-line-usage/stack-secrets-set",
       "command-line-usage/stacks-inspect-dependency-graph",
       "command-line-usage/org-create",
       "command-line-usage/org-describe",
@@ -83,6 +77,7 @@ module.exports = {
       "examples/managing-organization",
     ],
     "Upgrade Guide": [
+      "upgrade-guide/from-2-to-3",
       "upgrade-guide/from-1-to-2",
       "upgrade-guide/from-0-to-1",
     ]

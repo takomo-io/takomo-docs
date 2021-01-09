@@ -64,18 +64,6 @@ parameters:
     commandRole: arn:aws:iam::123456789012:role/deployer
 ```
 
-#### Example: Using Stack Secret as Parameter Value
-
-If our Takomo project contains stack secrets, we can use them as parameter values.
-
-```yaml
-parameters:
-  DatabasePassword:
-    resolver: secret
-    stack: /rds.yml
-    secret: password
-```
-
 ## See Also
 
 - [Config reference > parameters property](/docs/config-reference/stacks#parameters)

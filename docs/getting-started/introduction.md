@@ -48,10 +48,6 @@ Manage organizational units, service control and tag policies. Quickly create ne
 Avoid mistakes by reviewing changes to the configuration before deployment. Take advantage of safety features that prevent deployments to the wrong environments
 and accounts.
 
-#### Secrets Management
-
-Store your secrets, such as passwords and API keys, in AWS Parameter Store, and use them as input parameters for your CloudFormation stacks.
-
 #### Extensible
 
 Plug in your own JavaScript code to extend the core features.
