@@ -15,6 +15,14 @@ module.exports = {
   projectName: 'Takomo',
   plugins: [],
   themeConfig: {
+    announcementBar: {
+      id: 'release3',
+      content:
+          'Takomo 3.0.0 released. Take a look at <a href="/docs/upgrade-guide/from-2-to-3">upgrade guide</a>.',
+      backgroundColor: '#fafbfc',
+      textColor: '#091E42',
+      isCloseable: true,
+    },
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: false,

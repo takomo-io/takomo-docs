@@ -158,7 +158,7 @@ The parameter resolver provider has the following properties:
 | --- | -------- | ---- | ----------- |
 | name   | yes | string or function | Name of the resolver used to refer to the resolver from stack configuration files. It can be either a string or a function that returns a string. The function must not be asynchronous. |
 | init   | yes | function | A function that initializes the resolver with properties given in a stack configuration file. The function can be either normal or async, and must return an instantiated [parameter resolver](#parameter-resolver) object. |
-| schema | no  | function | An optional function that returns a [Joi](https://hapi.dev/module/joi/) schema that is used to validate configuration provided for the resolver from stack configuration files.<br/><br/>It takes two arguments: [Joi instance](https://hapi.dev/module/joi/api/?v=17.1.1) and [Joi object schema](https://hapi.dev/module/joi/api/?v=17.1.1#object). The former can be used to create new validation constraints. The latter is a pre-initialized object schema that you can modify to provide your resolver's validation schema.<br/><br/>You can return the pre-initialized schema from the schema function or use the Joi root instance to create an entirely new schema. |
+| schema | no  | function | An optional function that returns a [Joi](https://hapi.dev/module/joi/) schema that is used to validate configuration provided for the resolver from stack configuration files.<br/><br/>It takes one argument that is an object with the following properties:<br/><ul><li>ctx = CommandContext object that provides access to project configuration</li><li>joi = [Joi instance](https://hapi.dev/module/joi/api/?v=17.1.1) that can be used to create new validation constraints</li><li>base = A pre-initialized [Joi object schema](https://hapi.dev/module/joi/api/?v=17.1.1#object) that you can modify to provide your resolver's validation schema</li></ul>You can return the pre-initialized schema from the schema function or use the Joi instance to create an entirely new schema. In most cases you should modify the base schema object as needed and then return it. |
 
 ### Parameter Resolver
 
@@ -192,8 +192,8 @@ The parameter resolver provider defined in **resolvers/uppercase.js** looks like
 ```javascript title="resolvers/uppercase.js"
 module.exports = {
   name: "uppercase",
-  schema: (joi, schema) => {
-    return schema.keys({
+  schema: ({joi, base}) => {
+    return base.keys({
       value: joi.string().max(50).required()
     })
   },

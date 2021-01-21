@@ -231,7 +231,7 @@ Config sets configuration is an object where keys are names for the config sets 
 
 Requirements for config set names:
 
-- minimun length is 1
+- minimum length is 1
 - maximum length is 60
 - must match pattern `/^[a-zA-Z_]+[a-zA-Z0-9-_]*$/`
 - must be unique among config sets
@@ -514,7 +514,7 @@ List of trusted AWS service principals.
 <OrgConfigReferenceTable 
     required={false}
     types='string[]'
-    defaultValue='A list containing all AWS service principals'
+    defaultValue='[]'
     requirements={<div>Allowed AWS service principals:{ awsServicePrincipals() }</div>}
 />    
 
