@@ -39,6 +39,13 @@ Because the secrets management is no longer provided, also the `secret` resolver
 ## Breaking Changes to Stack Configuration Files
 
 - All CloudFormation template files are processed with Handlebars templating engine regardless the file extension. Before, one had to explicitly enable Handlebars processing by using `.hbs` file extension.
+  - You can disable Handlebars processing by setting `dynamic: false` in stack configuration files like so:
+    
+    ```yaml
+    template:
+      filename: <optional path to template file>
+      dynamic: false
+    ```
 - Expose stack tags in CloudFormation template files as an array instead of an object.
 
 ## Breaking Changes to Hooks

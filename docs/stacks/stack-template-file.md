@@ -12,7 +12,7 @@ CloudFormation template files for stacks are located in the **templates** direct
 
 You specify the template file for a stack with a [template](/docs/config-reference/stacks#template) property. It accepts a relative file path to the template file in the **templates** directory. If no template is given, the relative path to the stack configuration file in the **stacks** directory is used.
 
-Both the standard CloudFormation template file formats. i.e. **JSON** and **YAML**, are supported, but the file extension must be **.yml**, **.json** or **.hbs**. The last one is used to tell Takomo to treat the template file as a dynamic Handlebars template.
+Both of the standard CloudFormation template file formats. i.e. **JSON** and **YAML**, are supported.
 
 #### Example: Defining the Template File
 
@@ -56,6 +56,14 @@ templateBucket:
 ## Dynamic Templates
 
 Takomo processes template files with Handlebars templating engine. You can use all Handlebars features.
+
+You can disable Handlebars processing of the stack template by specifying `dynamic: false` like so:
+
+```yaml
+template:
+  filename: optional-path-to-template-file
+  dynamic: false
+```
 
 ## See Also
 
