@@ -89,8 +89,7 @@ module.exports = {
 
 Please note that in many examples the `base` argument was named as `schema`.
 
-### Other changes
+### Other API Changes
 
 You might bump into other breaking changes if you have used Takomo's types in your custom resolvers, hooks or helpers. Most of the changes to the codebase are small, and you should be able to fix any possible issues easily. You can find the stable type definitions from the [API documentation](https://takomo.io/api-docs/release/v3-0-0/).
 
-If you have are uncertain about upgrading to 3.x, please feel free to contact me in [Gitter](https://gitter.im/takomo-io/community) or via email &lt;henri at takomo.io&gt;.
