@@ -17,8 +17,8 @@ jobs:
         with:
           path: node_modules
           key: npm-${{ hashFiles('yarn.lock') }}
-      - run: echo ::set-env name=CURRENT_RELEASE::$(echo ${GITHUB_REF#refs/heads/release/})
-      - run: echo ::set-env name=LATEST_RELEASE::$(node ci/get-latest-release.js)
+      - run: echo "CURRENT_RELEASE=$(echo ${GITHUB_REF#refs/release/})" >> $GITHUB_ENV
+      - run: echo "LATEST_RELEASE=$(node ci/get-latest-release.js)" >> $GITHUB_ENV
       - run: yarn
       - run: yarn build
       - run: ./ci/publish-latest-docs.sh
