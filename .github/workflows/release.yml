@@ -22,7 +22,7 @@ jobs:
           path: node_modules
           key: npm-${{ hashFiles('yarn.lock') }}
       - run: echo "CURRENT_RELEASE=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-      - run: echo "DOCS_BASE=$(echo /api-docs/release/v$RELEASE_VERSION/ | tr '.' '-')" >> $GITHUB_ENV
+      - run: echo "DOCS_BASE=$(echo /docs/$CURRENT_RELEASE/ | tr '.' '-')" >> $GITHUB_ENV
       - run: yarn
       - run: yarn build
       - run: ./ci/publish-versioned-docs.sh
