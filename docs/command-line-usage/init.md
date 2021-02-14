@@ -42,6 +42,10 @@ This command has no positional arguments.
 
 <CommonCliOptionsTable notSupported={['yes']} />
 
+## IAM Permissions
+
+This command requires no IAM permissions.
+
 ## Examples
 
 Initialize a new project to the current directory:

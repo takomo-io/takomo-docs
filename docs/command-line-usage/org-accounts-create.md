@@ -21,7 +21,9 @@ tkm org accounts create \
   --email <account email> \
   [--iam-user-access-to-billing <IAM user access to billing>] \
   [--role-name <account admin role> ] \
-  [--alias <account alias>]
+  [--alias <account alias>] \
+  [--ou <organizational unit>] \
+  [--config-file <path to account config file>]
 ```
 
 ## Positional arguments
@@ -56,6 +58,12 @@ This command has no positional arguments.
     <CliOption name='--alias' required={false}>
         The account alias to create.
     </CliOption>
+    <CliOption name='--ou' required={false}>
+        Path to the organizational unit where the account should be added. Defaults to Root.
+    </CliOption>
+    <CliOption name='--config-file' required={false}>
+        Path to a file containing account specific configuration.
+    </CliOption>
 </CliOptionsTable>
 
 ## Common Options
@@ -74,6 +82,16 @@ Statement:
       - organizations:DescribeOrganization
       - organizations:CreateAccount
       - organizations:DescribeCreateAccountStatus
+      - organizations:ListRoots
+      - organizations:ListTargetsForPolicy
+      - organizations:ListAWSServiceAccessForOrganization
+      - organizations:DescribePolicy
+      - organizations:ListPolicies
+      - organizations:ListAccountsForParent
+      - organizations:ListAccounts
+      - organizations:DescribeOrganization
+      - organizations:ListOrganizationalUnitsForParent
+      - organizations:MoveAccount
     Resource: "*"
 ```
 
@@ -83,4 +101,13 @@ Create a new account with email **hello@example.com** and name **example**.
 
 ```
 tkm org accounts create --email hello@example.com --name example
+```
+
+Create a new account to organiational unit Root/Examples.
+
+```
+tkm org accounts create \
+  --email hello@example.com \
+  --name example \
+  --ou Root/Examples
 ```

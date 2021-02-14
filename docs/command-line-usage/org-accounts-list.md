@@ -31,6 +31,20 @@ This command has no positional arguments.
 
 <CommonCliOptionsTable />
 
+## IAM Permissions
+
+This command must be run using credentials of the organization master account
+with the following permissions.
+
+```yaml
+Statement:
+  - Effect: Allow
+    Action:
+      - organizations:DescribeOrganization
+      - organizations:ListAccounts
+    Resource: "*"
+```
+
 ## Examples
 
 List all accounts.

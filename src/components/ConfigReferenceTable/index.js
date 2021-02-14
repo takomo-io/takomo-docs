@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTypes, getRequirements } from "../common"
 
 const getOverriding = (value) => {
     switch (value) {
@@ -34,6 +35,8 @@ const getDefineIn = (value) => {
     }
 }
 
+
+
 export default ({ children, required, types, defaultValue, inherited, overriding, since, requirements, defineIn }) => (
     <table class={'config-reference-table'}>
         <tr>
@@ -43,7 +46,7 @@ export default ({ children, required, types, defaultValue, inherited, overriding
         <tr>
             <th>Type</th>
             <td>
-                { types.map(type => (<div>{type}</div>)) }
+                { getTypes(types) }
             </td>
         </tr>
         <tr>
@@ -70,12 +73,7 @@ export default ({ children, required, types, defaultValue, inherited, overriding
         </tr>
         <tr>
             <th>Requirements</th>
-            <td>
-            { requirements.length > 0
-                ? <ul>{ requirements.map(requirement => <li>{ requirement }</li>) }</ul>
-                : <div>none</div>
-            }
-            </td>
+            <td>{ getRequirements(requirements) }</td>
         </tr>
     </table>
 );

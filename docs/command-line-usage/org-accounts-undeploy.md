@@ -46,6 +46,35 @@ tkm org accounts undeploy [org-unit-path...] [--account <account_id>]...
 
 <CommonCliOptionsTable />
 
+## IAM Permissions
+
+This command must be run using credentials of the organization master account
+with the following permissions.
+
+```yaml
+Statement:
+  - Effect: Allow
+    Action:
+      - organizations:ListRoots
+      - organizations:ListTargetsForPolicy
+      - organizations:ListAWSServiceAccessForOrganization
+      - organizations:DescribePolicy
+      - organizations:ListPolicies
+      - organizations:ListAccountsForParent
+      - organizations:ListAccounts
+      - organizations:DescribeOrganization
+      - organizations:ListOrganizationalUnitsForParent
+    Resource: "*"
+
+  # IAM permissions needed to assume role from the target accounts.
+  # Specify resource to restrict access to specific roles.  
+  - Sid: IAM
+    Effect: Allow
+    Action:
+      - sts:AssumeRole
+    Resource: "*"
+```
+
 ## Examples
 
 Undeploy all accounts in the organization.

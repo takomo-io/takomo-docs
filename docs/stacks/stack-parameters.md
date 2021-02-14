@@ -32,6 +32,31 @@ parameters:
     - 10.0.0.64/26
 ```
 
+You can provide configuration for static parameters using object notation which allows you to use additional properties in the configuration. When using the object notation you give the parameter value in `value` property:
+
+```yaml
+parameters:
+  VpcId:
+    value: vpc-06e4ab6c6c
+```
+
+## Immutable Parameters
+
+You can mark parameters as immutable if you want to make sure their values are not updated. Many CloudFormation resources have properties that don't support updating after creation, and making them immutable in stack configuration helps prevent failures during deployment.
+
+A parameter can't be marked as immutable if it has **NoEcho** set to true in the CloudFormation template file. There is no way to find out the current value for NoEcho parameters and therefore Takomo can't detect if their value is about to be changed. 
+
+#### Examples
+
+A static immnutable value for a parameter named **VpcId**:
+
+```yaml
+parameters:
+  VpcId:
+    value: vpc-06e4ab6c6c
+    immutable: true
+```
+
 ## Dynamic Parameters
 
 In many cases, it's not wise or even possible to hard code all parameter values. When you need to assign parameter values dynamically at deployment time, you can use parameter resolvers. There are a few built-in parameter resolvers, and you can also implement your own.

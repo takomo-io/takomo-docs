@@ -227,9 +227,9 @@ Configuration for each hook is given as an object with the properties described 
 | --- | -------- | ---- | ----------- |
 | name      | yes | string | Name of the hook |
 | type      | yes | string | Type of the hook |
-| operation | no  | string<br/>string[] | Stack operations during which the hook is executed. Accepts a single value or a list of values. If no operation is defined, the hook is executed on all operations.<br/><br/>Allowed values:<ul><li>create - A new stack is created</li><li>update - An existing stack is updated</li><li>delete - An existing stack is deleted</li></ul> |
-| stage     | no  | string<br/>string[] | Stack operation stages during which the hook is executed. Accepts a single value or a list of values. If no stage is defined, the hook is executed on all stages.<br/><br/>Allowed values:<ul><li>before - Hook is executed before the stack operation</li><li>after - Hook is executed after the stack operation</li></ul> |
-| status    | no  | string<br/>string[] | Stack operation statuses during which the hook is executed. Accepts a single value or a list of values. If no status is defined, the hook is executed on all statuses.<br/><br/>Allowed values:<ul><li>success - Stack operation was successful</li><li>failed - Stack operation failed</li><li>cancelled - Stack operation was cancelled</li><li>skipped - Stack operation was skipped</li></ul>Has effect only when the stage is after. |
+| operation | no  | string,<br/>string[] | Stack operations during which the hook is executed. Accepts a single value or a list of values. If no operation is defined, the hook is executed on all operations.<br/><br/>Allowed values:<ul><li>create - A new stack is created</li><li>update - An existing stack is updated</li><li>delete - An existing stack is deleted</li></ul> |
+| stage     | no  | string,<br/>string[] | Stack operation stages during which the hook is executed. Accepts a single value or a list of values. If no stage is defined, the hook is executed on all stages.<br/><br/>Allowed values:<ul><li>before - Hook is executed before the stack operation</li><li>after - Hook is executed after the stack operation</li></ul> |
+| status    | no  | string,<br/>string[] | Stack operation statuses during which the hook is executed. Accepts a single value or a list of values. If no status is defined, the hook is executed on all statuses.<br/><br/>Allowed values:<ul><li>success - Stack operation was successful</li><li>failed - Stack operation failed</li><li>cancelled - Stack operation was cancelled</li><li>skipped - Stack operation was skipped</li></ul>Has effect only when the stage is after. |
 
 ### Examples
 
@@ -349,7 +349,7 @@ Parameters configuration is an object where keys are names for the parameters an
 
 | Key | Required | Type | Description |
 | --- | -------- | ---- | ----------- |
-| {parameter&nbsp;name} | yes | string<br/>number<br/>boolean<br/>[Parameter Configuration Object](#parameter-configuration-object)<br/>any[] | Value of the parameter whose name is given as the key. An array should be used when the template parameter is accepts a list of values. |
+| {parameter&nbsp;name} | yes | string,<br/>number,<br/>boolean,<br/>[Parameter Configuration Object](#parameter-configuration-object),<br/>any[] | Value of the parameter whose name is given as the key. An array should be used when the template parameter is accepts a list of values. |
 
 ### Parameter Configuration Object
 
@@ -357,11 +357,23 @@ Parameter value must be given as object when the parameter value is resolved usi
 
 | Key | Required | Type | Description |
 | --- | -------- | ---- | ----------- |
-| resolver     | yes | string  | Name of parameter resolver used to resolve the value for the parameter |
+| resolver     | no  | string  | Name of parameter resolver used to resolve the value for the parameter. |
 | confidential | no  | boolean | Boolean determining if the parameter value should be concealed from the logs. Defaults to false. |
 | immutable    | no  | boolean | Boolean determining if the parameter value should be immutable. Updating an immutable parameter value is not allowed. Defaults to false.<br/><br/>Parameters marked with NoEcho can't be immutable. |
+| schema       | no | string,<br/>[Parameter Schema Object](#parameter-schema-object) | A Joi schema used to validate the parameter value. Use a string value to specify schema name when no schema properties are needed. If the schema has properties, use [Parameter Schema Object](#parameter-schema-object). |
+| value        | no | string,<br/>number,<br/>boolean,<br/>any[] | Parameter value when no custom resolver is used. |
 
 In addition to the standard properties documented above, different parameter resolvers can have properties of their own.
+
+### Parameter Schema Object
+
+Specifies Joi schema to validate the parameter value.
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| name | yes  | string  | Name of the schema. |
+
+If the schema configuration has other properties, they will be used to initialize the schema.
 
 ### Examples
 

@@ -46,6 +46,19 @@ This command supports the following common options.
 
 <CommonCliOptionsTable />
 
+## IAM Permissions
+
+These are the minimum IAM permissions required to run this command.
+
+```yaml
+Statement:
+  - Effect: Allow
+    Action:
+      - iam:CreateServiceLinkedRole
+      - organizations:CreateOrganization
+    Resource: "*"
+```
+
 ## Examples
 
 Create a new organization with default feature set, which is **ALL**.

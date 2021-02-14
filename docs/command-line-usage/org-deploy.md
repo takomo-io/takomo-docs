@@ -36,3 +36,36 @@ This command has no command-specific options.
 This command supports the following common options.
 
 <CommonCliOptionsTable />
+
+## IAM Permissions
+
+This command must be run using credentials of the organization master account
+with the following permissions.
+
+```yaml
+Statement:
+  - Effect: Allow
+    Action:
+      - organizations:ListRoots
+      - organizations:ListTargetsForPolicy
+      - organizations:DisableAWSServiceAccess
+      - organizations:DeletePolicy
+      - organizations:DeleteOrganizationalUnit
+      - organizations:DisablePolicyType
+      - organizations:ListAWSServiceAccessForOrganization
+      - organizations:DescribePolicy
+      - organizations:ListPolicies
+      - organizations:ListAccountsForParent
+      - organizations:ListAccounts
+      - organizations:EnableAWSServiceAccess
+      - organizations:UpdateOrganizationalUnit
+      - organizations:DescribeOrganization
+      - organizations:UpdatePolicy
+      - organizations:EnablePolicyType
+      - organizations:AttachPolicy
+      - organizations:ListOrganizationalUnitsForParent
+      - organizations:CreateOrganizationalUnit
+      - organizations:MoveAccount
+      - organizations:CreatePolicy
+    Resource: "*"
+```

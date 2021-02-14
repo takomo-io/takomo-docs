@@ -35,6 +35,27 @@ This command has no command-specific options.
 
 <CommonCliOptionsTable />
 
+## IAM Permissions
+
+These are the minimum IAM permissions required to run this command.
+
+```yaml
+Statement: 
+  - Sid: Stacks
+    Effect: Allow
+    Action:
+      - cloudformation:DescribeStacks
+    Resource: "*"
+
+  # IAM permissions needed only if command roles are used  
+  # Specify resource to restrict access to specific roles.  
+  - Sid: IAM
+    Effect: Allow
+    Action:
+      - sts:AssumeRole
+    Resource: "*" 
+```
+
 ## Examples
 
 List all stacks:
