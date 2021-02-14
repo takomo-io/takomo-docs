@@ -7,8 +7,8 @@ module.exports = {
     ],
     "General": [
       'general/directory-structure',
-      'general/project-configuration',
       'general/credentials',
+      'general/project-configuration',
     ],
     "Stacks": [
       "stacks/introduction",
