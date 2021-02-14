@@ -538,11 +538,11 @@ tags:
 
 ## template
 
-Path to a CloudFormation template file used to create or update the stack, located in the **templates** directory.
+Specifies the CloudFormation template file be used to create or update the stack. Use a string value to give filename located in the **templates** directory. You can use [Template Configuration Object](#template-configuration-object) to disable dynamic processing of the template file.
 
 <ConfigReferenceTable 
     required={false} 
-    types={['string']}
+    types={['string', <a href='#template-configuration-object'>Template Configuration Object</a>]}
     defaultValue='computed (see below)' 
     inherited={false} 
     overriding='not applicable' 
@@ -556,6 +556,15 @@ Path to a CloudFormation template file used to create or update the stack, locat
 
 By default, the stack configuration file path relative to the **stacks** directory is used. For example, if the stack configuration file is **networks/vpc.yml** and the template is not explicitly defined, then the template gets value **networks/vpc.yml**.
 
+### Template Configuration Object
+
+Template bucket configuration is an object with following keys:
+
+| Key | Required | Type | Description |
+| --- | -------- | ---- | ----------- |
+| filename | no | string  | Path to a CloudFormation template file in **templates** dir. |
+| dynamic  | no | boolean | Boolean indicating if the template file should be processed using Handlebars templating engine. Defaults to true.  |
+
 ### Examples
 
 Use template rds.yml:
@@ -568,6 +577,14 @@ Use template from networking subdir:
 
 ```yaml
 template: networking/vpc.yml
+```
+
+Disable Handlebars processing:
+
+```yaml
+template: 
+  filename: my-template.yml
+  dynamic: false
 ```
 
 ## templateBucket
