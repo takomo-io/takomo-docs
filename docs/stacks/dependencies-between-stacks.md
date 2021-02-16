@@ -38,9 +38,26 @@ depends:
   - /dev/security-groups.yml
 ```
 
+You can also use relative paths to specify dependencies. The relative paths work the same way as relative paths in Linux filesystem.
+
+Say, you have the following directory structure:
+
+```
+.
+└─ stacks
+   ├─ vpc.yml
+   ├─ common
+   |  └─ logs.yml
+   └─ application
+      ├─ frontend.yml
+      └─ backend.yml
+```
+
+Here, stack **frontend.yml** could refer to **backend.yml** stack by using an absolute stack path **/application/backend.yml** or a relative stack path **backend.yml**, and it could refer to **vpc.yml** with relative stack path **../vpc.yml**, and to **logs.yml** with relative stack path **../common/logs.yml**.
+
 ## Dependencies from Parameter Resolvers
 
-Parameter resolvers can also introduce dependencies between stacks. A good example is the [stack-output parameter resolver](/docs/stacks/parameter-resolvers#stack-output) that reads a value from stack output and then passes it as an input parameter for another stack. When a parameter resolver creates the dependency between stacks, there's no need to specify it using the **depends** property.
+Parameter resolvers can also introduce dependencies between stacks. A good example is the [stack-output parameter resolver](/docs/stacks/parameter-resolvers#stack-output) that reads a value from a stack output and then passes it as an input parameter for another stack. When a parameter resolver creates the dependency between stacks, there's no need to specify it using the **depends** property.
 
 ## See Also
 

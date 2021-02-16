@@ -203,6 +203,12 @@ depends:
   - /dev/security-groups.yml
 ```
 
+Using a relative stack path:
+
+```yaml
+depends: ../../common/logs.yml
+```
+
 ## hooks
 
 A list of hooks to be executed at different stages of deploy and undeploy commands. Hooks are executed in the order they are defined. If a hook fails, the stack operation is cancelled and deemed as failure.

@@ -39,7 +39,7 @@ Here are the properties available for the **stack-output** resolver.
 | Key | Required | Type | Description |
 | --- | -------- | ---- | ----------- |
 | resolver | yes | string | Resolver name, this must be **stack-output**. |
-| stack    | yes | string | Stack path of the source stack. |
+| stack    | yes | string | Stack path of the source stack. Can be an absolute or a relative stack path. |
 | output   | yes | string | Name of the stack output whose value is read. |
 | confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false** |
 | immutable    | no | boolean | Mark the parameter as immutable, defaults to **false** |
