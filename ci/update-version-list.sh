@@ -9,6 +9,8 @@ aws s3 ls s3://takomo-website-versioned/docs/release/ \
   | tr - . \
   | tr -d v > versions.txt
 
+cat versions.txt
+
 aws s3 cp \
   versions.txt \
   s3://takomo-website-versioned/docs/release/versions.txt
