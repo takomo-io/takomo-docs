@@ -73,7 +73,7 @@ function Version() {
                         <tr>
                             <th>{latestVersion}</th>
                             <td>
-                                <Link to={useBaseUrl('/docs')}>Documentation</Link>
+                                <Link to='https://takomo.io/'>Documentation</Link>
                             </td>
                         </tr>
                         </tbody>
