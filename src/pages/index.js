@@ -68,7 +68,7 @@ function Home() {
                 'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
-              to={useBaseUrl('docs/')}>
+              href='https://docs.takomo.io'>
               Get Started
             </Link>
           </div>

@@ -15,14 +15,6 @@ module.exports = {
   projectName: 'Takomo',
   plugins: [],
   themeConfig: {
-    announcementBar: {
-      id: 'release3',
-      content:
-          'Takomo 3.0.0 released. Take a look at <a href="/docs/upgrade-guide/from-2-to-3">upgrade guide</a>.',
-      backgroundColor: '#fafbfc',
-      textColor: '#091E42',
-      isCloseable: true,
-    },
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: false,
@@ -30,10 +22,6 @@ module.exports = {
     },
     googleAnalytics: {
       trackingID: 'UA-165592316-1',
-    },
-    algolia: {
-      apiKey: '34a9b39ce6857682820980ace4f5fa1c',
-      indexName: 'takomo'
     },
     navbar: {
       title: 'Takomo ' + currentRelease,
@@ -44,8 +32,7 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
+          href: 'https://docs.takomo.io',
           label: 'Docs',
           position: 'left',
         },
@@ -75,41 +62,12 @@ module.exports = {
           items: [
             {
               label: 'Introduction',
-              to: 'docs',
+              to: 'https://docs.takomo.io/',
             },
             {
               label: 'Installation',
-              to: 'docs/getting-started/installation',
-            },
-            {
-              label: 'Examples',
-              to: 'docs/examples/about',
-            },
-          ],
-        },
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Stacks',
-              to: 'docs/stacks/introduction',
-            },
-            {
-              label: 'Deployment Targets',
-              to: 'docs/deployment-targets/introduction',
-            },
-            {
-              label: 'Organization',
-              to: 'docs/organizations/introduction',
-            },
-            {
-              label: 'Config Reference',
-              to: 'docs/config-reference/project',
-            },
-            {
-              label: 'CLI',
-              to: 'docs/command-line-usage/overview',
-            },
+              to: 'https://docs.takomo.io/getting-started/installation',
+            }
           ],
         },
         {
