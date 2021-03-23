@@ -32,7 +32,7 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://takomo.io/api-docs/latest/',
+          href: 'https://takomo.io/api-docs/release/latest/',
           label: 'API',
           position: 'left',
         },
