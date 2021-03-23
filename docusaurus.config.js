@@ -38,7 +38,7 @@ module.exports = {
           position: 'left',
         },
         {
-          href: `https://takomo.io/api-docs/release/${currentRelease.replace(/\./g, '-')}/`,
+          href: 'https://takomo.io/api-docs/release/v3-4-0/',
           label: 'API',
           position: 'left',
         },
