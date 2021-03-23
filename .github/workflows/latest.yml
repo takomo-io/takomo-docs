@@ -3,7 +3,7 @@ name: Latest
 on:
   push:
     branches:
-      - release/v**
+      - master
 
 jobs:
   build:

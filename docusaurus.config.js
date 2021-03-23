@@ -1,10 +1,5 @@
-const currentRelease = process.env.CURRENT_RELEASE || 'next'
-
 module.exports = {
   title: 'Takomo',
-  customFields: {
-    currentRelease,
-  },
   tagline: 'Organize, parameterize and deploy CloudFormation stacks',
   url: 'https://takomo.io',
   baseUrl: process.env.DOCS_BASE || '/',
@@ -24,7 +19,7 @@ module.exports = {
       trackingID: 'UA-165592316-1',
     },
     navbar: {
-      title: 'Takomo ' + currentRelease,
+      title: 'Takomo',
       hideOnScroll: true,
       logo: {
         alt: 'Takomo logo',
@@ -37,14 +32,9 @@ module.exports = {
           position: 'left',
         },
         {
-          href: `https://takomo.io/api-docs/release/${currentRelease.replace(/\./g, '-')}/`,
+          href: 'https://takomo.io/api-docs/latest/',
           label: 'API',
           position: 'left',
-        },
-        {
-          to: 'versions/',
-          label: 'All versions',
-          position: 'right',
         },
         {
           href: 'https://github.com/takomo-io/takomo',
@@ -93,20 +83,13 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Henri Meltaus. Built with <a href='https://v2.docusaurus.io/'>Docusaurus</a>.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Henri Meltaus`,
     },
   },
   presets: [
     [
       '@docusaurus/preset-classic',
       {
-        docs: {
-          path: 'docs',
-          sidebarPath: require.resolve('./sidebars.js'),
-        },
-        blog: {
-          showReadingTime: false,
-        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
           sidebarCollapsible: false
