@@ -32,7 +32,8 @@ module.exports = {
       },
       items: [
         {
-          href: 'https://docs.takomo.io',
+          to: 'docs/',
+          activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
         },
