@@ -1,0 +1,204 @@
+Description: Takomo website
+
+Resources:
+
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: "*.takomo.io"
+      ValidationMethod: DNS
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: takomo-website-bucket
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - '*'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Website
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+            Action: s3:GetObject
+            Resource: !Sub ${Bucket.Arn}/*
+
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        PriceClass: PriceClass_100
+        Origins:
+          - DomainName: !Sub ${Bucket}.s3.amazonaws.com
+            Id: WebsiteS3Bucket
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
+        Enabled: true
+#        Aliases:
+#          - takomo.io
+        ViewerCertificate:
+          AcmCertificateArn: !Ref Certificate
+          SslSupportMethod: sni-only
+        DefaultCacheBehavior:
+          TargetOriginId: WebsiteS3Bucket
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          Compress: true
+          DefaultTTL: 0
+          LambdaFunctionAssociations:
+            - EventType: origin-request
+              LambdaFunctionARN: !Ref EdgeLambdaVersion{{ stack.data.lambdaVersion }}
+#        CacheBehaviors:
+#          - TargetOriginId: Versioned
+#            PathPattern: docs/release/*
+#            ViewerProtocolPolicy: redirect-to-https
+#            ForwardedValues:
+#              QueryString: false
+#              Headers:
+#                - Origin
+#              Cookies:
+#                Forward: none
+#            AllowedMethods:
+#              - GET
+#              - HEAD
+#              - OPTIONS
+#            Compress: true
+#            DefaultTTL: 0
+#            LambdaFunctionAssociations:
+#              - EventType: origin-request
+#                LambdaFunctionARN: !Ref EdgeLambdaVersionArn
+#          - TargetOriginId: Versioned
+#            PathPattern: api-docs/*
+#            ViewerProtocolPolicy: redirect-to-https
+#            ForwardedValues:
+#              QueryString: false
+#              Cookies:
+#                Forward: none
+#            AllowedMethods:
+#              - GET
+#              - HEAD
+#              - OPTIONS
+#            Compress: true
+#            DefaultTTL: 0
+#        LambdaFunctionAssociations:
+#          - EventType: origin-request
+#            LambdaFunctionARN: !Ref EdgeLambdaVersion{{ stack.data.lambdaVersion }}
+        CustomErrorResponses:
+          - ErrorCode: 400
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 403
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 404
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 405
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 414
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 416
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 500
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 501
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 502
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 503
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+          - ErrorCode: 504
+            ResponseCode: 404
+            ErrorCachingMinTTL: 30
+            ResponsePagePath: /404.html
+
+  EdgeLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: takomo-website-edge
+      Handler: index.handler
+      Role: !GetAtt EdgeLambdaRole.Arn
+      Runtime: nodejs14.x
+      Timeout: 6
+      Code:
+        ZipFile: |
+          {{> edge-lambda.js }}
+
+  EdgeLambdaVersion{{ stack.data.lambdaVersion }}:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref EdgeLambda
+
+  EdgeLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action: sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - edgelambda.amazonaws.com
+                - replicator.lambda.amazonaws.com
+            Effect: Allow
+      Policies:
+        - PolicyName: EdgeLambdaPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - xray:PutTraceSegments
+                  - xray:PutTelemetryRecords
+                  - lambda:GetFunction
+                  - lambda:EnableReplication*
+                  - lambda:InvokeFunction
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Effect: Allow
+                Resource: '*'
