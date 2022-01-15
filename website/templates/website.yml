@@ -2,10 +2,10 @@ Description: Takomo website
 
 Resources:
 
-  Certificate:
+  Certificate2:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: "*.takomo.io"
+      DomainName: "takomo.io"
       ValidationMethod: DNS
 
   Bucket:
@@ -54,13 +54,14 @@ Resources:
             S3OriginConfig:
               OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
         Enabled: true
-#        Aliases:
-#          - takomo.io
+        Aliases:
+          - takomo.io
         ViewerCertificate:
-          AcmCertificateArn: !Ref Certificate
+          AcmCertificateArn: !Ref Certificate2
           SslSupportMethod: sni-only
         DefaultCacheBehavior:
           TargetOriginId: WebsiteS3Bucket
+          ResponseHeadersPolicyId: 60669652-455b-4ae9-85a4-c4c02393f86c
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: false
@@ -75,41 +76,6 @@ Resources:
           LambdaFunctionAssociations:
             - EventType: origin-request
               LambdaFunctionARN: !Ref EdgeLambdaVersion{{ stack.data.lambdaVersion }}
-#        CacheBehaviors:
-#          - TargetOriginId: Versioned
-#            PathPattern: docs/release/*
-#            ViewerProtocolPolicy: redirect-to-https
-#            ForwardedValues:
-#              QueryString: false
-#              Headers:
-#                - Origin
-#              Cookies:
-#                Forward: none
-#            AllowedMethods:
-#              - GET
-#              - HEAD
-#              - OPTIONS
-#            Compress: true
-#            DefaultTTL: 0
-#            LambdaFunctionAssociations:
-#              - EventType: origin-request
-#                LambdaFunctionARN: !Ref EdgeLambdaVersionArn
-#          - TargetOriginId: Versioned
-#            PathPattern: api-docs/*
-#            ViewerProtocolPolicy: redirect-to-https
-#            ForwardedValues:
-#              QueryString: false
-#              Cookies:
-#                Forward: none
-#            AllowedMethods:
-#              - GET
-#              - HEAD
-#              - OPTIONS
-#            Compress: true
-#            DefaultTTL: 0
-#        LambdaFunctionAssociations:
-#          - EventType: origin-request
-#            LambdaFunctionARN: !Ref EdgeLambdaVersion{{ stack.data.lambdaVersion }}
         CustomErrorResponses:
           - ErrorCode: 400
             ResponseCode: 404

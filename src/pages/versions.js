@@ -62,10 +62,17 @@ export default function Versions() {
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
-    setTimeout(() => {
-      console.log("ddddd")
-      setVersions(["3.40.0", "3.39.0", "3.38.0"])
-    }, 2000)
+    fetch("https://takomo.io/takomo-versions.txt", {
+      headers: {
+        "Content-Type": "text/plain"
+      }
+    })
+      .then(response => response.text())
+      .then(body => {
+        const versions = body.split("\n").map(v => v.trim()).filter(v => v.length > 0)
+        setVersions(versions)
+      })
+
   }, []);
 
   return (
