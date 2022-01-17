@@ -121,13 +121,17 @@ const config = {
             title: 'More',
             items: [
               {
+                label: 'Releases',
+                href: '/releases'
+              },
+              {
                 label: 'GitHub',
                 href: 'https://github.com/takomo-io/takomo',
               },
               {
                 label: 'NPM',
                 href: 'https://www.npmjs.com/package/takomo'
-              }
+              },
             ],
           },
         ],
