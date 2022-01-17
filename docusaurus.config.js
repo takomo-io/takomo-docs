@@ -104,6 +104,10 @@ const config = {
             title: 'Support',
             items: [
               {
+                label: 'Telegram',
+                href: 'https://t.me/takomo_io',
+              },
+              {
                 label: 'Gitter',
                 href: 'https://gitter.im/takomo-io/community',
               },
@@ -112,7 +116,7 @@ const config = {
                 href: 'https://github.com/takomo-io/takomo/issues',
               },
               {
-                label: 'Discussion',
+                label: 'GitHub Discussion',
                 href: 'https://github.com/takomo-io/takomo/discussions',
               },
             ],
