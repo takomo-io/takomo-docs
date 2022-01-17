@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - release/**
+      - main
+
+jobs:
+
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 17.0.1
+      - uses: actions/cache@v2
+        id: node_modules
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('yarn.lock') }}
+      - name: Install dependencies
+        if: steps.node_modules.outputs.cache-hit != 'true'
+        run: yarn
+      - name: Dependency check
+        run: yarn depcheck
+      - name: Deploy
+        run: ./scripts/deploy.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEPLOYER_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEPLOYER_AWS_SECRET_ACCESS_KEY }}

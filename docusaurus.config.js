@@ -124,6 +124,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/takomo-io/takomo',
               },
+              {
+                label: 'NPM',
+                href: 'https://www.npmjs.com/package/takomo'
+              }
             ],
           },
         ],

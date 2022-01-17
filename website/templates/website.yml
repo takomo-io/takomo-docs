@@ -61,7 +61,7 @@ Resources:
           SslSupportMethod: sni-only
         DefaultCacheBehavior:
           TargetOriginId: WebsiteS3Bucket
-          ResponseHeadersPolicyId: 60669652-455b-4ae9-85a4-c4c02393f86c
+          ResponseHeadersPolicyId: 5cc3b908-e619-4b99-88e5-2cf7f45965bd
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: false

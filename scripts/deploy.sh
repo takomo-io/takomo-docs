@@ -50,22 +50,11 @@ echo "Encoded version: ${ENCODED_CURRENT_VERSION}"
 build_and_deploy "/archive/${ENCODED_CURRENT_VERSION}/"
 
 # ======================================================
-# Update versions file that contains all versioned
-# websites.
+# Update releases file that contains all releases and
+# links to versioned websites.
 # ======================================================
-aws s3 ls s3://takomo-website-bucket/archive/ --profile takomo-website-deployer \
-  | sed -e 's/^[[:space:]]*//' \
-  | cut -d ' ' -f 2 \
-  | sed 's/-/\./g' \
-  | sed 's/\///g' > takomo-versions.txt
-
-cat takomo-versions.txt | sort -V > takomo-versions-sorted.txt
-LATEST_VERSION=$(tail -n1 takomo-versions-sorted.txt)
-echo "Latest version: ${LATEST_VERSION}"
-echo "All versions:"
-cat takomo-versions-sorted.txt
-
-aws s3 cp takomo-versions-sorted.txt s3://takomo-website-bucket/takomo-versions.txt --profile takomo-website-deployer
+cd "$DIR"
+LATEST_VERSION=$(node update-releases-config.js)
 
 # ======================================================
 # Build and deploy as latest version if the current
