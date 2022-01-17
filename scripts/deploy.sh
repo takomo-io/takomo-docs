@@ -22,15 +22,13 @@ build_and_deploy() {
   aws s3 cp . s3://takomo-website-bucket${BASE_URL} \
     --recursive \
     --exclude "*.html" \
-    --cache-control "public, max-age=604800" \
-    --profile takomo-website-deployer
+    --cache-control "public, max-age=604800"
 
   aws s3 cp . s3://takomo-website-bucket${BASE_URL} \
     --recursive \
     --exclude "*" \
     --include "*.html" \
-    --cache-control "public, max-age=60" \
-    --profile takomo-website-deployer
+    --cache-control "public, max-age=60"
 }
 
 # ======================================================
