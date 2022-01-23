@@ -36,7 +36,7 @@ const renderBody = (version, body, website) => {
     return md.render(body)
   }
 
-  const [header, ...rest] = body.trim().split("\n", 2)
+  const [header, ...rest] = body.trim().split("\n")
   const modifiedBody = [ header, `[Documentation](${website.url})`, ...rest].join("\n")
   return md.render(modifiedBody)
 }
