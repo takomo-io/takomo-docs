@@ -31,23 +31,43 @@ const listVersionedWebsites = async () => {
   return versions
 }
 
-const extractReleaseInfo = ({ name, published_at, body, html_url }) => ({
-  version: name.replace("v", ""),
-  date: published_at,
-  body: md.render(body),
-  githubUrl: html_url
-})
+const renderBody = (version, body, website) => {
+  if (!website) {
+    return md.render(body)
+  }
 
-const listGitHubReleases = () => {
+  const [header, ...rest] = body.trim().split("\n", 2)
+  const modifiedBody = [ header, `[Documentation](${website.url})`, ...rest].join("\n")
+  return md.render(modifiedBody)
+}
+
+const extractReleaseInfo = ({ name, published_at, body, html_url }, websites) => {
+  const version = name.replace("v", "")
+  const website = websites.find(w => w.version === version)
+  const renderedBody = renderBody(version, body, website)
+
+  return {
+    version,
+    date: published_at,
+    body: renderedBody,
+    githubUrl: html_url,
+    website: website !== undefined,
+    websiteUrl: website ? website.url : null,
+  }
+}
+
+const listGitHubReleases = (websites) => {
   return octokit.paginate("GET /repos/{org}/{repo}/releases", {
     org: "takomo-io",
     repo: "takomo",
-  }).then(releases => releases.map(extractReleaseInfo))
+  }).then(releases => {
+    return releases.map(release => extractReleaseInfo(release, websites))
+  })
 }
 
 const createReleasesInfo = async () => {
   const websites = await listVersionedWebsites()
-  const githubReleases = await listGitHubReleases()
+  const githubReleases = await listGitHubReleases(websites)
 
   return githubReleases.map(release => {
     const website = websites.find(w => w.version === release.version)
