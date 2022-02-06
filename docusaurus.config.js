@@ -46,6 +46,18 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'targets',
+        path: 'targets',
+        routeBasePath: 'targets',
+        sidebarPath: require.resolve('./targets-sidebars.js'),
+      },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -144,6 +156,11 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+      },
+      algolia: {
+        appId: '1NDO4P8MGG',
+        apiKey: 'f679ad1edde28db5e229d492f7f2de8e',
+        indexName: 'takomo',
       },
     }),
 };
