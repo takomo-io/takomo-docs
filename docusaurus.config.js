@@ -81,6 +81,12 @@ const config = {
             label: 'Docs',
           },
           {
+            to: 'targets/intro',
+            position: 'left',
+            label: 'Deployment targets',
+            activeBaseRegex: '/targets/',
+          },
+          {
             href: 'https://docs.takomo.io',
             label: 'Old docs',
             position: 'right',
