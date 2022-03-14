@@ -27,14 +27,10 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          //editUrl: 'https://github.com/facebook/docusaurus/edit/main/website/',
         },
-        // blog: {
-        //   showReadingTime: true,
-          // Please change this to your repo.
-          //editUrl:'https://github.com/facebook/docusaurus/edit/main/website/blog/',
-        // },
+        blog: {
+          showReadingTime: true,
+        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -65,7 +61,7 @@ const config = {
         backgroundColor: '#106100',
         textColor: '#ffffff',
         content:
-          'Documentation is being updated. You can find the old docs <a target="_blank" rel="noopener noreferrer" href="https://docs.takomo.io/">here</a>',
+          'Takomo 4.0 released! <a href="/blog/takomo-4-released">Read more</a>. Docs for Takomo 3.x can be found <a target="_blank" rel="noopener noreferrer" href="https://takomo.io/archive/3-40-3/">here</a>.',
       },
       navbar: {
         title: `Takomo v${version}`,
@@ -85,6 +81,12 @@ const config = {
             position: 'left',
             label: 'Deployment targets',
             activeBaseRegex: '/targets/',
+          },
+          {
+            to: 'blog',
+            position: 'left',
+            label: 'Blog',
+            activeBaseRegex: '/blog/',
           },
           {
             href: 'https://docs.takomo.io',

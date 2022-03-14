@@ -39,10 +39,6 @@ Available feature flags:
 - `deploymentTargetsUndeploy` - Set false to disable undeploy deployment targets command
 - `deploymentTargetsTearDown` - Set false to disable tear down deployment targets command
 
-## Load AWS SDK config
-
-Use `--load-aws-sdk-config` to prefer loading credentials from configuration file over the credentials file. Passing this option will enable loading the profile from ~/.aws/config file.
-
 ## Load environment variables from a file
 
 Use `--env-file <path-to-environment-variables-file>` to load environment variables from a file. The loaded variables override existing variables with the same name. This option can be used multiple times.
