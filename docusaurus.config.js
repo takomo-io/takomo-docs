@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 const { version } = require('./package.json')
 const baseUrl = process.env.BASE_URL ?? '/'
-
+const apiVersion = version.replace(/\./g, '-')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -89,7 +89,7 @@ const config = {
             activeBaseRegex: '/blog/',
           },
           {
-            href: 'https://takomo.io/api-docs/latest/',
+            href: `https://takomo.io/api-docs/${apiVersion}/`,
             label: 'API',
             position: 'left',
           },
@@ -123,6 +123,10 @@ const config = {
                 label: 'Tutorial',
                 to: '/docs/getting-started/tutorial',
               },
+              {
+                label: 'API',
+                href: `https://takomo.io/api-docs/${apiVersion}/`,
+              }
             ],
           },
           {
