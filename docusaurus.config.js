@@ -89,6 +89,11 @@ const config = {
             activeBaseRegex: '/blog/',
           },
           {
+            href: 'https://takomo.io/api-docs/latest/',
+            label: 'API',
+            position: 'left',
+          },
+          {
             href: 'https://docs.takomo.io',
             label: 'Old docs',
             position: 'right',
