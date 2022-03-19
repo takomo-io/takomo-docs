@@ -94,11 +94,6 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://docs.takomo.io',
-            label: 'Old docs',
-            position: 'right',
-          },
-          {
             href: 'https://github.com/takomo-io/takomo',
             label: 'GitHub',
             position: 'right',
@@ -127,6 +122,23 @@ const config = {
                 label: 'API',
                 href: `https://takomo.io/api-docs/${apiVersion}/`,
               }
+            ],
+          },
+          {
+            title: 'CLI',
+            items: [
+              {
+                label: 'Common options',
+                to: '/docs/command-line-usage/common-options',
+              },
+              {
+                label: 'Stacks commands',
+                to: '/docs/category/command-line-usage',
+              },
+              {
+                label: 'Targets commands',
+                to: '/targets/category/command-line-usage',
+              },
             ],
           },
           {

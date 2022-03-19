@@ -9,5 +9,5 @@ In a stack configuration, you choose which type of hook to use by providing valu
 
 Here are the built-in hooks:
 
-- Command hook
-- Checksum hook
+- [Command hook](command-hook.md)
+- [Checksum hook](checksum-hook.md)

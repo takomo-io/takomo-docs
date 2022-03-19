@@ -42,17 +42,22 @@ Takomo helps you follow the principle of least privilege by providing you with a
 Avoid hard coding of parameter values to configuration files by using parameter resolvers that provide parameter values at deployment time.
 Takomo comes with these built-in resolvers that resolve parameter values from:
 
-- Stack outputs - use outputs from other stacks  
-- File contents - read contents of a file
-- Shell command output - execute a shell command and use its output 
-- Hook output - use value exposed by a lifecycle hook
-- SSM parameter - read value from an SSM parameter 
+- [Stack outputs](parameter-resolvers/stack-output-resolver.md) - use outputs from other stacks  
+- [File contents](parameter-resolvers/file-contents-resolver.md) - read contents of a file
+- [Shell command](parameter-resolvers/command-resolver.md) output - execute a shell command and use its output 
+- [Hook output](parameter-resolvers/hook-output-resolver.md) - use value exposed by a lifecycle hook
+- [SSM parameter](parameter-resolvers/ssm-parameter-resolver.md) - read value from an SSM parameter 
+- [Secret](parameter-resolvers/secret-resolver.md) - read value from AWS Secrets Manager
 
 It's really easy to implement your own custom resolvers, too!
+
+[Read more about parameter resolvers](/docs/category/parameter-resolvers).
 
 ### Dynamic templates files
 
 Take advantage of dynamic Handlebars templating and avoid repetitive configuration and copy-pasting in CloudFormation templates.
+
+[Read more about dynamic templating with Handlebars](/docs/category/variables-and-templating).
 
 ### Safe
 
@@ -70,6 +75,10 @@ Plug in your own JavaScript code to extend the core features. You can implement 
 - Joi validation schemas to validate your configuration
 - Handlebars helpers to run custom code when processing configuration 
 
-### Continuous Integration
+### Continuous integration
 
 Easily integrate Takomo to your CI pipeline.
+
+### Large-scale deployments
+
+Manage hundreds of AWS accounts with [deployment target features](/targets/intro).

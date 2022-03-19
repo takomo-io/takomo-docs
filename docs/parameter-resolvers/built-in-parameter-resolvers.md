@@ -10,10 +10,10 @@ In a stack configuration, you choose which resolver to use by providing value to
 
 Here are the built-in parameter resolvers:
 
-- Stack output resolver
-- External stack output resolver
-- Command resolver
-- File contents resolver
-- Hook output resolver
-- SSM parameter resolver
-- Secret resolver
+- [Stack output resolver](stack-output-resolver.md)
+- [External stack output resolver](external-stack-output-resolver.md)
+- [Command resolver](command-resolver.md)
+- [File contents resolver](file-contents-resolver.md)
+- [Hook output resolver](hook-output-resolver.md)
+- [SSM parameter resolver](ssm-parameter-resolver.md)
+- [Secret resolver](secret-resolver.md)
