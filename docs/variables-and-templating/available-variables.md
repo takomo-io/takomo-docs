@@ -50,26 +50,26 @@ Here are variables available in stack configuration files:
 | context | object | An object containing context variables. |
 | context.projectDir | string | Current project directory. |
 | env | object | Environment variables. |
-| stackGroup | object | An object representing the stack group where the stack belongs to. |
-| stackGroup.accountIds | string[] | Account ids of the stack group. |
-| stackGroup.capabilities | string[] | Capabilities of the stack group. |
-| stackGroup.commandRole | string | Command role of the stack group. |
-| stackGroup.data | object | Data object of the stack group. |
-| stackGroup.isRoot | boolean | Is the stack group the root. |
-| stackGroup.name | string | Name of the stack group. |
-| stackGroup.path | string | Path of the stack group. |
-| stackGroup.pathSegments | string[] | Path of the stack group split into an array using / as a separator. |
-| stackGroup.project | string | Project of the stack group. |
-| stackGroup.regions | string | Regions of the stack group. |
-| stackGroup.tags | object[] | Stack tags of the stack group. |
-| stackGroup.tags[].key | string | Tag key. |
-| stackGroup.tags[].value | string | Tag value. |
-| stackGroup.templateBucket | object | Template bucket configuration of the stack group. |
-| stackGroup.templateBucket.name | string | Name of the template bucket. |
-| stackGroup.templateBucket.keyPrefix | string | Key prefix of the template bucket. |
-| stackGroup.timeout | object | Timeout configuration of the stack group. |
-| stackGroup.timeout.create | number | Create timeout in seconds. |
-| stackGroup.timeout.update | number | Update timeout in seconds. |
+| parent | object | An object representing the stack group where the stack belongs to. Prior to Takomo v4.1.0 this information was available under stackGroup variable. |
+| parent.accountIds | string[] | Account ids of the stack group. |
+| parent.capabilities | string[] | Capabilities of the stack group. |
+| parent.commandRole | string | Command role of the stack group. |
+| parent.data | object | Data object of the stack group. |
+| parent.isRoot | boolean | Is the stack group the root. |
+| parent.name | string | Name of the stack group. |
+| parent.path | string | Path of the stack group. |
+| parent.pathSegments | string[] | Path of the stack group split into an array using / as a separator. |
+| parent.project | string | Project of the stack group. |
+| parent.regions | string | Regions of the stack group. |
+| parent.tags | object[] | Stack tags of the stack group. |
+| parent.tags[].key | string | Tag key. |
+| parent.tags[].value | string | Tag value. |
+| parent.templateBucket | object | Template bucket configuration of the stack group. |
+| parent.templateBucket.name | string | Name of the template bucket. |
+| parent.templateBucket.keyPrefix | string | Key prefix of the template bucket. |
+| parent.timeout | object | Timeout configuration of the stack group. |
+| parent.timeout.create | number | Create timeout in seconds. |
+| parent.timeout.update | number | Update timeout in seconds. |
 | stack | object | An object representing the stack. |
 | stack.configFile | object | An object representing configuration file of the stack. |
 | stack.configFile.basename | string | Name of the stack configuration file including the file extension |
@@ -79,6 +79,8 @@ Here are variables available in stack configuration files:
 | stack.path | string | Path of the stack without the region specified. |
 | stack.pathSegments | string[] | Path of the stack without the region specified split into an array using / as a separator. |
 | var | object | Variables from the command line. |
+
+
 
 ## Stack template files
 
