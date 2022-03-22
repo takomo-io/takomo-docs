@@ -19,7 +19,9 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'takomo-io',
   projectName: 'takomo',
-
+  customFields: {
+    takomoVersion: version,
+  },
   presets: [
     [
       '@docusaurus/preset-classic',
