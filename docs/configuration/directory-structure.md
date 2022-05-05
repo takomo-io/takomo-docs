@@ -16,8 +16,7 @@ Takomo project's directory structure looks like this.
 ├─ hooks
 ├─ schemas
 ├─ deployment
-├─ config-sets
-└─ organization
+└─ config-sets
 ```
 
 There are two mandatory directories: **stacks** and **templates**. The stacks directory will contain all configuration files for your stacks, and the templates directory is where you'll place template files for the stacks.
@@ -35,4 +34,3 @@ You can find the purpose of each directory from the table below.
 | schemas | Custom Joi schemas |
 | deployment | Configuration for deployment targets |
 | config-sets | Config sets |
-| organization | AWS organization configuration. |
