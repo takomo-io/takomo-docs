@@ -4,11 +4,16 @@ sidebar_position: 9
 
 # Externalize target configuration
 
-As the number of deployment targets grows, the size of the deployment configuration file might become unwieldy. You can externalize the deployment target configurations outside the deployment configuration file to make the deployment configuration file more manageable. To do this, you need to define the deployment target repository in a takomo.yml file located in your project's root directory.
+As the number of deployment targets grows, the size of the deployment configuration file might become unwieldy. You can externalize the deployment target configurations outside the deployment configuration file to make the deployment configuration file more manageable. To do this, you need to define the deployment target repository in a **takomo.yml** file located in your project's root directory.
+
+There are two target repository implementations:
+
+- [Load deployment targets from the filesystem](#load-deployment-targets-from-the-filesystem)
+- [Load deployment targets from AWS organization](#load-deployment-targets-from-aws-organization)
 
 ## Load deployment targets from the filesystem
 
-Currently, there is one target repository implementation. It loads deployment target configurations from a specified directory. To enable it, you need to add the following configuration to the takomo.yml file.
+This target repository loads deployment target configurations from a specified directory. To enable it, you need to add the following configuration to the **takomo.yml** file.
 
 ```yaml title="takomo.yml"
 deploymentTargets:
@@ -19,9 +24,9 @@ deploymentTargets:
     inferDeploymentTargetNameFromFileName: <boolean>
 ```
 
-The `type` property specifies that the target repository of type filesystem should be used to load the external targets configuration. The `dir` property specifies the file path to the directory from where to load the configurations. The file path can be absolute or relative to the project's root directory. Finally, the `inferDeploymentGroupPathFromDirName` property instructs Takomo to infer the target's deployment group from the name of the directory where the target's configuration file is located.  
+The `type` property specifies that the target repository of type **filesystem** should be used to load the external targets configuration. The `dir` property specifies the file path to the directory from where to load the configurations. The file path can be absolute or relative to the project's root directory. Finally, the `inferDeploymentGroupPathFromDirName` property instructs Takomo to infer the target's deployment group from the name of the directory where the target's configuration file is located.  
 
-Takomo will look for .yml files from the specified directory and its subdirectories. You can name the files as you wish. Each file must contain a valid configuration for one deployment target. The configuration format is the same as if the target's configuration was given in the deployment configuration file. The only difference is that unless you set `inferDeploymentGroupPathFromDirName` to true, you need to specify the target's deployment group with a deploymentGroupPath property. All deployment groups referred in the external configuration files must be defined in the deployment configuration file, too.
+Takomo will look for **.yml** files from the specified directory and its subdirectories. You can name the files as you wish. Each file must contain a valid configuration for one deployment target. The configuration format is the same as if the target's configuration was given in the deployment configuration file. The only difference is that unless you set `inferDeploymentGroupPathFromDirName` to true, you need to specify the target's deployment group with a deploymentGroupPath property. All deployment groups referred in the external configuration files must be defined in the deployment configuration file, too.
 
 #### Example
 
@@ -178,3 +183,24 @@ deploymentTargets:
 ```
 
 Then just remove the `name` property from configuration files of our targets.
+
+## Load deployment targets from AWS organization
+
+This target repository loads deployment target configurations from an AWS organization. It scans all organization's member accounts and creates one deployment target for each account. To enable it, you need to add the following configuration to the **takomo.yml** file.
+
+```yaml title="takomo.yml"
+deploymentTargets:
+  repository:
+    type: organization
+    organizationReaderRoleArn: <path to a directory with the target configurations>
+    inferDeploymentGroupPathFromOUPath: <boolean>
+    inferDeploymentTargetNameFromAccountName: <boolean>
+```
+
+The `type` property specifies that the target repository of type **organization** should be used to load the external targets configuration. The `organizationReaderRoleArn` property specifies which IAM role Takomo should assume to query organization's member accounts. If no role is specified, Takomo uses AWS credentials found from the current terminal session.
+
+By default, Takomo infers a target's deployment group from the organizational unit where the member account belongs to. You can turn off this feature by setting `false` to `inferDeploymentGroupPathFromOUPath` property, but then all targets will have same deployment group **ROOT**. 
+
+By default, Takomo infers a target's name from the member account's name. You can turn off this feature by setting `false` to `inferDeploymentTargetNameFromAccountName` property, but then Takomo uses account's id as target name.
+
+All deployment groups referred in the external configuration files must be defined in the deployment configuration file, too.
