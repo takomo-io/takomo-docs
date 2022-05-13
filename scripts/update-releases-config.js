@@ -85,7 +85,8 @@ const uploadReleaseInfo = async (releases) => {
     Bucket,
     Key: "takomo-releases.json",
     Body: JSON.stringify(releases, undefined, 2),
-    ContentType: "application/json"
+    ContentType: "application/json",
+    CacheControl: "public, max-age=60",
   }))
 
   console.log(latest.version)
