@@ -192,6 +192,8 @@ This target repository loads deployment target configurations from an AWS organi
 deploymentTargets:
   repository:
     type: organization
+    id: <id of repository>
+    cache: <boolean>
     organizationReaderRoleArn: <path to a directory with the target configurations>
     inferDeploymentGroupPathFromOUPath: <boolean>
     inferDeploymentTargetNameFromAccountName: <boolean>
@@ -199,8 +201,33 @@ deploymentTargets:
 
 The `type` property specifies that the target repository of type **organization** should be used to load the external targets configuration. The `organizationReaderRoleArn` property specifies which IAM role Takomo should assume to query organization's member accounts. If no role is specified, Takomo uses AWS credentials found from the current terminal session.
 
+The `id` property identifies the repository and is used in caching. It's mandatory but you can choose the value as you wish.
+
+The `cache` property specifies if Takomo should cache the AWS accounts it loads from AWS organization. It's recommended to enable caching to speed up the configuration loading phase. Cached files are stored in `.takomo.cache` directory. 
+
 By default, Takomo infers a target's deployment group from the organizational unit where the member account belongs to. You can turn off this feature by setting `false` to `inferDeploymentGroupPathFromOUPath` property, but then all targets will have same deployment group **ROOT**. 
+
+By default, **ROOT** becomes the root deployment group but you can change this by specifying root deployment group path in `rootDeploymentGroupPath` property. 
 
 By default, Takomo infers a target's name from the member account's name. You can turn off this feature by setting `false` to `inferDeploymentTargetNameFromAccountName` property, but then Takomo uses account's id as target name.
 
 All deployment groups referred in the external configuration files must be defined in the deployment configuration file, too.
+
+## Loading deployment targets from multiple repositories
+
+You can load deployment targets from multiple repositories by providing a list of repositories in **takomo.yml** file, like so:
+
+```yaml title="takomo.yml"
+deploymentTargets:
+  repository:
+    - type: organization
+      id: My-Org-A
+      organizationReaderRoleArn: arn:aws:iam::123456789013:role/org-reader
+    - type: organization
+      id: My-Org-B
+      organizationReaderRoleArn: arn:aws:iam::123456789012:role/org-reader
+```
+
+In the example above, we have two organization repositories. Takomo iterates over the repositories in the order they are defined in the configuration file and each repository loads its targets. Takomo uses targets' `name` property to identify targets. Targets with the same name are merged into one and targets loaded later can override properties of previously loaded targets.
+
+When using multiple repositories, each repository must have `id` property.
