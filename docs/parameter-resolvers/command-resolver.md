@@ -14,6 +14,7 @@ Here are the properties of the command resolver:
 | --- | -------- | ---- | ----------- |
 | resolver | yes | string | Resolver name, this must be **cmd**. |
 | command | yes | string | Shell command to execute. |
+| cwd | no | string | Path to the working directory from where the shell command is executed. Relative to the current project directory. |
 | exposeStackCredentials | no | boolean | Make the current stack's AWS credentials available for the shell command. Defaults to false. |
 | exposeStackRegion | no | boolean | Make the current stack's region available for the shell command. Defaults to false. |
 | capture | no | string | Controls how to capture the output of the executed shell command. By default, all output is captured. To capture only the last line, set this to **last-line**. |
