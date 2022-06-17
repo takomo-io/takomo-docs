@@ -37,7 +37,7 @@ The following environment variables are available in the shell command:
 | AWS_SESSION_TOKEN | If `exposeStackCredentials` is **true**, this will hold the session token of credentials of the current stack. |
 | AWS_SECURITY_TOKEN | If `exposeStackCredentials` is **true**, this will hold the session token of credentials of the current stack. |
 | AWS_DEFAULT_REGION | If `exposeStackRegion` is **true**, this will hold the region of the current stack. |
-| TKM_HOOK_{hook-name} | Values returned from previous hooks are exposed in environment variables where the {hook-name} placeholder is replaced with the hook's name. Hooks whose name has unsafe characters not compatible with a pattern `/^[a-zA-Z_]+[a-zA-Z0-9_]*$/` are not exposed and a warning is logged instead.  |
+| TKM\_HOOK_{hook-name} | Values returned from previous hooks are exposed in environment variables where the {hook-name} placeholder is replaced with the hook's name. Hooks whose name has unsafe characters not compatible with a pattern `/^[a-zA-Z_]+[a-zA-Z0-9_]*$/` are not exposed and a warning is logged instead.  |
 
 Any output the hook prints to the stdout is captured and exposed to other hooks.
 

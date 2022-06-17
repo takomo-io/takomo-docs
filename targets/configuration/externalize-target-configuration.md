@@ -203,7 +203,7 @@ The `type` property specifies that the target repository of type **organization*
 
 The `id` property identifies the repository and is used in caching. It's mandatory but you can choose the value as you wish.
 
-The `cache` property specifies if Takomo should cache the AWS accounts it loads from AWS organization. It's recommended to enable caching to speed up the configuration loading phase. Cached files are stored in `.takomo.cache` directory. 
+The `cache` property specifies if Takomo should cache the AWS accounts it loads from AWS organization. It's recommended to enable caching to speed up the configuration loading phase. Cached files are stored in `.takomo.cache` directory. To reset the cache, you can remove the cached files or run a deployment targets command with `--reset-cache` flag.  
 
 By default, Takomo infers a target's deployment group from the organizational unit where the member account belongs to. You can turn off this feature by setting `false` to `inferDeploymentGroupPathFromOUPath` property, but then all targets will have same deployment group **ROOT**. 
 

@@ -17,7 +17,8 @@ tkm targets deploy [group-path...] \
   [--concurrent-targets <count>] \
   [--config-set <config-set>] \
   [--command-path <command-path>] \
-  [--expect-no-changes]
+  [--expect-no-changes] \
+  [--reset-cache]
 ```
 
 ## Positional arguments
@@ -54,6 +55,8 @@ In addition to the [common options](../../docs/command-line-usage/common-options
   - To use this option, also the `--config-set` option must be given. 
 - `--expect-no-changes`
   - Fail the deployment if at least one stack has changes.
+- `--reset-cache`
+  - Reset cached files under **.takomo-cache** dir
 
 ## IAM permissions
 

@@ -24,7 +24,8 @@ tkm targets run [group-path...] \
   [--capture-before <line>] \
   [--capture-last-line] \
   [--output <format>] \
-  [--concurrent-targets <count>]
+  [--concurrent-targets <count>] \
+  [--reset-cache]
 ```
 
 ## Positional arguments
@@ -84,7 +85,9 @@ In addition to the [common options](../../docs/command-line-usage/common-options
   - Supported values: text, json, yaml
 - `--concurrent-targets <number>`
   - Number of deployment targets to run concurrently. Defaults to 1.
-
+- `--reset-cache`
+  - Reset cached files under **.takomo-cache** dir
+  
 ## IAM permissions
 
 ```yaml

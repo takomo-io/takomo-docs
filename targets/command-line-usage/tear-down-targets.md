@@ -16,7 +16,8 @@ tkm targets tear-down [group-path...] \
   [--exclude-label <label>]... \
   [--concurrent-targets <count>] \
   [--config-set <config-set>] \
-  [--command-path <command-path>]
+  [--command-path <command-path>] \
+  [--reset-cache]
 ```
 
 ## Positional arguments
@@ -50,6 +51,8 @@ In addition to the [common options](../../docs/command-line-usage/common-options
 - `--command-path <command-path>`
   - Tear down only stacks under this command path.
   - To use this option, also the `--config-set` option must be given.
+- `--reset-cache`
+  - Reset cached files under **.takomo-cache** dir
 
 ## IAM permissions
 
