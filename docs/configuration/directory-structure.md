@@ -15,6 +15,7 @@ Takomo project's directory structure looks like this.
 ├─ resolvers
 ├─ hooks
 ├─ schemas
+├─ blueprints
 ├─ deployment
 └─ config-sets
 ```
@@ -30,7 +31,8 @@ You can find the purpose of each directory from the table below.
 | helpers | Custom Handlebars helpers. You can use helpers in stack configuration and template files. |                 
 | partials | Handlebars partial files. You can include partial files in stack configuration and template files.  |
 | resolvers | Custom resolvers |
-| hooks | Custom hooks. |
+| hooks | Custom hooks |
 | schemas | Custom Joi schemas |
+| blueprints | Blueprint files |
 | deployment | Configuration for deployment targets |
 | config-sets | Config sets |

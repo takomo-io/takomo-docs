@@ -27,4 +27,3 @@ The `tags` property must satisfy these requirements:
 
 - Each tag key must be a string
 - Each tag value must be a string, a number or a boolean
-- 

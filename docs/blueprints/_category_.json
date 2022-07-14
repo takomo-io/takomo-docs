@@ -1,10 +1,10 @@
 {
-  "label": "Variables and templating",
-  "position": 6,
+  "label": "Blueprints",
+  "position": 5,
   "collapsed": false,
   "collapsible": false,
   "link": {
     "type": "generated-index",
-    "title": "Variables and templating"
+    "title": "Blueprints"
   }
 }

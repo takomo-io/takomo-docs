@@ -4,7 +4,7 @@ sidebar_position: 16
 
 # Obsolete
 
-You can exclude stacks from configuration by marking them as obsolete with the `obsolete` property. Obsolete stacks can be removed with prune stacks command.
+You can exclude stacks from configuration by marking them as obsolete with the `obsolete` property. Obsolete stacks can be removed with [prune stacks command](../command-line-usage/prune-stacks.md).
 Obsolete stacks can't have dependents that are not obsolete themselves.
 
 #### Examples
