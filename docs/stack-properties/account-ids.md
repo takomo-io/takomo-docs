@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Account ids
 
-Working simultaneously with multiple accounts usually requires switching between many credentials or IAM roles. This poses a real risk of accidentally deploying infrastructure to the wrong account.
+Working simultaneously with multiple accounts usually requires switching between many credentials or IAM roles. This poses a real risk of accidentally deploying infrastructure to a wrong account.
 
 You can mitigate this risk with the `accountIds` property, which lets you define a list of allowed accounts to deploy a stack. It accepts a single account id or a list of account ids.
 
@@ -24,9 +24,34 @@ accountIds:
   - "763273627326"
 ```
 
-## Where to define
+## Usage in configuration
 
-The `accountIds` property can be defined in stack and stack group configuration files. If specified in a stack group, the stack group's children and stacks inherit the value. Stack groups and stacks can override the value they have inherited from their parent.
+`accountIds` property can be defined in:
+
+- stack group configuration files
+- blueprint configuration files
+- stack configuration files
+
+### Stack group config file
+
+When `accountIds` property is defined in a stack group configuration file: 
+
+- its value completely overrides the value inherited from the parent stack group
+- its value is inherited by stack groups and stacks that belong under the stack group
+
+### Blueprint config file 
+
+When `accountIds` property is defined in a blueprint configuration file:
+
+- its value completely overrides the value inherited from the parent stack group
+- its value is inherited by stacks that extend the blueprint
+
+### Stack config file
+
+When `accountIds` property is defined in a stack configuration file:
+
+- if the stack extends a blueprint, its value completely overrides the value inherited from the blueprint
+- otherwise, its value completely overrides the value inherited from the parent stack group
 
 ## Requirements
 

@@ -69,9 +69,34 @@ CloudFormation doesn't support removing of a stack policy once it has been creat
 }
 ```
 
-## Where to define
+## Usage in configuration
 
-The `stackPolicy` and `stackPolicyDuringUpdate` properties can be defined in stack and stack group configuration files. If specified in a stack group, the stack group's children and stacks inherit the value. Stack groups and stacks can overwrite the policies they inherited from their parent.
+`stackPolicy` and `stackPolicyDuringUpdate` properties can be defined in:
+
+- stack group configuration files
+- blueprint configuration files
+- stack configuration files
+
+### Stack group config file
+
+When `stackPolicy` / `stackPolicyDuringUpdate` property is defined in a stack group configuration file:
+
+- its value completely overrides the value inherited from the parent stack group
+- its value is inherited by stack groups and stacks that belong under the stack group
+
+### Blueprint config file
+
+When `stackPolicy` / `stackPolicyDuringUpdate` property is defined in a blueprint configuration file:
+
+- its value completely overrides the value inherited from the parent stack group
+- its value is inherited by stacks that extend the blueprint
+
+### Stack config file
+
+When `stackPolicy` / `stackPolicyDuringUpdate` property is defined in a stack configuration file:
+
+- if the stack extends a blueprint, its value completely overrides the value inherited from the blueprint
+- otherwise, its value completely overrides the value inherited from the parent stack group
 
 ## Requirements
 

@@ -16,9 +16,11 @@ Setting the `blueprint` property:
 blueprint: application.yml
 ```
 
-## Where to define
+## Usage in configuration
 
-The `blueprint` property can be defined only in stack configuration files.
+`blueprint` property can be defined in:
+
+- stack configuration files
 
 ## Requirements
 
