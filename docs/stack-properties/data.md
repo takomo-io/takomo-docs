@@ -64,6 +64,12 @@ When `data` property is defined in a stack configuration file:
 - if the stack extends a blueprint, its value is merged with the value inherited from the blueprint
 - otherwise, its value is merged with the value inherited from the parent stack group
 
+## Configuration merging
+
+Configuration merging happens when a stack group, blueprint or stack inherits `data` property but also defines `data` property of its own.
+
+Data objects are merged recursively.
+
 ## Requirements
 
 The `data` property must satisfy these requirements:
