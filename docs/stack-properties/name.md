@@ -27,9 +27,25 @@ If you omit the name, Takomo will generate the name using the following logic:
 
 For example, if your stack's path is **/dev/eu-west-1/vpc.yml/eu-west-1**, its generated name will be **dev-eu-west-1-vpc**.
 
-## Where to define
+## Usage in configuration
 
-The `name` property can be defined only in stack configuration files.
+`name` property can be defined in:
+
+- blueprint configuration files
+- stack configuration files
+
+### Blueprint config file
+
+When `name` property is defined in a blueprint configuration file:
+
+- its value is inherited by stacks that extend the blueprint
+
+### Stack config file
+
+When `name` property is defined in a stack configuration file:
+
+- if the stack extends a blueprint, its value completely overrides the value inherited from the blueprint
+- otherwise, its value is used as is
 
 ## Requirements
 

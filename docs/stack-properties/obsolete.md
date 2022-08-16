@@ -15,9 +15,34 @@ Setting the obsolete property:
 obsolete: true
 ```
 
-## Where to define
+## Usage in configuration
 
-The `obsolete` property can be defined in stack and stack group configuration files. If specified in a stack group, the stack group's children and stacks inherit the value but can also override it.
+`obsolete` property can be defined in:
+
+- stack group configuration files
+- blueprint configuration files
+- stack configuration files
+
+### Stack group config file
+
+When `obsolete` property is defined in a stack group configuration file:
+
+- its value completely overrides the value inherited from the parent stack group
+- its value is inherited by stack groups and stacks that belong under the stack group
+
+### Blueprint config file
+
+When `obsolete` property is defined in a blueprint configuration file:
+
+- its value completely overrides the value inherited from the parent stack group
+- its value is inherited by stacks that extend the blueprint
+
+### Stack config file
+
+When `obsolete` property is defined in a stack configuration file:
+
+- if the stack extends a blueprint, its value completely overrides the value inherited from the blueprint
+- otherwise, its value completely overrides the value inherited from the parent stack group
 
 ## Requirements
 

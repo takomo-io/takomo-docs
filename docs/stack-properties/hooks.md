@@ -58,9 +58,44 @@ hooks:
     command: echo 'hello'
 ```
 
-## Where to define
+## Usage in configuration
 
-The `hooks` property can be defined in stack and stack group configuration files. If specified in a stack group, the stack group's children and stacks inherit the value. The hooks defined by stack groups and stacks are appended to the list of hooks they inherit from their parent.
+`hooks` property can be defined in:
+
+- stack group configuration files
+- blueprint configuration files
+- stack configuration files
+
+### Stack group config file
+
+When `hooks` property is defined in a stack group configuration file:
+
+- its value is merged with the value inherited from the parent stack group
+- its value is inherited by stack groups and stacks that belong under the stack group
+
+### Blueprint config file
+
+When `hooks` property is defined in a blueprint configuration file:
+
+- its value is merged with the value inherited from the parent stack group
+- its value is inherited by stacks that extend the blueprint
+
+### Stack config file
+
+When `hooks` property is defined in a stack configuration file:
+
+- if the stack extends a blueprint, its value is merged with the value inherited from the blueprint
+- otherwise, its value is merged with the value inherited from the parent stack group
+
+## Configuration merging
+
+Configuration merging happens when a stack group, blueprint or stack inherits `hooks` property but also defines `hooks` property of its own. 
+
+These rules are used when configuration merging happens:
+
+1. Hooks are identified by their name
+2. If the inherited hooks and the hooks defined by the inheritor have hooks with the same name, the hooks defined by the inheritor override the inherited hooks  
+3. The remaining hooks defined by the inheritor are appended to the inherited list of hooks
 
 ## Requirements
 

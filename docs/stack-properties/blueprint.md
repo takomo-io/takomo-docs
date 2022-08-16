@@ -18,9 +18,7 @@ blueprint: application.yml
 
 ## Usage in configuration
 
-`blueprint` property can be defined in:
-
-- stack configuration files
+`blueprint` property can be defined only in stack configuration files.
 
 ## Requirements
 

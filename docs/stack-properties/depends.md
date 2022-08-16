@@ -38,9 +38,9 @@ Using a relative stack path:
 depends: ../../common/logs.yml
 ```
 
-## Where to define
+## Usage in configuration
 
-The `depends` property can be defined only in stack configuration files.
+`depends` property can be defined only in stack configuration files.
 
 ## Requirements
 
