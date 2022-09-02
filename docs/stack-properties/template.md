@@ -64,7 +64,6 @@ template:
   dynamic: false
 ```
 
-
 ## Usage in configuration
 
 `template` property can be defined in:
