@@ -40,7 +40,23 @@ depends: ../../common/logs.yml
 
 ## Usage in configuration
 
-`depends` property can be defined only in stack configuration files.
+`depends` property can be defined in:
+
+- blueprint configuration files
+- stack configuration files
+
+### Blueprint config file
+
+When `depends` property is defined in a blueprint configuration file:
+
+- its value is inherited by stacks that extend the blueprint
+
+### Stack config file
+
+When `depends` property is defined in a stack configuration file:
+
+- if the stack extends a blueprint, its value completely overrides the value inherited from the blueprint
+- otherwise, its value is used as is
 
 ## Requirements
 
