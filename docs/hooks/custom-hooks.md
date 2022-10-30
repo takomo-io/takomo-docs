@@ -20,7 +20,7 @@ Hook provider has the following properties:
   - A function that initializes the hook with properties given in a stack group or stack configuration file. The function can be either synchronous or asynchronous, and must return an instantiated hook object.
   - Required
 
-See more information from <ApiLink text="API docs" source="interfaces/stacks_model_src.HookProvider.html"/>.
+See more information from <ApiLink text="API docs" source="interfaces/HookProvider.html"/>.
 
 ## Hook
 
@@ -30,7 +30,7 @@ Hook has the following properties:
   - A function that is invoked with an hook input object when the hook is executed. The function can be synchronous or asynchronous and must return a hook output. 
   - Required
 
-See more information from <ApiLink text="API docs" source="interfaces/stacks_model_src.Hook.html"/>.
+See more information from <ApiLink text="API docs" source="interfaces/Hook.html"/>.
 
 ## Hook Input
 
@@ -47,7 +47,7 @@ A hook input is an object that is passed to hook's execute function. It has the 
 - `ctx`
   - Command context object
 
-See more information from <ApiLink text="API docs" source="interfaces/stacks_model_src.HookInput.html"/>.
+See more information from <ApiLink text="API docs" source="interfaces/HookInput.html"/>.
 
 ## Hook Output
 
@@ -66,7 +66,7 @@ A hook output is a value returned from hook's execute function. It is used to de
   - A boolean determining if all the remaining hooks of the current stack and the stack operation itself should be skipped.  
   - Optional
 
-See more information from <ApiLink text="API docs" source="modules/stacks_model_src.html#HookOutput"/>.
+See more information from <ApiLink text="API docs" source="types/HookOutput.html"/>.
 
 ## Example
 
