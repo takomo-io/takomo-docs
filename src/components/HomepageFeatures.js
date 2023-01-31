@@ -15,7 +15,7 @@ const FeatureList = [
     title: 'Extendable and dynamic',
     description: (
       <>
-        Extend core functionality with your own JavaScript code. Use dynamic Handlebars templating and
+        Extend core functionality with your own JavaScript/TypeScript code. Use dynamic Handlebars templating and
         avoid repetitive configuration and copy-pasting in CloudFormation templates.
       </>
     ),
