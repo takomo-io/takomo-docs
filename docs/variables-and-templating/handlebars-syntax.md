@@ -59,3 +59,11 @@ This is how you iterate over a collection of items:
   - {{this}}
 {{/each}}
 ```
+
+## Escaping expressions
+
+If you don't want to process a Handlebars expressio, you can escape it by prefixing it with an escape character `\` like so:
+
+```yaml
+\{{my expression to escape}}
+```

@@ -10,6 +10,10 @@ You can use variables in stack and stack group configuration files and stack tem
 
 Here are variables available in stack group configuration files:
 
+:::note
+When using EJS templating engine, all variables are available under one top-level variable named `it`. For example, to access `env` variable listed in the table below, you must write `it.env`.
+:::
+
 | Key | Type | Description |
 | --- | ---- | ----------- |
 | env | object | Environment variables. |
@@ -44,6 +48,10 @@ Here are variables available in stack group configuration files:
 ## Stack configuration files
 
 Here are variables available in stack configuration files:
+
+:::note
+When using EJS templating engine, all variables are available under one top-level variable named `it`. For example, to access `context` variable listed in the table below, you must write `it.context`.
+:::
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
@@ -80,11 +88,13 @@ Here are variables available in stack configuration files:
 | stack.pathSegments | string[] | Path of the stack without the region specified split into an array using / as a separator. |
 | var | object | Variables from the command line. |
 
-
-
 ## Stack template files
 
 Here are variables available in stack template files:
+
+:::note
+When using EJS templating engine, all variables are available under one top-level variable named `it`. For example, to access `context` variable listed in the table below, you must write `it.context`.
+:::
 
 | Key | Type | Description |
 | --- | ---- | ----------- |

@@ -1,10 +1,14 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Helpers
 
 Handlebars helpers are plain JavaScript functions you can invoke from your stack group and stack configuration, and template files.
+
+:::note
+Helpers are supported only when using Handlebars templating engine.
+:::
 
 You register your own custom Handlebars helpers by adding .js files to helpers dir.
 

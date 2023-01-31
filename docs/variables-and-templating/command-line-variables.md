@@ -1,6 +1,9 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Command-line variables
 
@@ -20,12 +23,28 @@ Provide a single variable named myVariable with value hello:
 
 You can refer to the variable in configuration files like so:
 
+<Tabs>
+<TabItem value="handlebars" label="Handlebars" default>
+
 ```yaml
 Resources:
   LogGroup:
     Type: AWS::Logs::LogGroup
     LogGroupName: {{ var.myVariable }}
 ```
+
+</TabItem>
+<TabItem value="ejs" label="EJS">
+
+```yaml
+Resources:
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    LogGroupName: <%= it.var.myVariable %>
+```
+
+</TabItem>
+</Tabs>
 
 ## Variables from files
 
@@ -62,11 +81,26 @@ You can deserialize its contents to a variable named **myVariable** like so:
 
 And then use the variable in the configuration like so:
 
+<Tabs>
+<TabItem value="handlebars" label="Handlebars" default>
+
 ```yaml
 parameters:
   UserName: {{ var.person.name }}
   UserAge: {{ var.person.age }}
 ```
+
+</TabItem>
+<TabItem value="ejs" label="EJS">
+
+```yaml
+parameters:
+  UserName: <%= it.var.person.name %>
+  UserAge: <%= it.var.person.age %>
+```
+
+</TabItem>
+</Tabs>
 
 #### Example - Deserialize file contents to top-level variables
 
@@ -89,11 +123,27 @@ You can deserialize its contents to top-level of variables:
 
 And then use the variables in the configuration like so:
 
+<Tabs>
+<TabItem value="handlebars" label="Handlebars" default>
+
 ```yaml
 parameters:
   Color: {{ var.color }}
   FooBarEnabled: {{ var.foo.bar }}
 ```
+
+</TabItem>
+<TabItem value="ejs" label="EJS">
+
+```yaml
+parameters:
+  Color: <%= it.var.color %>
+  FooBarEnabled: <%= it.var.foo.bar %>
+```
+
+</TabItem>
+</Tabs>
+
 
 ## Loading order and merging of variables
 

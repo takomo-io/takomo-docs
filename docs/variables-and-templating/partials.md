@@ -1,10 +1,14 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Partials
 
 Each file in the `partials` directory or its subdirectory can be used as a [Handlebars partial](https://handlebarsjs.com/guide/partials.html).
+
+:::note
+Partials are supported only when using Handlebars templating engine.
+:::
 
 ## Examples
 
