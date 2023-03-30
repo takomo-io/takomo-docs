@@ -20,7 +20,7 @@ const listVersionedWebsites = async () => {
 
   const versions = []
   for await (const page of paginateListObjectsV2({ client }, input)) {
-    const items = page.CommonPrefixes.map(p => ({
+    const items = page.CommonPrefixes.filter(p => !p.Prefix.includes("alpha")).map(p => ({
       url: `https://takomo.io/${p.Prefix}`,
       version: p.Prefix.replace(Prefix, "").replace("/", "").replace(/-/g, ".")
     }))
