@@ -7,9 +7,12 @@ import {ApiLink} from '@site/src/components/ApiLink';
 
 # Custom hooks
 
+
+## API
+
 You can provide custom hooks by placing plain JavaScript files, with **.js** file extension, into the **hooks** directory. Each file must export a hook provider object. Takomo uses the provider to initialize the actual hook.
 
-## Hook provider
+### Hook provider
 
 Hook provider has the following properties:
 
@@ -22,7 +25,7 @@ Hook provider has the following properties:
 
 See more information from <ApiLink text="API docs" source="interfaces/HookProvider.html"/>.
 
-## Hook
+### Hook
 
 Hook has the following properties:
 
@@ -32,7 +35,7 @@ Hook has the following properties:
 
 See more information from <ApiLink text="API docs" source="interfaces/Hook.html"/>.
 
-## Hook Input
+### Hook Input
 
 A hook input is an object that is passed to hook's execute function. It has the following properties:
 
@@ -49,7 +52,7 @@ A hook input is an object that is passed to hook's execute function. It has the 
 
 See more information from <ApiLink text="API docs" source="interfaces/HookInput.html"/>.
 
-## Hook Output
+### Hook Output
 
 A hook output is a value returned from hook's execute function. It is used to determine if the hook execution was successful and to share data between hooks. It can be either a boolean, an Error which is always considered as failure, or a detailed object with the following properties:
 
@@ -68,7 +71,9 @@ A hook output is a value returned from hook's execute function. It is used to de
 
 See more information from <ApiLink text="API docs" source="types/HookOutput.html"/>.
 
-## Example
+## Examples
+
+### Debug hook
 
 This example hook prints some debug information to the console.
 
@@ -119,3 +124,44 @@ hooks:
 ```
 
 When executed, the hook exposes string **"Did some debugging"** in the mutable variables object.
+
+## Using TypeScript
+
+You can also implement custom hooks using TypeScript. Make sure you have [TypeScript support enabled](../configuration/project-configuration#typescript-support).
+
+Place code for your custom hooks under `src` directory under the project directory:
+
+```typescript title="src/debug-hook.ts"
+import {Hook, HookConfig, HookProvider} from "takomo"
+
+export const debugHookProvider: HookProvider = {
+  type: "debug",
+  init: async (props: HookConfig): Promise<Hook> => {
+    return {
+      execute: async () => {
+        console.log("log something")
+        return {
+          message: "OK",
+          success: true,
+          value: "Did some debugging"
+        }
+      },
+    }
+  },
+}
+```
+
+Register your hooks in `takomo.ts` file located in the project directory like so:
+
+```typescript title="takomo.ts"
+import {TakomoConfigProvider} from 'takomo'
+import {debugHookProvider} from './src/debug-hook'
+
+const provider: TakomoConfigProvider = async () => ({
+  hookProviders: [
+    debugHookProvider,
+  ],
+})
+
+export default provider
+```
