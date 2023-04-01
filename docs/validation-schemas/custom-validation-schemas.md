@@ -47,7 +47,7 @@ You can use the schemas property to specify validation schemas for stack tag con
 First, you need to implement a schema provider. We name our tag schema as my-tags and specify two required properties: environment and costCenter. In other words, we require that every stack must always have these two tags.
 
 ```javascript title="schemas/my-tags.js"
-module.exports = {
+export default {
   name: "my-tags",
   init: ({ joi }) => joi.object({
     environment: joi.string().valid("dev", "test", "prod").required(),

@@ -32,7 +32,7 @@ schemas:
 The implementation of **myDataSchema** schema provider could look like this:
 
 ```javascript title="schemas/data.js"
-module.exports = {
+export default {
   name: "myDataSchema",
   init: ({ joi }) => joi.object({
     owner: joi.string().email(),
@@ -46,7 +46,7 @@ The file exports an object with two properties `name` and `init`. The former spe
 The implementation of **commonTags** schema provider could look like this:
 
 ```javascript title="schemas/common-tags.js"
-module.exports = {
+export default {
   name: "commonTags",
   init: ({ joi }) => joi.object({
     project: joi.string().required()
@@ -57,7 +57,7 @@ module.exports = {
 Finally, we have the implementation of environmentTag schema provider:
 
 ```javascript title="schemas/environment-tag.js"
-module.exports = {
+export default {
   name: "environmentTag",
   init: ({ joi, props }) => {
     return joi.object({

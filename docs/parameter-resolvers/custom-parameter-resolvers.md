@@ -71,7 +71,7 @@ Our file structure looks like this:
 The parameter resolver provider defined in **resolvers/uppercase.js** looks like this:
 
 ```javascript title="resolvers/uppercase.js"
-module.exports = {
+export default {
   name: "uppercase",
   schema: ({joi, base}) => {
     return base.keys({
@@ -121,7 +121,7 @@ Here's an example of how to publish a simple custom resolver that returns the cu
 The **index.js** file contains the parameter resolver provider:
 
 ```javascript title="index.js"
-module.exports = {
+export default {
   name: "timestamp",
   init: () => Date.now(),
 }

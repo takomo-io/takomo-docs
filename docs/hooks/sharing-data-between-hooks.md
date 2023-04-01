@@ -26,7 +26,7 @@ Our file structure looks like this:
 There are two custom hooks located in the hooks dir.
 
 ```javascript title="hooks/first.js"
-module.exports = {
+export default {
   type: "first",
   init: (props) => {
     return {
@@ -45,7 +45,7 @@ module.exports = {
 The first hook returns a hook output object that contains a greeting to other hooks in the value property.
 
 ```javascript title="hooks/second.js"
-module.exports = {
+export default {
   type: "second",
   init: (props) => {
     return {

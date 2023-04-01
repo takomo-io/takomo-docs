@@ -87,7 +87,7 @@ Our file structure looks like this:
 The hook provider defined in **hooks/debug.js** looks like this:
 
 ```javascript title="hooks/debug.js"
-module.exports = {
+export default {
   type: "debug",
   init: (props) => {
     console.log("Initialize debug hook")
