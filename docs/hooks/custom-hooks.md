@@ -4,7 +4,6 @@ sidebar_position: 4
 
 import {ApiLink} from '@site/src/components/ApiLink';
 
-
 # Custom hooks
 
 
@@ -129,7 +128,7 @@ When executed, the hook exposes string **"Did some debugging"** in the mutable v
 
 You can also implement custom hooks using TypeScript. Make sure you have [TypeScript support enabled](../configuration/project-configuration#typescript-support).
 
-Place code for your custom hooks under `src` directory under the project directory:
+Place code for your custom hooks in `src` directory under the project directory:
 
 ```typescript title="src/debug-hook.ts"
 import {Hook, HookConfig, HookProvider} from "takomo"

@@ -2,13 +2,17 @@
 sidebar_position: 9
 ---
 
+import {ApiLink} from '@site/src/components/ApiLink';
+
 # Custom parameter resolvers
 
 You can provide custom parameter resolvers by placing plain JavaScript files, with **.js** file extension, into the resolvers directory. Each file must export a parameter resolver provider object. Takomo uses the provider to initialize the actual parameter resolver.
 
-## Parameter Resolver Provider
+## API
 
-The parameter resolver provider must implement the ResolverProvider interface which has the following properties:
+### Parameter Resolver Provider
+
+The parameter resolver provider must implement the <ApiLink text="ResolverProvider" source="interfaces/ResolverProvider.html"/> interface which has the following properties:
 
 - `name`
   - Name of the resolver used to refer to the resolver from stack configuration files.
@@ -27,9 +31,9 @@ The parameter resolver provider must implement the ResolverProvider interface wh
     - `base` - A pre-initialized Joi object schema that you can modify to provide your resolver's validation schema
   - You can return the pre-initialized schema from the schema function or use the Joi instance to create an entirely new schema. In most cases you should modify the base schema object as needed and then return it.
 
-## Parameter Resolver
+### Parameter Resolver
 
-The parameter resolver must implement the Resolver interface which consists of the following properties:
+The parameter resolver must implement the <ApiLink text="Resolver" source="interfaces/Resolver.html"/> interface which consists of the following properties:
 
 - `resolve`
   - A function that resolves the actual parameter value. The resolved value can be of any type and is converted to a string before it is passed to CloudFormation. If the value is an array, it is converted to a string by joining its values with a comma.
@@ -185,3 +189,39 @@ When registering the resolver using option 1 or 2, Takomo registers the resolver
 It's possible that our project already has a resolver registered with the same name. Takomo requires that all resolver names are unique and will throw an error if more that one resolver has the same name. To work around this problem, you can use the third way to register a resolver, which let's you specify a new name for it. In our example, we have set the resolver name to be **special-timestamp**.
 
 Once the resolver is registered, you can use it like any resolver. For more information, see the related documentation.
+
+## Using TypeScript
+
+You can also implement custom parameter resolvers using TypeScript. Make sure you have [TypeScript support enabled](../configuration/project-configuration#typescript-support).
+
+Place code for your custom parameter resolvers in `src` directory under the project directory:
+
+```typescript title="src/example-resolver.ts"
+import {ResolverInput, ResolverProvider, ParameterConfig} from "takomo"
+
+const exampleResolverProvider: ResolverProvider = {
+  init: async (config: ParameterConfig): Promise<Resolver> => {
+    return {
+      resolve: async (input: ResolverInput): Promise<string> => {
+        return "hello"
+      },
+    }
+  },
+  name: "my-resolver",
+}
+```
+
+Register your parameter resolvers in `takomo.ts` file located in the project directory like so:
+
+```typescript title="takomo.ts"
+import {TakomoConfigProvider} from 'takomo'
+import {exampleResolverProvider} from './src/example-resolver'
+
+const provider: TakomoConfigProvider = async () => ({
+  resolverProviders: [
+    exampleResolverProvider,
+  ],
+})
+
+export default provider
+```

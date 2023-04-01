@@ -68,7 +68,7 @@ Avoid mistakes by reviewing changes to the configuration before deployment. Take
 
 ### Extensible
 
-Plug in your own JavaScript code to extend the core features. You can implement your own:
+Plug in your own JavaScript/TypeScript code to extend the core features. You can implement your own:
 
 - Parameter resolvers to resolve stack parameter values at deployment time
 - Hooks to run code at different deployment stages
