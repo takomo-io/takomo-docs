@@ -21,3 +21,26 @@ If the `partials` directory contains a file named `my-log-group.yml`, you can in
 ```yaml
 {{> my-partial.hbs }}
 ```
+
+
+## Loading partials from custom locations
+
+You can provide additional directories from where Takomo should load partials by using `partialsDir` property in `takomo.yml`. You can give a single path or list of paths. Paths can be absolute or relative to the current project directory. Regardless of additional partials locations, Takomo will always also look partials from `partials` directory located under the current project directory.
+
+### Examples
+
+Specify a single custom location for partials.
+
+```yaml title="takomo.yml"
+partialsDir: my-custom-partials
+```
+
+Specify multiple custom locations.
+
+```yaml title="takomo.yml"
+partialsDir: 
+  - my-custom-partials
+  - /absolute/path/to/partials
+```
+
+

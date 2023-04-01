@@ -10,7 +10,7 @@ Handlebars helpers are plain JavaScript functions you can invoke from your stack
 Helpers are supported only when using Handlebars templating engine.
 :::
 
-You register your own custom Handlebars helpers by adding .js files to helpers dir.
+You register your own custom Handlebars helpers by adding .js files to `helpers` dir.
 
 Each file must export an object with the following properties:
 
@@ -26,7 +26,7 @@ Here are some examples of different helpers.
 This helper returns the current date and takes no arguments.
 
 ```javascript title="helpers/timestamp.js"
-module.exports = {
+export default {
   name: 'timestamp',
   fn: () => Date.now().getTime(),
 }
@@ -49,7 +49,7 @@ Description: Current timestamp is 1647678689175
 This helper accepts a single string argument and returns it converted in upper case.
 
 ```javascript title="helpers/upper-case.js"
-module.exports = {
+export default {
   name: 'upper-case',
   fn: (str) => str.toUpperCase(),
 }
@@ -72,7 +72,7 @@ Description: Hello WORLD
 This helper accepts two arguments and returns a boolean value indicating if the two arguments are equal.
 
 ```javascript title="helpers/eq.js"
-module.exports = {
+export default {
   name: 'eq',
   fn: (a, b) => a === b,
 }
@@ -92,9 +92,24 @@ Parameters:
   EnableFeature: true
 ```
 
+## Loading helpers from custom locations
 
+You can provide additional directories from where Takomo should load helpers by using `helpersDir` property in `takomo.yml`. You can give a single path or list of paths. Paths can be absolute or relative to the current project directory. Regardless of additional helper locations, Takomo will always also look helpers from `helpers` directory located under the current project directory. 
 
+### Examples
 
+Specify a single custom location for helpers.
 
+```yaml title="takomo.yml"
+helpersDir: my-custom-helpers
+```
+
+Specify multiple custom locations.
+
+```yaml title="takomo.yml"
+helpersDir: 
+  - my-custom-helpers
+  - /absolute/path/to/helpers
+```
 
 
