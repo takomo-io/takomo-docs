@@ -12,10 +12,10 @@ You specify the required Takomo version with the requiredVersion property. It ac
 
 #### Example
 
-Require Takomo version 3.4.0 or above:
+Require Takomo version 6.0.0 or above:
 
 ```yaml title="takomo.yml"
-requiredVersion: ">=3.4.0"
+requiredVersion: ">=6.0.0"
 ```
 
 ## Allowed regions
@@ -46,7 +46,6 @@ Here are the available feature flags:
 | Flag | Description |
 | ---- | ----------- |
 | deploymentTargetsUndeploy | Set false to disable undeploy deployment targets command.<br/><br/>You might want to disable this command to add an extra confirmation step to prevent removing targets unintentionally.<br/><br/>You can override this setting by giving `--feature deploymentTargetsUndeploy=true` option from command-line when executing undeploy deployment targets command. |
-| deploymentTargetsTearDown | Set false to disable tear down deployment targets command.<br/><br/>You might want to disable this command to add an extra confirmation step to prevent removing targets unintentionally.<br/><br/>You can override this setting by giving `--feature deploymentTargetsTearDown=true` option from command-line when executing tear down deployment targets command. |
 
 #### Example
 
@@ -86,4 +85,11 @@ Use different entry point file.
 ```yaml title="takomo.yml"
 esbuild:
   entryPoint: src/index.ts
+```
+
+Disable Typescript support:
+
+```yaml title="takomo.yml"
+esbuild:
+  enabled: false
 ```

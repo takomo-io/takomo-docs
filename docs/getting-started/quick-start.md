@@ -4,11 +4,11 @@ sidebar_position: 2
 
 # Quickstart
 
-This quick start guide will show you how to install and configure Takomo and deploy some basic infrastructure.
+This quick start guide will show you how to install and configure Takomo and deploy a single CloudFormation stack.
 
 ## AWS credentials
 
-During this tutorial, you'll deploy some stacks, so you need an AWS account where you can safely try things out.
+You need an AWS account where you can safely try things out.
 
 Create an IAM user with administrator permissions.
 
@@ -20,7 +20,7 @@ aws_access_key_id = ENTER_YOUR_ACCESS_KEY_ID_HERE
 aws_secret_access_key = ENTER_YOUR_SECRET_ACCESS_KEY_HERE
 ```
 
-## Project initialization
+## Project setup
 
 We'll start by creating a new directory for your Takomo project:
 
@@ -43,27 +43,46 @@ Add Takomo as a development dependency:
 npm install -D takomo 
 ```
 
-Initialize a new Takomo project:
+Verify installation:
 
 ```shell
-npx tkm init --create-samples --project quick-start --regions eu-west-1
+npx tkm --version
 ```
 
-From the command output you can see what directories and files were created.
+## Stack Configuration
 
-## Deploy stacks
+Our stack contains a VPC whose CIDR range can be parameterized. First, we need to create a `stacks` directory that will host all stack configurations. Create the directory and add there a file named `vpc.yml` with the following contents:
 
-Now that you have the project initialized, it's time to deploy the stacks. Go ahead and run the following command:
+    regions: eu-west-1
+    parameters:
+      CidrBlock: 10.0.0.0/24
 
-```shell
-npx tkm stacks deploy --profile takomo-quick-start
-```
+## Stack Template
 
-Takomo will present you a deployment plan. Review it and continue when you are ready. Once the deployment completes, you can see a summary of what just happened.
+Next, we need to provide a CloudFormation template for our stack. Create `templates` directory next to the `stacks` directory, and add there a file named `vpc.yml` with the following contents:
 
-## Clean up
+    Description: My VPC
+    Parameters:
+      CidrBlock:
+        Type: String
+        Description: VPC CIDR block
+    Resources:
+      VPC:
+        Type: AWS::EC2::VPC
+        Properties:
+          CidrBlock: !Ref CidrBlock
 
-You can remove the created stacks by running the following command:
+## Stack Deployment
+
+Alright, we are ready to deploy our stack. Change to the project root directory and run:
+
+    npx tkm stacks deploy --profile ttakomo-quick-start
+
+You will be prompted if you want to continue the deployment. You also need to review and approve the changes. If you answer yes to both questions, then the deploy will proceed, and given your AWS credentials had all the needed IAM permissions, it should also succeed.
+
+## Clean Up
+
+You can delete the stack with command:
 
 ```shell
 npx tkm stacks undeploy --profile takomo-quick-start
