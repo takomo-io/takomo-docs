@@ -76,7 +76,7 @@ Next, we need to provide a CloudFormation template for our stack. Create `templa
 
 Alright, we are ready to deploy our stack. Change to the project root directory and run:
 
-    npx tkm stacks deploy --profile ttakomo-quick-start
+    npx tkm stacks deploy --profile takomo-quick-start
 
 You will be prompted if you want to continue the deployment. You also need to review and approve the changes. If you answer yes to both questions, then the deploy will proceed, and given your AWS credentials had all the needed IAM permissions, it should also succeed.
 
