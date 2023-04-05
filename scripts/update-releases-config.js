@@ -20,7 +20,7 @@ const listVersionedWebsites = async () => {
 
   const versions = []
   for await (const page of paginateListObjectsV2({ client }, input)) {
-    const items = page.CommonPrefixes.filter(p => !p.Prefix.includes("alpha")).map(p => ({
+    const items = page.CommonPrefixes.map(p => ({
       url: `https://takomo.io/${p.Prefix}`,
       version: p.Prefix.replace(Prefix, "").replace("/", "").replace(/-/g, ".")
     }))
@@ -61,7 +61,7 @@ const listGitHubReleases = (websites) => {
     org: "takomo-io",
     repo: "takomo",
   }).then(releases => {
-    return releases.map(release => extractReleaseInfo(release, websites))
+    return releases.map(release => extractReleaseInfo(release, websites)).filter(release => !release.version.includes("alpha"))
   })
 }
 
