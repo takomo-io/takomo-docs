@@ -72,11 +72,11 @@ By default, Takomo looks for a `takomo.ts` file, which can be used to customize 
 
 You can customize this feature by providing `esbuild` property. It has the following properties:
 
-| Property  | Description                                                 | Required | Default             |
-|-----------|-------------------------------------------------------------|----------|---------------------|
-| enabled   | Toggle esbuild and Typescript feature on or off             | no       | true                |
-| outFile   | Name of the file where compiled Typescript code is written  | no       | takomo.ts           |
-| entryPoint | Input entry point file for esbuild                         | no       | .takomo/out/takomo.js |
+| Property  | Description                                                 | Required | Default                |
+|-----------|-------------------------------------------------------------|----------|------------------------|
+| enabled   | Toggle esbuild and Typescript feature on or off             | no       | true                   |
+| outFile   | Name of the file where compiled Typescript code is written  | no       | .takomo/out/takomo.mjs |
+| entryPoint | Input entry point file for esbuild                         | no       | takomo.ts              |
 
 #### Example
 
