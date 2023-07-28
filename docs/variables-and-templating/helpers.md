@@ -2,6 +2,8 @@
 sidebar_position: 7
 ---
 
+import {ApiLink} from '@site/src/components/ApiLink';
+
 # Helpers
 
 Handlebars helpers are plain JavaScript functions you can invoke from your stack group and stack configuration, and template files.
@@ -112,4 +114,49 @@ helpersDir:
   - /absolute/path/to/helpers
 ```
 
+## Implementing helpers with Typescript
 
+[Customizing Takomo with Typescript](../configuration/typescript-support.html) allows you to write your own helpers with Typescript.
+
+Your helpers must be of type <ApiLink text="HandlebarsHelper" source="interfaces/HandlebarsHelper.html"/>. You can also implement helper providers of type <ApiLink text="HandlebarsHelperProvider" source="interfaces/HandlebarsHelperProvider.html"/> that instantiate helpers.
+
+In your entry point file (defaults to `takomo.ts`) you need to implement `templateEngineProvider` and use it to register your helpers like so: 
+
+```typescript
+import { 
+  HandlebarsTemplateEngineProvider, 
+  TakomoConfigProvider, 
+  HandlebarsHelperProvider, 
+  InitHandlebarsHelperProps,  
+  HandlebarsHelper,
+} from "takomo"
+
+// Example helper
+const jsonHelper: HandlebarsHelper = {
+  name: "json",
+  fn: (value) => JSON.stringify(value),
+}
+
+// Example helper provider
+const equalsHelper: HandlebarsHelperProvider = {
+  init: async (props: InitHandlebarsHelperProps): Promise<HandlebarsHelper> => {
+    return {
+      name: "equals",
+      fn: (val1, val2) => val1 === val2,
+    }
+  },
+}
+
+const provider: TakomoConfigProvider = async () => ({
+  templateEngineProvider: new HandlebarsTemplateEngineProvider({
+    helpers: [
+      jsonHelper,
+    ],
+    helperProviders: [
+      equalsHelper,  
+    ]
+  }),
+})
+
+export default provider
+```

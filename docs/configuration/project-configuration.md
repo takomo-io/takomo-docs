@@ -2,6 +2,8 @@
 sidebar_position: 4
 ---
 
+import {ApiLink} from '@site/src/components/ApiLink';
+
 # Project configuration
 
 You can configure project-wide settings in a **takomo.yml** file that you place in the project root directory. 
@@ -64,32 +66,4 @@ You use the extends property to make a project configuration file inherit config
 
 ```yaml title="takomo.yml"
 extends: ../my-parent-config.yml
-```
-
-## Typescript support
-
-By default, Takomo looks for a `takomo.ts` file, which can be used to customize Takomo configuration, from the project root dir. If the file is found, it's compiled with [esbuild](https://esbuild.github.io/), and then run to apply customizations it contains. 
-
-You can customize this feature by providing `esbuild` property. It has the following properties:
-
-| Property  | Description                                                 | Required | Default                |
-|-----------|-------------------------------------------------------------|----------|------------------------|
-| enabled   | Toggle esbuild and Typescript feature on or off             | no       | true                   |
-| outFile   | Name of the file where compiled Typescript code is written  | no       | .takomo/out/takomo.mjs |
-| entryPoint | Input entry point file for esbuild                         | no       | takomo.ts              |
-
-#### Example
-
-Use different entry point file.
-
-```yaml title="takomo.yml"
-esbuild:
-  entryPoint: src/index.ts
-```
-
-Disable Typescript support:
-
-```yaml title="takomo.yml"
-esbuild:
-  enabled: false
 ```
