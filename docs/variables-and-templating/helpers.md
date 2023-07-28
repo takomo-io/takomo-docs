@@ -154,9 +154,15 @@ const provider: TakomoConfigProvider = async () => ({
     ],
     helperProviders: [
       equalsHelper,  
-    ]
+    ],
+    helpersDirs: [/* paths to dirs containing helpers implemented with JavaScript */],
+    partialsDirs: [/* paths to dirs containing partials */],
   }),
 })
 
 export default provider
 ```
+
+:::note
+Please note that `templateEngineProvider` completely overrides any Handlebars configuration you have specified in **takomo.yml** file. 
+:::
