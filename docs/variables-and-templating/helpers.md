@@ -116,7 +116,7 @@ helpersDir:
 
 ## Implementing helpers with Typescript
 
-[Customizing Takomo with Typescript](../configuration/typescript-support.html) allows you to write your own helpers with Typescript.
+[Customizing Takomo with Typescript](configuration/typescript-support.md) allows you to write your own helpers with Typescript.
 
 Your helpers must be of type <ApiLink text="HandlebarsHelper" source="interfaces/HandlebarsHelper.html"/>. You can also implement helper providers of type <ApiLink text="HandlebarsHelperProvider" source="interfaces/HandlebarsHelperProvider.html"/> that instantiate helpers.
 
