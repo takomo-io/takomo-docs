@@ -66,3 +66,51 @@ tags:
   environment: dev
   costCenter: 1234  
 ```
+
+## Using TypeScript
+
+You can also implement validation schemas using TypeScript. Make sure you have [TypeScript support enabled](../configuration/project-configuration#typescript-support).
+
+Place code for your validation schemas in `src` directory under the project directory:
+
+```typescript title="src/stack-name-schema.ts"
+import { InitSchemaProps, SchemaProvider } from "takomo"
+
+const init = async ({ joi, props }: InitSchemaProps) =>
+  joi
+    .string()
+    .lowercase()
+    .custom((value, helpers) => {
+      // Name must begin with the given prefix
+      if (!value.startsWith(props.prefix)) {
+        return helpers.error("invalidPrefix", {
+          prefix: props.prefix,
+          name: value,
+        })
+      }
+    })
+    .messages({
+      invalidPrefix: "Stack name '{{#name}}' does not begin with required prefix '{{#prefix}}'",
+    })
+
+export const stackNameSchemaProvider: SchemaProvider = {
+  name: "stack-name",
+  init,
+}
+
+```
+
+Register your validation schemas in `takomo.ts` file located in the project directory like so:
+
+```typescript title="takomo.ts"
+import {TakomoConfigProvider} from 'takomo'
+import {stackNameSchemaProvider} from './src/stack-name-schema'
+
+const provider: TakomoConfigProvider = async () => ({
+  schemaProviders: [
+    stackNameSchemaProvider,
+  ],
+})
+
+export default provider
+```

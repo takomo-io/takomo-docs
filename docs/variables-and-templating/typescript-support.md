@@ -14,7 +14,6 @@ If you want to implement your own template engine from scratch, you need to impl
 
 In your entry point file (defaults to `takomo.ts`) you register the template engine provider with `templateEngineProvider` property:
 
-
 ```typescript title=takomo.ts
 import {
   HandlebarsTemplateEngineProvider,
@@ -72,7 +71,6 @@ const provider: TakomoConfigProvider = async () => ({
 
 export default provider
 ```
-
 
 ## Implementing helpers with Typescript
 
