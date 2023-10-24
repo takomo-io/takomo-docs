@@ -2,6 +2,8 @@
 sidebar_position: 3
 ---
 
+import {ApiLink} from '@site/src/components/ApiLink';
+
 # Run targets
 
 Run command against the given set of deployment targets.
@@ -40,20 +42,16 @@ In addition to the [common options](../../docs/command-line-usage/common-options
 
 - `--map <command>`
   - Command to run against each target.
-  - To invoke a JavaScript function from a file, give path to the file prefixed with js:
-    - The JavaScript file must export a function.
-    - For each target, the function is invoked with an object that contains the following properties:
-      - target = Current target configuration
-      - deploymentGroupPath = Deployment group path of the current target
-      - credentials = AWS credentials bound to the current target
-      - args = Arguments passed with the --map-args option
-    - The function can return anything. Takomo collects the returned values to a list and invokes the reduce command with it.
+  - To invoke a JavaScript function from a file, give the path to the file prefixed with `js:`
+    - The JavaScript file must have a default export that exports a mapper function of type <ApiLink text="MapFunction" source="types/MapFunction.html"/>.
+    - For each target, Takomo invokes the mapper function and collects the returned values.
+    - After all targets are processed, Takomo invokes the reduce command with the returned values.
+  - Invoking a TypeScript function from a file works the same, but you need to give the path to the file with `ts:` prefix
 - `--reduce <command>`
   - Command to invoke with results from the map command.
-  - To invoke a JavaScript function from a file, give path to the file prefixed with js:
-    - The JavaScript file must export a function which accepts a an object with the following properties:
-      - credentials = Credentials from the command line or credentials bound to the IAM role specified in --reduce-role-arn option.
-      - targets = List of results from the map command
+  - To invoke a JavaScript function from a file, give path to the file prefixed with `js:`
+    - The JavaScript file must have a default export that exports a reducer function of type <ApiLink text="ReduceFunction" source="types/ReduceFunction.html"/>:
+  - Invoking a TypeScript function from a file works the same, but you need to give the path to the file with `ts:` prefix
 - `--map-role-name <role-name>`
   - Name of IAM role Takomo should assume from each account when invoking the map command.
 - `--map-args <args>`
@@ -126,4 +124,61 @@ tkm targets run \
   --map js:/Documents/my-mapper.js \
   --reduce js:/Documents/reducer.js \
   --map-role-name MyRunnerRole
+```
+
+Example of a mapper function written with JavaScript. Note that this function requires that you have declared @aws-sdk/client-sts in your package.json dependencies.
+
+```javascript
+import { STS } from "@aws-sdk/client-sts"
+export default async ({ credentials }) => {
+  const { Account } = await new STS({
+    credentials,
+    region: "us-east-1",
+  }).getCallerIdentity({})
+
+  return Account
+}
+```
+
+Example of a mapper function written with TypeScript: 
+
+```typescript
+import { MapFunction } from "takomo"
+
+export interface MyTarget {
+  accountId: string
+  message: string
+}
+
+const map: MapFunction<MyTarget> = async ({ target }) => {
+  return {
+    accountId: target.accountId!,
+    message: target.vars.message,
+  }
+}
+
+export default map
+```
+
+Example of a reducer function written with JavaScript.
+
+```javascript
+export default ({ targets }) => targets.sort().join(",")
+```
+
+Example of a reducer function written with TypeScript. 
+
+```typescript
+import { ReduceFunction } from "takomo"
+
+export interface MyTarget {
+  accountId: string
+  message: string
+}
+
+const reduce: ReduceFunction<MyTarget, string> = async ({ targets }) => {
+  return targets.map((t) => t.accountId + "=" + t.message).join("")
+}
+
+export default reduce
 ```
