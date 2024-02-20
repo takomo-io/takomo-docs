@@ -63,7 +63,7 @@ const config = {
         backgroundColor: '#1d977d',
         textColor: '#ffffff',
         content:
-          'Takomo 6.0 released! <a href="/blog/takomo-6-released">Read more</a>. Docs for Takomo 5.x can be found <a target="_blank" rel="noopener noreferrer" href="https://takomo.io/archive/5-6-0/">here</a>.',
+          'Takomo 7.0 released! <a href="/blog/takomo-7-released">Read more</a>. Docs for Takomo 6.x can be found <a target="_blank" rel="noopener noreferrer" href="https://takomo.io/archive/6-4-2/">here</a>.',
       },
       navbar: {
         title: `Takomo v${version}`,
