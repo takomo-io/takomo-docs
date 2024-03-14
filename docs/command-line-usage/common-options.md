@@ -37,7 +37,6 @@ You can use `--feature <feature>=<boolean value>` option to enable and disable c
 Available feature flags:
 
 - `deploymentTargetsUndeploy` - Set false to disable undeploy deployment targets command
-- `deploymentTargetsTearDown` - Set false to disable tear down deployment targets command
 
 ## Load environment variables from a file
 
