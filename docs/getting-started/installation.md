@@ -6,9 +6,9 @@ sidebar_position: 1
 
 ## System requirements
 
-Takomo is built with Node.js and requires Node.js **v18.14.2** or later.
+Takomo is built with Node.js and requires Node.js **v20.11.0** or later.
 
-Sorry to say this, but currently, Takomo doesn't work on Windows, so you need to have Linux or Mac.
+Takomo doesn't work on Windows, so you need to have Linux or Mac.
 
 ## Install as a project dependency
 
