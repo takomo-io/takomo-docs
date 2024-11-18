@@ -6,7 +6,7 @@ sidebar_position: 3
 
 Undeploy (remove) stacks within the given command path. 
 
-Takomo also removes stacks that depend on the stacks within the command path, even if they are outside the given command path. Takomo arranges the stacks in removal order by stack dependencies, ensuring that it removes the stacks in the correct order and in parallel when possible.
+Takomo also removes stacks depending on the stacks within the command path, even if they are outside the given command path. Takomo arranges the stacks in removal order by stack dependencies, ensuring that it removes the stacks in the correct order and in parallel when possible.
 
 ## Usage
 

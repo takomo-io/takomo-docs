@@ -6,7 +6,7 @@ sidebar_position: 2
 
 Deploy stacks within the given command path.
 
-Takomo also deploys stacks that the stacks within the command path depend on, even if they are outside the given command path. Takomo arranges the stacks in deployment order by stack dependencies, ensuring that it deploys the stacks in the correct order and in parallel when possible.
+Takomo also deploys stacks the stacks within the command path depend on, even if they are outside the given command path. Takomo arranges the stacks in deployment order by stack dependencies, ensuring that it deploys the stacks in the correct order and in parallel when possible.
 
 Takomo deletes stacks whose creation have failed earlier and then recreates them. Such failed stacks can't be updated, and deleting them is the only possible operation.
 
