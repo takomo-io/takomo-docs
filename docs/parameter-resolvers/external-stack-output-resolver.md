@@ -10,15 +10,16 @@ The external stack output resolver reads the parameter value from a stack output
 
 Here are the properties of the external stack output resolver:
 
-| Key | Required | Type | Description |
-| --- | -------- | ---- | ----------- |
-| resolver | yes | string | Resolver name, this must be **external-stack-output**. |
-| stack | yes | string | Name of the source stack. |
-| output | yes | string | Name of the stack output whose value is read. |
-| region | no | string | Region of the source stack. Region is optional. By default, the region of the target stack is used. |
-| commandRole | no | string | IAM role used to access the stack output. Command role is optional. By default, credentials associated with the target stack are used. |
-| confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false**. |
-| immutable | no | boolean | Mark the parameter as immutable, defaults to **false**. |
+| Key          | Required | Type | Description                                                                                                                            |
+|--------------| -------- | ---- |----------------------------------------------------------------------------------------------------------------------------------------|
+| resolver     | yes | string | Resolver name, this must be **external-stack-output**.                                                                                 |
+| stack        | yes | string | Name of the source stack.                                                                                                              |
+| output       | yes | string | Name of the stack output whose value is read.                                                                                          |
+| region       | no | string | Region of the source stack. Region is optional. By default, the region of the target stack is used.                                    |
+| commandRole  | no | string | IAM role used to access the stack output. Command role is optional. By default, credentials associated with the target stack are used. |
+| confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false**.                                                                 |
+| immutable    | no | boolean | Mark the parameter as immutable, defaults to **false**.                                                                                |
+| cache        | no | boolean | Cache the resolved parameter value for the duration of the deploy operation, defaults to **false**.                                    |
 
 ## Example
 
