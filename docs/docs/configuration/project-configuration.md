@@ -1,0 +1,60 @@
+import { ApiLink } from '@site/src/components/ApiLink';
+
+# Project Configuration
+
+Project-wide settings can be defined in a `takomo.yml` file placed in the root of your project directory.
+
+## Required Takomo Version
+
+You can specify which version of Takomo your project depends on using the `requiredVersion` property. This accepts a version range compatible with [npm semver](https://www.npmjs.com/package/semver).
+
+#### Example
+
+Require Takomo version 6.0.0 or later:
+
+```yaml title="takomo.yml"
+requiredVersion: ">=6.0.0"
+```
+
+## Allowed Regions
+
+By default, Takomo uses a hardcoded list of supported AWS regions. New regions are added as part of new Takomo releases. If you're using an older version of Takomo and need to access newer regions, or if you want to limit deployments to specific regions, use the `regions` property.
+
+#### Example
+
+Restrict deployments to the following regions:
+
+```yaml title="takomo.yml"
+regions:
+  - us-east-1
+  - eu-west-1
+  - eu-central-1
+  - eu-north-1
+```
+
+## Feature Flags
+
+You can toggle optional features using the `features` property. Each feature flag enables or disables a specific behavior within Takomo.
+
+| Flag                      | Description |
+|---------------------------|-------------|
+| `deploymentTargetsUndeploy` | Set to `false` to disable the `undeploy deployment-targets` command.<br/><br/>This can be used to add an extra safeguard against accidental target removal.<br/><br/>This setting can be overridden on the command line using `--feature deploymentTargetsUndeploy=true`. |
+
+#### Example
+
+Disable the `undeploy deployment-targets` command:
+
+```yaml title="takomo.yml"
+features:
+  deploymentTargetsUndeploy: false
+```
+
+## Extending Configuration
+
+A `takomo.yml` configuration file can inherit settings from another configuration file using the `extends` property. This is especially useful in monorepos where multiple Takomo projects share common configuration.
+
+Place shared properties in a parent config file and reference it like this:
+
+```yaml title="takomo.yml"
+extends: ../my-parent-config.yml
+```
