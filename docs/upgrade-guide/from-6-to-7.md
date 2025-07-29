@@ -1,18 +1,18 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 import {ApiLink} from '@site/src/components/ApiLink';
 
 # From Takomo 6.x to 7.x
 
-Takomo 7.0 is a maintenance release with only one breaking change. Upgrading from 7.x should be straightforward.
+Takomo 7.0 is a maintenance release with only one breaking change. Upgrading from 6.x should be straightforward.
 
 ## Breaking changes
 
 Here is the breaking change introduced in Takomo 7.0.
 
-- [Require Nodejs 18.14.2](#require-nodejs-20110)
+- [Require Nodejs 20.11.0](#require-nodejs-20110)
 
 ### Require Nodejs 20.11.0
 

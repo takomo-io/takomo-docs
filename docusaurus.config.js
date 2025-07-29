@@ -60,10 +60,10 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        backgroundColor: '#1d977d',
+        backgroundColor: '#871d97',
         textColor: '#ffffff',
         content:
-          'Takomo 7.0 released! <a href="/blog/takomo-7-released">Read more</a>. Docs for Takomo 6.x can be found <a target="_blank" rel="noopener noreferrer" href="https://takomo.io/archive/6-4-2/">here</a>.',
+          'Takomo 8.0 released! <a href="/blog/takomo-8-released">Read more</a>. Docs for Takomo 7.x can be found <a target="_blank" rel="noopener noreferrer" href="https://takomo.io/archive/7-4-4/">here</a>.',
       },
       navbar: {
         title: `Takomo v${version}`,
