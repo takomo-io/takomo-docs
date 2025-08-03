@@ -1,10 +1,6 @@
-import TOCInline from '@theme/TOCInline';
-
 # Common Options
 
 Here are the options available for all commands (unless stated otherwise).
-
-<TOCInline toc={toc} />
 
 ## Assume yes to all questions
 

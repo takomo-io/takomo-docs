@@ -14,4 +14,4 @@ This is a maintenance release that introduces a few breaking changes in order to
 - [Rename the temp directory](../docs/upgrade-guide/from-5-to-6#rename-the-temp-directory)
 - [Changes to public API](../docs/upgrade-guide/from-5-to-6#changes-to-public-api)
 
-See [upgrade guide](/docs/upgrade-guide/from-5-to-6/) to learn required actions when upgrading from Takomo 5.x to 6.x.
+See [upgrade guide](../docs/upgrade-guide/from-5-to-6/) to learn required actions when upgrading from Takomo 5.x to 6.x.

@@ -43,6 +43,10 @@
     "type": "dir",
     "name": "command-line-usage",
     "label": "Command Line Usage"
+  },
+  {
+    "type": "dir",
+    "name": "upgrade-guide",
+    "label": "Upgrade Guide"
   }
-
 ]

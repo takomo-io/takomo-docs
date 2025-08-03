@@ -10,4 +10,4 @@ This is a maintenance release that introduces only one breaking change.
 
 - [Require Nodejs 20.11.0](../docs/upgrade-guide/from-6-to-7#require-nodejs-20110)
 
-See [upgrade guide](/docs/upgrade-guide/from-6-to-7/) to learn required actions when upgrading from Takomo 6.x to 7.x.
+See [upgrade guide](../docs/upgrade-guide/from-6-to-7/) to learn required actions when upgrading from Takomo 6.x to 7.x.

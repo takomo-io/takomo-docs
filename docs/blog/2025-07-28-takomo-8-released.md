@@ -10,4 +10,4 @@ This is a maintenance release that introduces only one breaking change.
 
 - [Require Nodejs 22.16.0](../docs/upgrade-guide/from-7-to-8#require-nodejs-22160)
 
-See [upgrade guide](/docs/upgrade-guide/from-7-to-8/) to learn required actions when upgrading from Takomo 7.x to 8.x.
+See [upgrade guide](../docs/upgrade-guide/from-7-to-8) to learn required actions when upgrading from Takomo 7.x to 8.x.

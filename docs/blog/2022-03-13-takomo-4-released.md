@@ -12,4 +12,4 @@ This is a maintenance release that introduces a few breaking changes in order to
 - Drop AWS organization management commands
 - Require Nodejs v14.17.1 or later 
 
-See [upgrade guide](/docs/upgrade-guide/from-3-to-4/) to learn required actions when upgrading from Takomo 3.x to 4.x.
+See [upgrade guide](../docs/upgrade-guide/from-3-to-4/) to learn required actions when upgrading from Takomo 3.x to 4.x.

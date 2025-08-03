@@ -2,7 +2,7 @@
 
 Emit stack templates within the given command path to stdout or to files.
 
-This operation is like [deploy](deploy-stacks) but doesn't perform actual deploy for stacks. Instead, stack templates are written to stdout or to a specified dir. Stack parameters are resolved and hooks are executed just like in deploy operation. In some cases, especially when stacks have dependencies, this will cause problems as resolvers might try to get values for parameters from stacks that do not exist yet. If you face these issues, you can use `--skip-parameters` and `--skip-hooks` options to skip parameter resolving and executing hooks, respectively. Bear in mind though that using these options might break something in your templates if you are using dynamic templating. 
+This operation is like [deploy](./deploy-stacks) but doesn't perform actual deploy for stacks. Instead, stack templates are written to stdout or to a specified dir. Stack parameters are resolved and hooks are executed just like in deploy operation. In some cases, especially when stacks have dependencies, this will cause problems as resolvers might try to get values for parameters from stacks that do not exist yet. If you face these issues, you can use `--skip-parameters` and `--skip-hooks` options to skip parameter resolving and executing hooks, respectively. Bear in mind though that using these options might break something in your templates if you are using dynamic templating. 
 
 ## Usage
 
