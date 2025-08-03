@@ -28,6 +28,21 @@
     "type": "dir",
     "name": "parameter-resolvers",
     "label": "Parameter Resolvers"
+  },
+  {
+    "type": "dir",
+    "name": "hooks",
+    "label": "Hooks"
+  },
+  {
+    "type": "dir",
+    "name": "validation-schemas",
+    "label": "Validation Schemas"
+  },
+  {
+    "type": "dir",
+    "name": "command-line-usage",
+    "label": "Command Line Usage"
   }
 
 ]

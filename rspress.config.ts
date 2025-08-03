@@ -5,16 +5,12 @@ export default defineConfig({
   root: path.join(__dirname, 'docs'),
   title: 'Takomo',
   description: 'Organize, parameterize and deploy your CloudFormation stacks',
-  icon: '/rspress-icon.png',
+  icon: '/takomo-icon.png',
   logo: {
-    light: '/rspress-light-logo.png',
-    dark: '/rspress-dark-logo.png',
+    light: '/takomo-light-logo.png',
+    dark: '/takomo-dark-logo.png',
   },
   themeConfig: {
-    footer: {
-      message:
-        '<p>This is a footer with a <a href="https://example.com">link</a> and <strong>bold text</strong></p>',
-    },
     socialLinks: [
       {
         icon: 'github',

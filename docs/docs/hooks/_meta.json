@@ -1,0 +1,7 @@
+[
+  "built-in-hooks",
+  "command-hook",
+  "checksum-hook",
+  "custom-hooks",
+  "sharing-data-between-hooks"
+]

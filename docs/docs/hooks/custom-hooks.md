@@ -1,0 +1,162 @@
+import {ApiLink} from '@site/src/components/ApiLink';
+
+# Custom Hooks
+
+
+## API
+
+You can provide custom hooks by placing plain JavaScript files, with **.js** file extension, into the **hooks** directory. Each file must export a hook provider object. Takomo uses the provider to initialize the actual hook.
+
+### Hook provider
+
+Hook provider has the following properties:
+
+- `type`
+  - Type of the hook
+  - Required
+- `init`
+  - A function that initializes the hook with properties given in a stack group or stack configuration file. The function can be either synchronous or asynchronous, and must return an instantiated hook object.
+  - Required
+
+See more information from <ApiLink text="API docs" source="interfaces/HookProvider.html"/>.
+
+### Hook
+
+Hook has the following properties:
+
+- `execute`
+  - A function that is invoked with an hook input object when the hook is executed. The function can be synchronous or asynchronous and must return a hook output. 
+  - Required
+
+See more information from <ApiLink text="API docs" source="interfaces/Hook.html"/>.
+
+### Hook Input
+
+A hook input is an object that is passed to hook's execute function. It has the following properties:
+
+- `stage`
+  - Current stack operation stage. Possible values are: before, after
+- `operation`
+  - Current stack operation. Possible values are: create, update, delete
+- `status`
+  - Current stack operation status. Possible values are: success, failed, cancelled. This is defined only when the stage is after.
+- `variables`
+  - Mutable variables object containing command line and environment variables. The hook can modify existing variables and add new ones. After the hook is completed, the same variables object is passed to the subsequent hooks which can then access its contents. The variables are available also in the stack's template file.
+- `ctx`
+  - Command context object
+
+See more information from <ApiLink text="API docs" source="interfaces/HookInput.html"/>.
+
+### Hook Output
+
+A hook output is a value returned from hook's execute function. It is used to determine if the hook execution was successful and to share data between hooks. It can be either a boolean, an Error which is always considered as failure, or a detailed object with the following properties:
+
+- `success`
+  - A boolean determining if the hook execution was successful.
+  - Required
+- `message`
+  - An informative message about the hook execution outcome.
+  - Optional
+- `value`
+  - A value to be exposed to other hooks.
+  - Optional
+- `skip`
+  - A boolean determining if all the remaining hooks of the current stack and the stack operation itself should be skipped.  
+  - Optional
+
+See more information from <ApiLink text="API docs" source="types/HookOutput.html"/>.
+
+## Examples
+
+### Debug hook
+
+This example hook prints some debug information to the console.
+
+Our file structure looks like this:
+
+```shell
+.
+├─ stacks
+│  └─ my-stack.yml
+├─ hooks
+│  └─ debug.js
+└─ templates
+   └─ my-stack.yml
+```
+
+The hook provider defined in **hooks/debug.js** looks like this:
+
+```javascript title="hooks/debug.js"
+export default {
+  type: "debug",
+  init: (props) => {
+    console.log("Initialize debug hook")
+    return {
+      execute: (input) => {
+        console.log("Execute debug hook!")
+        console.log(`Stage:     ${input.stage}`)
+        console.log(`Operation: ${input.operation}`)
+        console.log(`Status:    ${input.status}`)
+        console.log(JSON.stringify(props, null, 2))
+        
+        return {
+          message: "OK",
+          success: true,
+          value: "Did some debugging"
+        }
+      }
+    }
+  }
+}
+```
+
+Our custom hook is used in the stack configuration like so:
+
+```yaml title="stacks/my-stack.yml"
+hooks:
+  - name: my-hook
+    type: debug
+```
+
+When executed, the hook exposes string **"Did some debugging"** in the mutable variables object.
+
+## Using TypeScript
+
+You can also implement custom hooks using TypeScript. Make sure you have [TypeScript support enabled](../configuration/project-configuration#typescript-support).
+
+Place code for your custom hooks in `src` directory under the project directory:
+
+```typescript title="src/debug-hook.ts"
+import {Hook, HookConfig, HookProvider} from "takomo"
+
+export const debugHookProvider: HookProvider = {
+  type: "debug",
+  init: async (props: HookConfig): Promise<Hook> => {
+    return {
+      execute: async () => {
+        console.log("log something")
+        return {
+          message: "OK",
+          success: true,
+          value: "Did some debugging"
+        }
+      },
+    }
+  },
+}
+```
+
+Register your hooks in `takomo.ts` file located in the project directory like so:
+
+```typescript title="takomo.ts"
+import {TakomoConfigProvider} from 'takomo'
+import {debugHookProvider} from './src/debug-hook'
+
+const provider: TakomoConfigProvider = async () => ({
+  hookProviders: [
+    debugHookProvider,
+  ],
+})
+
+export default provider
+```
