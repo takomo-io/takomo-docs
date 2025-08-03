@@ -2,19 +2,16 @@
 pageType: home
 
 hero:
-  name: My Site
-  text: A cool website!
-  tagline: This is the tagline
+  name: Takomo
+  text: 
+  tagline: Organize, parameterize and deploy your CloudFormation stacks
   actions:
     - theme: brand
       text: Quick Start
-      link: /guide/
+      link: /docs/getting-started/
     - theme: alt
       text: GitHub
-      link: https://github.com/web-infra-dev/rspress
-  image:
-    src: /rspress-icon.png
-    alt: Logo
+      link: https://github.com/takomo-io/takomo
 features:
   - title: Blazing fast build speed
     details: The core compilation module is based on the Rust front-end toolchain, providing a more ultimate development experience.

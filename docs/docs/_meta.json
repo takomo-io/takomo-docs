@@ -8,5 +8,26 @@
     "type": "dir",
     "name": "configuration",
     "label": "Configuration"
+  },
+  {
+    "type": "dir",
+    "name": "stack-properties",
+    "label": "Stack Properties"
+  },
+  {
+    "type": "dir",
+    "name": "blueprints",
+    "label": "Blueprints"
+  },
+  {
+    "type": "dir",
+    "name": "variables-and-templating",
+    "label": "Variables and Templating"
+  },
+  {
+    "type": "dir",
+    "name": "parameter-resolvers",
+    "label": "Parameter Resolvers"
   }
+
 ]

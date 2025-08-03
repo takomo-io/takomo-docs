@@ -5,9 +5,14 @@
     "activeMatch": "/docs/getting-started/"
   },
   {
-    "text": "Hello world",
-    "link": "/hello/",
-    "activeMatch": "/hello/"
+    "text": "Deployment Targets",
+    "link": "/docs/deployment-targets/",
+    "activeMatch": "/docs/deployment-targets/"
+  },
+  {
+    "text": "Blog",
+    "link": "/blog/",
+    "activeMatch": "/blog/"
   },
   {
     "text": "API",

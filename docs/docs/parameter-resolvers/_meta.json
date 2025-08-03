@@ -1,0 +1,11 @@
+[
+  "built-in-parameter-resolvers",
+  "stack-output-resolver",
+  "external-stack-output-resolver",
+  "command-resolver",
+  "file-contents-resolver",
+  "hook-output-resolver",
+  "ssm-parameter-resolver",
+  "secret-resolver",
+  "custom-parameter-resolvers"
+]

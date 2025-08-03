@@ -1,0 +1,11 @@
+[
+  "introduction",
+  "handlebars-syntax",
+  "ejs-syntax",
+  "environment-variables",
+  "command-line-variables",
+  "partials",
+  "available-variables",
+  "helpers",
+  "typescript-support"
+]
