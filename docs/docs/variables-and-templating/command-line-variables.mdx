@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Command-line variables
 
 You can pass variables from command line using `--var` and `--var-file` options. Both options can be used multiple times. Variables are exposed via var variable.
@@ -17,10 +14,7 @@ Provide a single variable named myVariable with value hello:
 --var myVariable=hello
 ```
 
-You can refer to the variable in configuration files like so:
-
-<Tabs>
-<TabItem value="handlebars" label="Handlebars" default>
+Using Handlebars, you can refer to the variable in configuration files like so:
 
 ```yaml
 Resources:
@@ -29,8 +23,7 @@ Resources:
     LogGroupName: {{ var.myVariable }}
 ```
 
-</TabItem>
-<TabItem value="ejs" label="EJS">
+Or, if you prefer, EJS:
 
 ```yaml
 Resources:
@@ -38,9 +31,6 @@ Resources:
     Type: AWS::Logs::LogGroup
     LogGroupName: <%= it.var.myVariable %>
 ```
-
-</TabItem>
-</Tabs>
 
 ## Variables from files
 
@@ -75,10 +65,7 @@ You can deserialize its contents to a variable named **myVariable** like so:
 --var-file person=/home/variables.yml
 ```
 
-And then use the variable in the configuration like so:
-
-<Tabs>
-<TabItem value="handlebars" label="Handlebars" default>
+And then with Handlebars, use the variable in the configuration like so:
 
 ```yaml
 parameters:
@@ -86,17 +73,13 @@ parameters:
   UserAge: {{ var.person.age }}
 ```
 
-</TabItem>
-<TabItem value="ejs" label="EJS">
+Or like this when using EJS:
 
 ```yaml
 parameters:
   UserName: <%= it.var.person.name %>
   UserAge: <%= it.var.person.age %>
 ```
-
-</TabItem>
-</Tabs>
 
 #### Example - Deserialize file contents to top-level variables
 
@@ -117,10 +100,7 @@ You can deserialize its contents to top-level of variables:
 --var-file person=/home/variables.yml
 ```
 
-And then use the variables in the configuration like so:
-
-<Tabs>
-<TabItem value="handlebars" label="Handlebars" default>
+And then with Handlebars, use the variables in the configuration like so:
 
 ```yaml
 parameters:
@@ -128,18 +108,13 @@ parameters:
   FooBarEnabled: {{ var.foo.bar }}
 ```
 
-</TabItem>
-<TabItem value="ejs" label="EJS">
+Or, with EJS:
 
 ```yaml
 parameters:
   Color: <%= it.var.color %>
   FooBarEnabled: <%= it.var.foo.bar %>
 ```
-
-</TabItem>
-</Tabs>
-
 
 ## Loading order and merging of variables
 

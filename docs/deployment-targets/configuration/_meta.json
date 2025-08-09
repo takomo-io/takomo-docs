@@ -1,7 +1,7 @@
 [
   "directory-structure",
   "deployment-groups",
-  "deploying-targets",
+  "deployment-targets",
   "config-sets",
   "variables",
   "schemas",

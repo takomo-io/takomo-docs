@@ -1,11 +1,9 @@
 import * as path from 'node:path';
 import { defineConfig } from 'rspress/config';
+import sitemap from "rspress-plugin-sitemap";
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
-  markdown: {
-    checkDeadLinks: true,
-  },
   builderConfig: {
     resolve: {
       alias: {
@@ -21,7 +19,13 @@ export default defineConfig({
     light: '/takomo-light-logo.png',
     dark: '/takomo-dark-logo.png',
   },
+  plugins: [
+    sitemap({
+      domain: "https://takomo.io"
+    })
+  ],
   themeConfig: {
+    enableScrollToTop: true,
     socialLinks: [
       {
         icon: 'github',

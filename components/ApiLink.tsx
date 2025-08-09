@@ -1,12 +1,12 @@
 import React from 'react';
 
 export default (props: { text: string, source: string }) => {
-  // const {siteConfig} = useDocusaurusContext()
-  // const {customFields: { takomoVersion }} = siteConfig
-  console.log(JSON.stringify((props), undefined, 2))
-  // const apiVersion = takomoVersion.replace(/\./g, '-')
+  // if (process.env.TAKOMO_VERSION) {
+  //   throw new Error("TAKOMO_VERSION environment variable is not found!");
+  // }
 
-  const apiVersion = "8-0-0"
-  // return <a href={`https://takomo.io/api-docs/${apiVersion}/${source}`} target={'_blank'}>{text}</a>
-  return <a href={`https://takomo.io/api-docs/${apiVersion}/${props.source}`} target={'_blank'}>{props.text}</a>
+  // const apiVersion = process.env.TAKOMO_VERSION!.replace(/\./g, '-')
+  const apiVersion = "8-0-1"
+
+  return <a href={`https://takomo.io/api-docs/${apiVersion}/${props.source}`} target={'_blank'} style={{color: '#33adff'}}>{props.text}</a>
 }

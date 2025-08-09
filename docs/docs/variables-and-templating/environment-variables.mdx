@@ -1,0 +1,17 @@
+# Environment variables
+
+System environment variables are exposed via the `env` variable.
+
+#### Example
+
+Here's an example how to print the `HOME` environment variable using Handlebars:
+
+```yaml
+Home dir is {{ env.HOME }}
+```
+
+And EJS:
+
+```yaml
+Home dir is <%= it.env.HOME %>
+```
