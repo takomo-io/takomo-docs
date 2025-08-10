@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   title: 'Takomo',
-  logoText: 'Takomo v8.0.0',
+  logoText: 'Takomo v8.0.1',
   description: 'Organize, parameterize and deploy your CloudFormation stacks',
   icon: '/takomo-icon.png',
   logo: {

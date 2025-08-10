@@ -1,4 +1,4 @@
-# Rspress website
+# Takomo Documentation
 
 ## Setup
 
