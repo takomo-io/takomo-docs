@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import { defineConfig } from 'rspress/config';
-import sitemap from "rspress-plugin-sitemap";
+import sitemap from 'rspress-plugin-sitemap';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   title: 'Takomo',
-  logoText: 'Takomo v8.0.2',
+  logoText: 'Takomo v8.0.3',
   description: 'Organize, parameterize and deploy your CloudFormation stacks',
   icon: '/takomo-icon.png',
   logo: {
@@ -21,8 +21,8 @@ export default defineConfig({
   },
   plugins: [
     sitemap({
-      domain: "https://takomo.io"
-    })
+      domain: 'https://takomo.io',
+    }),
   ],
   themeConfig: {
     enableScrollToTop: true,

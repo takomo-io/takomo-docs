@@ -6,7 +6,7 @@ export default (props: { text: string, source: string }) => {
   // }
 
   // const apiVersion = process.env.TAKOMO_VERSION!.replace(/\./g, '-')
-  const apiVersion = "8-0-1"
+  const apiVersion = "8-0-3"
 
   return <a href={`https://takomo.io/api-docs/${apiVersion}/${props.source}`} target={'_blank'} style={{color: '#33adff'}}>{props.text}</a>
 }
