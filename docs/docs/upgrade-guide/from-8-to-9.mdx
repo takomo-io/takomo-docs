@@ -1,0 +1,38 @@
+import ApiLink from '@components/ApiLink';
+
+# From Takomo 8.x to 9.x
+
+Takomo 9.0 adds support for custom stacks and introduces some breaking changes to exposed APIs.
+Upgrading from 8.x should be straightforward. No action is required if your project has no custom
+parameter resolvers or hooks.
+
+## Breaking changes
+
+Here are the breaking changes introduced Takomo APIs:
+
+### Stack interface renamed to StandardStack
+
+Because Takomo now supports custom stacks, the <ApiLink text="Stack" source="interfaces/Stack.html" /> interface now represents both the standard and custom stacks. Interface <ApiLink text="StandardStack" source="interfaces/StandardStack.html" /> represents standard stacks and interface <ApiLink text="CustomStack" source="interfaces/CustomStack.html" /> represents custom stacks.
+
+When working with stacks, use <ApiLink text="isCustomStack" source="functions/isCustomStack.html" /> and <ApiLink text="isStandardStack" source="functions/isStandardStack.html" /> functions to identify the stack type.
+
+### StacksContext
+
+Due to the renaming of interfaces, also the <ApiLink text="StacksContext" source="interfaces/StacksContext.html" /> has changed as follows:
+
+- <ApiLink
+    text="getStacksByPath"
+    source="interfaces/StacksContext.html#getstacksbypath"
+  />
+  now returns type <ApiLink text="Stack" source="interfaces/Stack.html" />
+  instead of
+  <ApiLink text="StandardStack" source="interfaces/StandardStack.html" />
+- <ApiLink
+    text="getStackByExactPath"
+    source="interfaces/StacksContext.html#getstackbyexactpath"
+  />
+  now returns type <ApiLink text="Stack" source="interfaces/Stack.html" />
+  instead of
+  <ApiLink text="StandardStack" source="interfaces/StandardStack.html" />
+
+Again, you need to use <ApiLink text="isCustomStack" source="functions/isCustomStack.html" /> and <ApiLink text="isStandardStack" source="functions/isStandardStack.html" /> functions to identify the stack type.

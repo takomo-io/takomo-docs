@@ -21,6 +21,11 @@
   },
   {
     "type": "dir",
+    "name": "custom-stacks",
+    "label": "Custom Stacks"
+  },
+  {
+    "type": "dir",
     "name": "variables-and-templating",
     "label": "Variables and Templating"
   },

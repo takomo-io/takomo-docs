@@ -1,0 +1,12 @@
+# Introduction
+
+Custom stacks provide a way to manage resources that cannot be defined using standard CloudFormation stacks.
+For example, custom stacks can be used to integrate other deployment tools — such as the Serverless Framework and AWS CDK —
+into Takomo configurations.
+
+You can mark a stack configuration as a custom stack by defining the [customType](../stack-properties/custom-type.mdx) property.
+Each custom stack type can have its own specific configuration, defined using the [customConfig](../stack-properties/custom-config.mdx) property.
+Custom stacks support most of the standard stack properties.
+
+Takomo includes one built-in custom stack type, [cmd](./command-custom-stack.mdx), which allows you to define shell commands for managing custom resources.
+You can also [implement](./implementing-custom-stacks.mdx) your own custom stacks with TypeScript.
