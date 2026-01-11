@@ -1,4 +1,4 @@
-# Hook output resolver
+# Hook Output Resolver
 
 The hook output resolver reads parameter values from hook outputs.
 
@@ -6,12 +6,12 @@ The hook output resolver reads parameter values from hook outputs.
 
 Here are the properties of the hook output resolver:
 
-| Key | Required | Type | Description |
-| --- | -------- | ---- | ----------- |
-| resolver | yes | string | Resolver name, this must be **hook-output**. |
-| hook | yes | string | Name of the hook whose output should be read. |
-| confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false**. |
-| immutable | no | boolean | Mark the parameter as immutable, defaults to **false**. |
+| Key          | Required | Type    | Description                                                            |
+| ------------ | -------- | ------- | ---------------------------------------------------------------------- |
+| resolver     | yes      | string  | Resolver name, this must be **hook-output**.                           |
+| hook         | yes      | string  | Name of the hook whose output should be read.                          |
+| confidential | no       | boolean | Conceal the resolved parameter value from logs, defaults to **false**. |
+| immutable    | no       | boolean | Mark the parameter as immutable, defaults to **false**.                |
 
 ## Examples
 

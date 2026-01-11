@@ -1,5 +1,169 @@
+import ApiLink from '@components/ApiLink';
+
 # Command Custom Stack
 
-:::note
-Documentation will be added soon
+Command custom stack is a built-in custom stack implementation that allows you to define shell
+commands to run at each phase of custom stack lifecycle, i.e. create, update and delete.
+
+:::tip
+The Command custom stack is somewhat limited and not particularly easy to use, so in most cases you should implement your own custom stacks.
 :::
+
+## Properties
+
+Here are the properties of the command custom stack.
+
+:::note
+All commands must output valid JSON string. Use `capture` property to control whether you want to use the whole script output or just the last line.
+:::
+
+| Key                    | Required | Type                                      | Description                                                                                                                                                                                          |
+| ---------------------- | -------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| createCommand          | yes      | string, [Command Config](#command-config) | Shell command to execute when a new custom stack is created. Can be a plain `string` or complex object if more control is required.                                                                  |
+| updateCommand          | yes      | string, [Command Config](#command-config) | Shell command to execute when an existing custom stack is updated. Can be a plain `string` or complex object if more control is required.                                                            |
+| deleteCommand          | no       | string, [Command Config](#command-config) | Shell command to execute when an existing custom stack is deleted. Can be a plain `string` or complex object if more control is required.                                                            |
+| getCurrentStateCommand | no       | string, [Command Config](#command-config) | Shell command to execute when state of an existing custom stack is queried. Can be a plain `string` or complex object if more control is required.                                                   |
+| getChangesCommand      | no       | string, [Command Config](#command-config) | Shell command to execute when expected changes to an existing custom stack are queried. Can be a plain `string` or complex object if more control is required.                                       |
+| cwd                    | no       | string                                    | Path to the working directory from where the shell command is executed. Relative to the current project directory. Sets default value for all commands.                                              |
+| exposeStackCredentials | no       | boolean                                   | Make the current stack's AWS credentials available for the shell command. Defaults to false. Sets default value for all commands.                                                                    |
+| exposeStackRegion      | no       | boolean                                   | Make the current stack's region available for the shell command. Defaults to false. Sets default value for all commands.                                                                             |
+| capture                | no       | boolean                                   | Controls how to capture the output of the executed shell command. By default, all output is captured. To capture only the last line, set this to **last-line**. Sets default value for all commands. |
+
+### Command Config
+
+When configuring a shell command to execute with `createCommand`, `updateCommand`, `deleteCommand`, `getCurrentStateCommand`, and `getChangesCommand`, you can use a complex object instead of plain `string`.
+
+| Key                    | Required | Type    | Description                                                                                                                                                     |
+| ---------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| command                | yes      | string  | Shell command to execute.                                                                                                                                       |
+| exposeStackCredentials | no       | boolean | Make the current stack's AWS credentials available for the shell command. Defaults to false.                                                                    |
+| exposeStackRegion      | no       | boolean | Make the current stack's region available for the shell command. Defaults to false.                                                                             |
+| cwd                    | no       | string  | Path to the working directory from where the shell command is executed. Relative to the current project directory.                                              |
+| capture                | no       | string  | Controls how to capture the output of the executed shell command. By default, all output is captured. To capture only the last line, set this to **last-line**. |
+
+## Environment Variables Available in the Shell Commands
+
+The following environment variables are available in the shell commands:
+
+| Name                     | Description                                                                                                                                                            |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AWS_ACCESS_KEY_ID        | If `exposeStackCredentials` is **true**, this will hold the access key id of credentials of the current stack.                                                         |
+| AWS_SECRET_ACCESS_KEY    | If `exposeStackCredentials` is **true**, this will hold the secret access key of credentials of the current stack.                                                     |
+| AWS_SESSION_TOKEN        | If `exposeStackCredentials` is **true**, this will hold the session token of credentials of the current stack.                                                         |
+| AWS_SECURITY_TOKEN       | If `exposeStackCredentials` is **true**, this will hold the session token of credentials of the current stack.                                                         |
+| AWS_DEFAULT_REGION       | If `exposeStackRegion` is **true**, this will hold the region of the current stack.                                                                                    |
+| TKM_TAGS_JSON            | Stack tags in JSON format.                                                                                                                                             |
+| TKM_TAG\_\<tag-name>     | Each stack tag where the \<tag-name> placeholder is replaced with the tag's name converted in uppercase and special characters replaced with underscore.               |
+| TKM_PARAMETERS_JSON      | Stack parameters in JSON format.                                                                                                                                       |
+| TKM_PARAM\_\<param-name> | Each stack parameter where the \<param-name> placeholder is replaced with the parameter's name converted in uppercase and special characters replaced with underscore. |
+
+## How Command Custom Stack Works?
+
+### Deploy
+
+This is what happens when Takomo [deploy](../command-line-usage/deploy-stacks.mdx) command is executed:
+
+1. Stack's current state is retrieved by invoking `getCurrentStateCommand` command.
+2. Planned changes to the stack are retrieved by invoking `getChangesCommand` command.
+3. If the stack's current state has status `CREATE_COMPLETE` or `UPDATE_COMPLETE`, the stack is updated by invoking `updateCommand`. Otherwise the stack will be created by invoking `createCommand`.
+
+### Undeploy
+
+This is what happens when Takomo [undeploy](../command-line-usage/undeploy-stacks.mdx) command is executed:
+
+1. Stack's current state is retrieved by invoking `getCurrentStateCommand` command.
+2. If the stack's current state has status `CREATE_COMPLETE`, `UPDATE_COMPLETE` or `UNKNOWN`, the stack is delete by invoking `deleteCommand`. Otherwise the stack delete is skipped.
+
+## How to Implement Commands?
+
+All commands must output valid JSON string. Use `capture` property to control whether you want to use the whole script output or just the last line.
+
+### Get Current State
+
+This command is used to determine the current state of the custom stack.
+
+The command must output valid JSON string representing <ApiLink text="CustomStackState" source="types/CustomStackState.html"/>.
+
+Note that only `status` property is required, so the minimum state can look like this:
+
+```json
+{ "status": "PENDING" }
+```
+
+The status can be one of the following:
+
+- `CREATE_COMPLETE` = Stack exists
+- `UPDATE_COMPLETE` = Stack exists
+- `PENDING` = Stack does not exist
+- `UNKNOWN` = Stack status is unknown
+
+### Get Changes
+
+During deploy operation, this command is used to determine what changes the operation would apply to the custom stack.
+
+The command must output valid JSON string representing an array of <ApiLink text="CustomStackChange" source="types/CustomStackChange.html"/> objects.
+
+You can return empty array if no changes are expected:
+
+```json
+[]
+```
+
+Or if there are changes, you can return:
+
+```json
+[{ "description": "some resource will be changed" }]
+```
+
+There are no requirements for descriptions other than they should preferably be something informative.
+
+### Create
+
+During deploy operation, this command is used to create new custom stack resources.
+
+The command must output valid JSON string representing <ApiLink text="CustomStackState" source="types/CustomStackState.html"/>.
+
+Note that only `status` property is required, so the minimum state can look like this:
+
+```json
+{ "status": "CREATE_COMPLETE" }
+```
+
+### Update
+
+During deploy operation, this command is used to update existing custom stack resources.
+
+The command must output valid JSON string representing <ApiLink text="CustomStackState" source="types/CustomStackState.html"/>.
+
+Note that only `status` property is required, so the minimum state can look like this:
+
+```json
+{ "status": "UPDATE_COMPLETE" }
+```
+
+### Delete
+
+During undeploy operation, this command is used to delete existing custom stack resources.
+
+The command output is ignored.
+
+## Examples
+
+Simple usage of Command custom stack. Set `customType: cmd` to specify that you want to use Command custom stack.
+
+Then, define configuration for the custom stack with `customConfig` property.
+
+In this example, each command invokes a shell script that implements the actual logic. Properties `exposeStackCredentials` and `exposeStackRegion`
+are set to `true`, so the shell script can access credentials and region of the current custom stack.
+
+```yaml
+customType: cmd
+customConfig:
+  getCurrentStateCommand: ./get-current-state.sh
+  getChangesCommand: ./get-changes.sh
+  createCommand: ./create-stack.sh
+  updateCommand: ./update-stack.sh
+  deleteCommand: ./delete-stack.sh
+  exposeStackCredentials: true
+  exposeStackRegion: true
+```

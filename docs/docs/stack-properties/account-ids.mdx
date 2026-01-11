@@ -9,33 +9,34 @@ You can mitigate this risk with the `accountIds` property, which lets you define
 A single allowed account:
 
 ```yaml
-accountIds: "123456789012"
+accountIds: '123456789012'
 ```
 
 A list of allowed accounts:
 
 ```yaml
 accountIds:
-  - "876272828282"
-  - "763273627326"
+  - '876272828282'
+  - '763273627326'
 ```
 
-## Usage in Configuration
+## Usage In Configuration
 
 `accountIds` property can be defined in:
 
 - stack group configuration files
 - blueprint configuration files
 - stack configuration files
+- custom stack configuration files
 
 ### Stack Group Config File
 
-When `accountIds` property is defined in a stack group configuration file: 
+When `accountIds` property is defined in a stack group configuration file:
 
 - its value completely overrides the value inherited from the parent stack group
 - its value is inherited by stack groups and stacks that belong under the stack group
 
-### Blueprint Config File 
+### Blueprint Config File
 
 When `accountIds` property is defined in a blueprint configuration file:
 
@@ -48,6 +49,12 @@ When `accountIds` property is defined in a stack configuration file:
 
 - if the stack extends a blueprint, its value completely overrides the value inherited from the blueprint
 - otherwise, its value completely overrides the value inherited from the parent stack group
+
+### Custom Stack Config File
+
+When `accountIds` property is defined in a custom stack configuration file:
+
+- its value completely overrides the value inherited from the parent stack group
 
 ## Requirements
 

@@ -1,4 +1,4 @@
-# SSM parameter resolver
+# SSM Parameter Resolver
 
 The SSM parameter resolver reads parameter values from SSM parameter store. The parameter can be encrypted.
 
@@ -6,14 +6,14 @@ The SSM parameter resolver reads parameter values from SSM parameter store. The 
 
 Here are the properties of the SSM parameter resolver:
 
-| Key | Required | Type | Description |
-| --- | -------- | ---- | ----------- |
-| resolver | yes | string | Resolver name, this must be **ssm**. |
-| name | yes | string | Name of the SSM parameter. |
-| region | no | string | Region where the SSM parameter resides. By default, Takomo uses the region of the stack where the parameter resolver is used. |
-| commandRole | no  | string | IAM role used to access the SSM parameter. Command role is optional. By default, credentials associated with the current stack are used. |
-| confidential | no | boolean | Conceal the resolved parameter value from logs, defaults to **false**. |
-| immutable | no | boolean | Mark the parameter as immutable, defaults to **false**. |
+| Key          | Required | Type    | Description                                                                                                                              |
+| ------------ | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| resolver     | yes      | string  | Resolver name, this must be **ssm**.                                                                                                     |
+| name         | yes      | string  | Name of the SSM parameter.                                                                                                               |
+| region       | no       | string  | Region where the SSM parameter resides. By default, Takomo uses the region of the stack where the parameter resolver is used.            |
+| commandRole  | no       | string  | IAM role used to access the SSM parameter. Command role is optional. By default, credentials associated with the current stack are used. |
+| confidential | no       | boolean | Conceal the resolved parameter value from logs, defaults to **false**.                                                                   |
+| immutable    | no       | boolean | Mark the parameter as immutable, defaults to **false**.                                                                                  |
 
 ## Examples
 

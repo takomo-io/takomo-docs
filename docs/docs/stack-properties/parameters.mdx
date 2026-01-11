@@ -89,27 +89,34 @@ parameters:
     commandRole: arn:aws:iam::123456789012:role/deployer
 ```
 
-## Usage in configuration
+## Usage In Configuration
 
 `parameters` property can be defined in:
 
 - blueprint configuration files
 - stack configuration files
+- custom stack configuration files
 
-### Blueprint config file
+### Blueprint Config File
 
 When `parameters` property is defined in a blueprint configuration file:
 
 - its value is inherited by stacks that extend the blueprint
 
-### Stack config file
+### Stack Config File
 
 When `parameters` property is defined in a stack configuration file:
 
 - if the stack extends a blueprint, its value is merged with the value inherited from the blueprint
 - otherwise, its value is used as is
 
-## Configuration merging
+### Custom Stack Config File
+
+When `parameters` property is defined in a custom stack configuration file:
+
+- its value is used as is
+
+## Configuration Merging
 
 Configuration merging happens when a stack inherits `parameters` property from a blueprint but also defines `parameters` property of its own.
 
@@ -124,4 +131,3 @@ The `parameters` property must satisfy these requirements:
 
 - Parameter name must be a string
 - Parameter name must match regex `^[a-zA-Z0-9]*$`
-

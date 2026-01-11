@@ -13,36 +13,43 @@ tags:
   backups: true
 ```
 
-## Usage in configuration
+## Usage In Configuration
 
 `tags` property can be defined in:
 
 - stack group configuration files
 - blueprint configuration files
 - stack configuration files
+- custom stack configuration files
 
-### Stack group config file
+### Stack Group Config File
 
 When `data` property is defined in a stack group configuration file:
 
 - its value is merged with the value inherited from the parent stack group
 - its value is inherited by stack groups and stacks that belong under the stack group
 
-### Blueprint config file
+### Blueprint Config File
 
 When `data` property is defined in a blueprint configuration file:
 
 - its value is merged with the value inherited from the parent stack group
 - its value is inherited by stacks that extend the blueprint
 
-### Stack config file
+### Stack Config File
 
 When `data` property is defined in a stack configuration file:
 
 - if the stack extends a blueprint, its value is merged with the value inherited from the blueprint
 - otherwise, its value is merged with the value inherited from the parent stack group
 
-## Configuration merging
+### Custom Stack Config File
+
+When `data` property is defined in a custom stack configuration file:
+
+- its value is merged with the value inherited from the parent stack group
+
+## Configuration Merging
 
 Configuration merging happens when a stack group, blueprint or stack inherits `tags` property but also defines `tags` property of its own.
 
