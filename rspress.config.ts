@@ -24,6 +24,9 @@ export default defineConfig({
       domain: 'https://takomo.io',
     }),
   ],
+  markdown: {
+    showLineNumbers: true,
+  },
   themeConfig: {
     enableScrollToTop: true,
     socialLinks: [

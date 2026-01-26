@@ -1,5 +1,1403 @@
+import ApiLink from '@components/ApiLink';
+
 # Implementing Custom Stacks
 
-:::note
-Documentation will be added soon
-:::
+You can create your own custom stacks with TypeScript by implementing <ApiLink text="CustomStackHandler" source="interfaces/CustomStackHandler.html"/> interface.
+Let’s walk through how this works in practice by implementing a custom stack handler that we use to deploy CloudFormation stacks 😀.
+
+## Custom Stack State
+
+First, you need to decide what information you want to expose in your custom stack's state.
+The only requirement is that the state object must implement <ApiLink text="CustomStackState" source="types/CustomStackState.html"/> interface.
+
+Create `my-custom-stack.ts` file and place it in the `src` directory of your Takomo project.
+Add the following content into the file.
+
+```typescript title=src/my-custom-stack.ts {1-5}
+import { CustomStackState } from 'takomo';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+```
+
+## Custom Stack Configuration
+
+Next, you need to decide what information you want to pass for your custom stack handler from stack configuration files.
+As we are building a handler for CloudFormation, we propably want to be able to pass stack template.
+
+```typescript title=src/my-custom-stack.ts {7-9}
+import { CustomStackState } from 'takomo';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+```
+
+## Custom Stack Type
+
+Each custom stack handler needs to have a unique type which you can reference from stack configuration files.
+
+```typescript title=src/my-custom-stack.ts {1,11-16}
+import { CustomStackState, CustomStackHandler } from 'takomo';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+};
+```
+
+## Parsing Custom Stack Configuration
+
+It's the responsibility of a custom stack handler to parse and validate its own configuration the user specifies in stack configuration files.
+Implement `parseConfig` function.
+
+```typescript title=src/my-custom-stack.ts {4-5,21-46}
+import {
+  CustomStackState,
+  CustomStackHandler,
+  ParseConfigProps,
+  ParseConfigResult,
+} from 'takomo';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+  parseConfig: async ({
+    rawConfig,
+  }: ParseConfigProps): Promise<ParseConfigResult<MyCustomStackConfig>> => {
+    const configObj = rawConfig as Record<string, unknown>;
+
+    // Validate that stackTemplate property is defined
+    if (configObj.stackTemplate === undefined) {
+      return {
+        success: false,
+        message: 'stackTemplate is required in custom stack config',
+      };
+    }
+
+    // Validate that stackTemplate is of type string
+    if (typeof configObj.stackTemplate !== 'string') {
+      return {
+        success: false,
+        message: 'stackTemplate is must be string in custom stack config',
+      };
+    }
+
+    return {
+      success: true,
+      parsedConfig: configObj as MyCustomStackConfig,
+    };
+  },
+};
+```
+
+## Get Current State
+
+You then need to implement returning of the current state of your custom stack.
+In this example, we query stack's state using AWS SDK.
+
+```typescript title=src/my-custom-stack.ts {6-7,9-13,23-89,122-154}
+import {
+  CustomStackState,
+  CustomStackHandler,
+  ParseConfigProps,
+  ParseConfigResult,
+  GetCurrentStateProps,
+  GetCurrentStateResult,
+} from 'takomo';
+import {
+  CloudFormationClient,
+  DescribeStacksCommand,
+  Stack,
+} from '@aws-sdk/client-cloudformation';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+// Utility function to convert an array to record
+const arrayToRecord = <T extends object, K extends string | number | symbol, V>(
+  array: ReadonlyArray<T>,
+  keyExtractor: (item: T) => K,
+  valueExtractor: (item: T) => V,
+): Record<K, V> =>
+  array.reduce(
+    (collected, item) => ({
+      ...collected,
+      [keyExtractor(item)]: valueExtractor(item),
+    }),
+    {} as Record<K, V>,
+  );
+
+// Utility function to convert a CloudFormation stack to a CustomStackState
+const convertToCustomStackState = (stack?: Stack): CustomStackState => {
+  if (!stack) {
+    return { status: 'PENDING' };
+  }
+
+  const outputs = arrayToRecord(
+    stack.Outputs ?? [],
+    (output) => output.OutputKey!,
+    (output) => output.OutputValue!,
+  );
+
+  const tags = arrayToRecord(
+    stack.Tags ?? [],
+    (tag) => tag.Key!,
+    (tag) => tag.Value!,
+  );
+
+  const parameters = arrayToRecord(
+    stack.Parameters ?? [],
+    (param) => param.ParameterKey!,
+    (param) => param.ParameterValue!,
+  );
+
+  return { status: 'CREATE_COMPLETE', outputs, tags, parameters };
+};
+
+// Utility function to describe a CloudFormation stack
+const describeStack = async (
+  client: CloudFormationClient,
+  stackName: string,
+): Promise<CustomStackState | undefined> => {
+  try {
+    const { Stacks = [] } = await client.send(
+      new DescribeStacksCommand({ StackName: stackName }),
+    );
+
+    if (Stacks.length === 0) {
+      return undefined;
+    }
+
+    return convertToCustomStackState(Stacks[0]);
+  } catch (e) {
+    const error = e as any;
+    if (error.Code === 'ValidationError') {
+      if (error.message === `Stack with id ${stackName} does not exist`) {
+        return undefined;
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+  parseConfig: async ({
+    rawConfig,
+  }: ParseConfigProps): Promise<ParseConfigResult<MyCustomStackConfig>> => {
+    const configObj = rawConfig as Record<string, unknown>;
+
+    // Validate that stackTemplate property is defined
+    if (configObj.stackTemplate === undefined) {
+      return {
+        success: false,
+        message: 'stackTemplate is required in custom stack config',
+      };
+    }
+
+    // Validate that stackTemplate is of type string
+    if (typeof configObj.stackTemplate !== 'string') {
+      return {
+        success: false,
+        message: 'stackTemplate is must be string in custom stack config',
+      };
+    }
+
+    return {
+      success: true,
+      parsedConfig: configObj as MyCustomStackConfig,
+    };
+  },
+  getCurrentState: async ({
+    stack,
+  }: GetCurrentStateProps<TestingCustomStackHandlerConfig>): Promise<
+    GetCurrentStateResult<CustomStackState>
+  > => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const currentState = await describeStack(client, stack.name);
+
+      if (currentState) {
+        return {
+          currentState,
+          success: true,
+        };
+      }
+      return { currentState: { status: 'PENDING' }, success: true };
+    } catch (e) {
+      const error = e as any;
+      if (error.Code === 'ValidationError') {
+        if (error.message === `Stack with id ${stack.name} does not exist`) {
+          return { currentState: { status: 'PENDING' }, success: true };
+        }
+      }
+
+      return { success: false, error, message: error.message };
+    }
+  },
+};
+```
+
+## Get Changes
+
+Next, we implement a function `getChanges()` to get expected changes to resources that are being updated.
+Implementing this function is not mandatory but if you don't do it, Takomo will fallback to default behavior
+and assume that there will always be changes. In this example, our implementation is simplified.
+
+```typescript title=src/my-custom-stack.ts {8-9,157-188}
+import {
+  CustomStackState,
+  CustomStackHandler,
+  ParseConfigProps,
+  ParseConfigResult,
+  GetCurrentStateProps,
+  GetCurrentStateResult,
+  GetChangesProps,
+  GetChangesResult,
+} from 'takomo';
+import {
+  CloudFormationClient,
+  DescribeStacksCommand,
+  Stack,
+} from '@aws-sdk/client-cloudformation';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+// Utility function to convert an array to record
+const arrayToRecord = <T extends object, K extends string | number | symbol, V>(
+  array: ReadonlyArray<T>,
+  keyExtractor: (item: T) => K,
+  valueExtractor: (item: T) => V,
+): Record<K, V> =>
+  array.reduce(
+    (collected, item) => ({
+      ...collected,
+      [keyExtractor(item)]: valueExtractor(item),
+    }),
+    {} as Record<K, V>,
+  );
+
+// Utility function to convert a CloudFormation stack to a CustomStackState
+const convertToCustomStackState = (stack?: Stack): CustomStackState => {
+  if (!stack) {
+    return { status: 'PENDING' };
+  }
+
+  const outputs = arrayToRecord(
+    stack.Outputs ?? [],
+    (output) => output.OutputKey!,
+    (output) => output.OutputValue!,
+  );
+
+  const tags = arrayToRecord(
+    stack.Tags ?? [],
+    (tag) => tag.Key!,
+    (tag) => tag.Value!,
+  );
+
+  const parameters = arrayToRecord(
+    stack.Parameters ?? [],
+    (param) => param.ParameterKey!,
+    (param) => param.ParameterValue!,
+  );
+
+  return { status: 'CREATE_COMPLETE', outputs, tags, parameters };
+};
+
+// Utility function to describe a CloudFormation stack
+const describeStack = async (
+  client: CloudFormationClient,
+  stackName: string,
+): Promise<CustomStackState | undefined> => {
+  try {
+    const { Stacks = [] } = await client.send(
+      new DescribeStacksCommand({ StackName: stackName }),
+    );
+
+    if (Stacks.length === 0) {
+      return undefined;
+    }
+
+    return convertToCustomStackState(Stacks[0]);
+  } catch (e) {
+    const error = e as any;
+    if (error.Code === 'ValidationError') {
+      if (error.message === `Stack with id ${stackName} does not exist`) {
+        return undefined;
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+  parseConfig: async ({
+    rawConfig,
+  }: ParseConfigProps): Promise<ParseConfigResult<MyCustomStackConfig>> => {
+    const configObj = rawConfig as Record<string, unknown>;
+
+    // Validate that stackTemplate property is defined
+    if (configObj.stackTemplate === undefined) {
+      return {
+        success: false,
+        message: 'stackTemplate is required in custom stack config',
+      };
+    }
+
+    // Validate that stackTemplate is of type string
+    if (typeof configObj.stackTemplate !== 'string') {
+      return {
+        success: false,
+        message: 'stackTemplate is must be string in custom stack config',
+      };
+    }
+
+    return {
+      success: true,
+      parsedConfig: configObj as MyCustomStackConfig,
+    };
+  },
+  getCurrentState: async ({
+    stack,
+  }: GetCurrentStateProps<TestingCustomStackHandlerConfig>): Promise<
+    GetCurrentStateResult<CustomStackState>
+  > => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const currentState = await describeStack(client, stack.name);
+
+      if (currentState) {
+        return {
+          currentState,
+          success: true,
+        };
+      }
+      return { currentState: { status: 'PENDING' }, success: true };
+    } catch (e) {
+      const error = e as any;
+      if (error.Code === 'ValidationError') {
+        if (error.message === `Stack with id ${stack.name} does not exist`) {
+          return { currentState: { status: 'PENDING' }, success: true };
+        }
+      }
+
+      return { success: false, error, message: error.message };
+    }
+  },
+  getChanges: async ({
+    stack,
+  }: GetChangesProps<
+    MyCustomStackConfig,
+    MyCustomStackState
+  >): Promise<GetChangesResult> => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const state = await describeStack(client, stack.name);
+
+      if (state) {
+        return {
+          changes: [{ description: 'Stack exists and will be updated' }],
+          success: true,
+        };
+      }
+
+      return {
+        changes: [{ description: 'Stack does not exist and will be created' }],
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, error, message: error.message };
+    }
+  },
+};
+```
+
+## Delete Stack
+
+Alright, now that we got all boilerplate in place, we can implement the actual logic to create, update and delete custom stacks.
+We start by implementing `delete()` function.
+
+```typescript title=src/my-custom-stack.ts {10-11,17-18,193-227}
+import {
+  CustomStackState,
+  CustomStackHandler,
+  ParseConfigProps,
+  ParseConfigResult,
+  GetCurrentStateProps,
+  GetCurrentStateResult,
+  GetChangesProps,
+  GetChangesResult,
+  DeleteCustomStackProps,
+  DeleteCustomStackResult,
+} from 'takomo';
+import {
+  CloudFormationClient,
+  DescribeStacksCommand,
+  Stack,
+  DeleteStackCommand,
+  waitUntilStackDeleteComplete,
+} from '@aws-sdk/client-cloudformation';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+// Utility function to convert an array to record
+const arrayToRecord = <T extends object, K extends string | number | symbol, V>(
+  array: ReadonlyArray<T>,
+  keyExtractor: (item: T) => K,
+  valueExtractor: (item: T) => V,
+): Record<K, V> =>
+  array.reduce(
+    (collected, item) => ({
+      ...collected,
+      [keyExtractor(item)]: valueExtractor(item),
+    }),
+    {} as Record<K, V>,
+  );
+
+// Utility function to convert a CloudFormation stack to a CustomStackState
+const convertToCustomStackState = (stack?: Stack): CustomStackState => {
+  if (!stack) {
+    return { status: 'PENDING' };
+  }
+
+  const outputs = arrayToRecord(
+    stack.Outputs ?? [],
+    (output) => output.OutputKey!,
+    (output) => output.OutputValue!,
+  );
+
+  const tags = arrayToRecord(
+    stack.Tags ?? [],
+    (tag) => tag.Key!,
+    (tag) => tag.Value!,
+  );
+
+  const parameters = arrayToRecord(
+    stack.Parameters ?? [],
+    (param) => param.ParameterKey!,
+    (param) => param.ParameterValue!,
+  );
+
+  return { status: 'CREATE_COMPLETE', outputs, tags, parameters };
+};
+
+// Utility function to describe a CloudFormation stack
+const describeStack = async (
+  client: CloudFormationClient,
+  stackName: string,
+): Promise<CustomStackState | undefined> => {
+  try {
+    const { Stacks = [] } = await client.send(
+      new DescribeStacksCommand({ StackName: stackName }),
+    );
+
+    if (Stacks.length === 0) {
+      return undefined;
+    }
+
+    return convertToCustomStackState(Stacks[0]);
+  } catch (e) {
+    const error = e as any;
+    if (error.Code === 'ValidationError') {
+      if (error.message === `Stack with id ${stackName} does not exist`) {
+        return undefined;
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+  parseConfig: async ({
+    rawConfig,
+  }: ParseConfigProps): Promise<ParseConfigResult<MyCustomStackConfig>> => {
+    const configObj = rawConfig as Record<string, unknown>;
+
+    // Validate that stackTemplate property is defined
+    if (configObj.stackTemplate === undefined) {
+      return {
+        success: false,
+        message: 'stackTemplate is required in custom stack config',
+      };
+    }
+
+    // Validate that stackTemplate is of type string
+    if (typeof configObj.stackTemplate !== 'string') {
+      return {
+        success: false,
+        message: 'stackTemplate is must be string in custom stack config',
+      };
+    }
+
+    return {
+      success: true,
+      parsedConfig: configObj as MyCustomStackConfig,
+    };
+  },
+  getCurrentState: async ({
+    stack,
+  }: GetCurrentStateProps<TestingCustomStackHandlerConfig>): Promise<
+    GetCurrentStateResult<CustomStackState>
+  > => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const currentState = await describeStack(client, stack.name);
+
+      if (currentState) {
+        return {
+          currentState,
+          success: true,
+        };
+      }
+      return { currentState: { status: 'PENDING' }, success: true };
+    } catch (e) {
+      const error = e as any;
+      if (error.Code === 'ValidationError') {
+        if (error.message === `Stack with id ${stack.name} does not exist`) {
+          return { currentState: { status: 'PENDING' }, success: true };
+        }
+      }
+
+      return { success: false, error, message: error.message };
+    }
+  },
+  getChanges: async ({
+    stack,
+  }: GetChangesProps<
+    MyCustomStackConfig,
+    MyCustomStackState
+  >): Promise<GetChangesResult> => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const state = await describeStack(client, stack.name);
+
+      if (state) {
+        return {
+          changes: [{ description: 'Stack exists and will be updated' }],
+          success: true,
+        };
+      }
+
+      return {
+        changes: [{ description: 'Stack does not exist and will be created' }],
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, error, message: error.message };
+    }
+  },
+  delete: async ({
+    stack,
+    logger,
+  }: DeleteCustomStackProps<
+    TestingCustomStackHandlerConfig,
+    CustomStackState
+  >): Promise<DeleteCustomStackResult> => {
+    logger.info(`About to delete custom stack '${stack.name}'`);
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      logger.info(`Initiating stack deletion`);
+      await client.send(new DeleteStackCommand({ StackName: stack.name }));
+
+      logger.info(`Waiting for stack deletion to complete`);
+      await waitUntilStackDeleteComplete(
+        { client, maxWaitTime: 2 * 60 * 1000 },
+        { StackName: stack.name },
+      );
+
+      logger.info(`Stack deletion complete`);
+
+      return {
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, message: error.message, error };
+    }
+  },
+};
+```
+
+## Create Stack
+
+Next, we implement `create()` function that takes care creating custom stacks.
+
+```typescript title=src/my-custom-stack.ts {12-13,21-22,232-286}
+import {
+  CustomStackState,
+  CustomStackHandler,
+  ParseConfigProps,
+  ParseConfigResult,
+  GetCurrentStateProps,
+  GetCurrentStateResult,
+  GetChangesProps,
+  GetChangesResult,
+  DeleteCustomStackProps,
+  DeleteCustomStackResult,
+  CreateCustomStackProps,
+  CreateCustomStackResult,
+} from 'takomo';
+import {
+  CloudFormationClient,
+  DescribeStacksCommand,
+  Stack,
+  DeleteStackCommand,
+  waitUntilStackDeleteComplete,
+  CreateStackCommand,
+  waitUntilStackCreateComplete,
+} from '@aws-sdk/client-cloudformation';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+// Utility function to convert an array to record
+const arrayToRecord = <T extends object, K extends string | number | symbol, V>(
+  array: ReadonlyArray<T>,
+  keyExtractor: (item: T) => K,
+  valueExtractor: (item: T) => V,
+): Record<K, V> =>
+  array.reduce(
+    (collected, item) => ({
+      ...collected,
+      [keyExtractor(item)]: valueExtractor(item),
+    }),
+    {} as Record<K, V>,
+  );
+
+// Utility function to convert a CloudFormation stack to a CustomStackState
+const convertToCustomStackState = (stack?: Stack): CustomStackState => {
+  if (!stack) {
+    return { status: 'PENDING' };
+  }
+
+  const outputs = arrayToRecord(
+    stack.Outputs ?? [],
+    (output) => output.OutputKey!,
+    (output) => output.OutputValue!,
+  );
+
+  const tags = arrayToRecord(
+    stack.Tags ?? [],
+    (tag) => tag.Key!,
+    (tag) => tag.Value!,
+  );
+
+  const parameters = arrayToRecord(
+    stack.Parameters ?? [],
+    (param) => param.ParameterKey!,
+    (param) => param.ParameterValue!,
+  );
+
+  return { status: 'CREATE_COMPLETE', outputs, tags, parameters };
+};
+
+// Utility function to describe a CloudFormation stack
+const describeStack = async (
+  client: CloudFormationClient,
+  stackName: string,
+): Promise<CustomStackState | undefined> => {
+  try {
+    const { Stacks = [] } = await client.send(
+      new DescribeStacksCommand({ StackName: stackName }),
+    );
+
+    if (Stacks.length === 0) {
+      return undefined;
+    }
+
+    return convertToCustomStackState(Stacks[0]);
+  } catch (e) {
+    const error = e as any;
+    if (error.Code === 'ValidationError') {
+      if (error.message === `Stack with id ${stackName} does not exist`) {
+        return undefined;
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+  parseConfig: async ({
+    rawConfig,
+  }: ParseConfigProps): Promise<ParseConfigResult<MyCustomStackConfig>> => {
+    const configObj = rawConfig as Record<string, unknown>;
+
+    // Validate that stackTemplate property is defined
+    if (configObj.stackTemplate === undefined) {
+      return {
+        success: false,
+        message: 'stackTemplate is required in custom stack config',
+      };
+    }
+
+    // Validate that stackTemplate is of type string
+    if (typeof configObj.stackTemplate !== 'string') {
+      return {
+        success: false,
+        message: 'stackTemplate is must be string in custom stack config',
+      };
+    }
+
+    return {
+      success: true,
+      parsedConfig: configObj as MyCustomStackConfig,
+    };
+  },
+  getCurrentState: async ({
+    stack,
+  }: GetCurrentStateProps<TestingCustomStackHandlerConfig>): Promise<
+    GetCurrentStateResult<CustomStackState>
+  > => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const currentState = await describeStack(client, stack.name);
+
+      if (currentState) {
+        return {
+          currentState,
+          success: true,
+        };
+      }
+      return { currentState: { status: 'PENDING' }, success: true };
+    } catch (e) {
+      const error = e as any;
+      if (error.Code === 'ValidationError') {
+        if (error.message === `Stack with id ${stack.name} does not exist`) {
+          return { currentState: { status: 'PENDING' }, success: true };
+        }
+      }
+
+      return { success: false, error, message: error.message };
+    }
+  },
+  getChanges: async ({
+    stack,
+  }: GetChangesProps<
+    MyCustomStackConfig,
+    MyCustomStackState
+  >): Promise<GetChangesResult> => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const state = await describeStack(client, stack.name);
+
+      if (state) {
+        return {
+          changes: [{ description: 'Stack exists and will be updated' }],
+          success: true,
+        };
+      }
+
+      return {
+        changes: [{ description: 'Stack does not exist and will be created' }],
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, error, message: error.message };
+    }
+  },
+  delete: async ({
+    stack,
+    logger,
+  }: DeleteCustomStackProps<
+    TestingCustomStackHandlerConfig,
+    CustomStackState
+  >): Promise<DeleteCustomStackResult> => {
+    logger.info(`About to delete custom stack '${stack.name}'`);
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      logger.info(`Initiating stack deletion`);
+      await client.send(new DeleteStackCommand({ StackName: stack.name }));
+
+      logger.info(`Waiting for stack deletion to complete`);
+      await waitUntilStackDeleteComplete(
+        { client, maxWaitTime: 2 * 60 * 1000 },
+        { StackName: stack.name },
+      );
+
+      logger.info(`Stack deletion complete`);
+
+      return {
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, message: error.message, error };
+    }
+  },
+  create: async ({
+    stack,
+    config,
+    tags,
+    parameters,
+    logger,
+  }: CreateCustomStackProps<TestingCustomStackHandlerConfig>): Promise<
+    CreateCustomStackResult<CustomStackState>
+  > => {
+    logger.info(`About to create custom stack '${stack.name}'`);
+
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      logger.info(`Initiating stack creation`);
+      await client.send(
+        new CreateStackCommand({
+          StackName: stack.name,
+          TemplateBody: config.stackTemplate,
+          Tags: Object.entries(tags).map(([Key, Value]) => ({ Key, Value })),
+          Parameters: Object.entries(parameters).map(
+            ([ParameterKey, ParameterValue]) => ({
+              ParameterKey,
+              ParameterValue,
+            }),
+          ),
+        }),
+      );
+      logger.info(`Waiting for stack creation to complete`);
+      await waitUntilStackCreateComplete(
+        { client, maxWaitTime: 3 * 60 * 1000 },
+        { StackName: stack.name },
+      );
+
+      logger.info(`Stack creation complete`);
+      const createdState = await describeStack(client, stack.name);
+
+      if (createdState) {
+        return {
+          createdState,
+          success: true,
+        };
+      }
+
+      throw new Error('Failed to retrieve stack state after creation');
+    } catch (e) {
+      const error = e as any;
+      return { success: false, message: error.message, error };
+    }
+  },
+};
+```
+
+## Update Stack
+
+Finally, we implement `update()` function that takes care updating custom stacks.
+
+```typescript title=src/my-custom-stack.ts {14-15,25-26,291-348}
+import {
+  CustomStackState,
+  CustomStackHandler,
+  ParseConfigProps,
+  ParseConfigResult,
+  GetCurrentStateProps,
+  GetCurrentStateResult,
+  GetChangesProps,
+  GetChangesResult,
+  DeleteCustomStackProps,
+  DeleteCustomStackResult,
+  CreateCustomStackProps,
+  CreateCustomStackResult,
+  UpdateCustomStackProps,
+  UpdateCustomStackResult,
+} from 'takomo';
+import {
+  CloudFormationClient,
+  DescribeStacksCommand,
+  Stack,
+  DeleteStackCommand,
+  waitUntilStackDeleteComplete,
+  CreateStackCommand,
+  waitUntilStackCreateComplete,
+  UpdateStackCommand,
+  waitUntilStackUpdateComplete,
+} from '@aws-sdk/client-cloudformation';
+
+type MyCustomStackState = CustomStackState & {
+  // Here we can add more state information later
+};
+
+type MyCustomStackConfig = {
+  stackTemplate: string;
+};
+
+// Utility function to convert an array to record
+const arrayToRecord = <T extends object, K extends string | number | symbol, V>(
+  array: ReadonlyArray<T>,
+  keyExtractor: (item: T) => K,
+  valueExtractor: (item: T) => V,
+): Record<K, V> =>
+  array.reduce(
+    (collected, item) => ({
+      ...collected,
+      [keyExtractor(item)]: valueExtractor(item),
+    }),
+    {} as Record<K, V>,
+  );
+
+// Utility function to convert a CloudFormation stack to a CustomStackState
+const convertToCustomStackState = (stack?: Stack): CustomStackState => {
+  if (!stack) {
+    return { status: 'PENDING' };
+  }
+
+  const outputs = arrayToRecord(
+    stack.Outputs ?? [],
+    (output) => output.OutputKey!,
+    (output) => output.OutputValue!,
+  );
+
+  const tags = arrayToRecord(
+    stack.Tags ?? [],
+    (tag) => tag.Key!,
+    (tag) => tag.Value!,
+  );
+
+  const parameters = arrayToRecord(
+    stack.Parameters ?? [],
+    (param) => param.ParameterKey!,
+    (param) => param.ParameterValue!,
+  );
+
+  return { status: 'CREATE_COMPLETE', outputs, tags, parameters };
+};
+
+// Utility function to describe a CloudFormation stack
+const describeStack = async (
+  client: CloudFormationClient,
+  stackName: string,
+): Promise<CustomStackState | undefined> => {
+  try {
+    const { Stacks = [] } = await client.send(
+      new DescribeStacksCommand({ StackName: stackName }),
+    );
+
+    if (Stacks.length === 0) {
+      return undefined;
+    }
+
+    return convertToCustomStackState(Stacks[0]);
+  } catch (e) {
+    const error = e as any;
+    if (error.Code === 'ValidationError') {
+      if (error.message === `Stack with id ${stackName} does not exist`) {
+        return undefined;
+      }
+    }
+
+    throw e;
+  }
+};
+
+export const myCustomStackHandler: CustomStackHandler<
+  MyCustomStackConfig,
+  MyCustomStackState
+> = {
+  type: 'my-custom-stack',
+  parseConfig: async ({
+    rawConfig,
+  }: ParseConfigProps): Promise<ParseConfigResult<MyCustomStackConfig>> => {
+    const configObj = rawConfig as Record<string, unknown>;
+
+    // Validate that stackTemplate property is defined
+    if (configObj.stackTemplate === undefined) {
+      return {
+        success: false,
+        message: 'stackTemplate is required in custom stack config',
+      };
+    }
+
+    // Validate that stackTemplate is of type string
+    if (typeof configObj.stackTemplate !== 'string') {
+      return {
+        success: false,
+        message: 'stackTemplate is must be string in custom stack config',
+      };
+    }
+
+    return {
+      success: true,
+      parsedConfig: configObj as MyCustomStackConfig,
+    };
+  },
+  getCurrentState: async ({
+    stack,
+  }: GetCurrentStateProps<TestingCustomStackHandlerConfig>): Promise<
+    GetCurrentStateResult<CustomStackState>
+  > => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const currentState = await describeStack(client, stack.name);
+
+      if (currentState) {
+        return {
+          currentState,
+          success: true,
+        };
+      }
+      return { currentState: { status: 'PENDING' }, success: true };
+    } catch (e) {
+      const error = e as any;
+      if (error.Code === 'ValidationError') {
+        if (error.message === `Stack with id ${stack.name} does not exist`) {
+          return { currentState: { status: 'PENDING' }, success: true };
+        }
+      }
+
+      return { success: false, error, message: error.message };
+    }
+  },
+  getChanges: async ({
+    stack,
+  }: GetChangesProps<
+    MyCustomStackConfig,
+    MyCustomStackState
+  >): Promise<GetChangesResult> => {
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      const state = await describeStack(client, stack.name);
+
+      if (state) {
+        return {
+          changes: [{ description: 'Stack exists and will be updated' }],
+          success: true,
+        };
+      }
+
+      return {
+        changes: [{ description: 'Stack does not exist and will be created' }],
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, error, message: error.message };
+    }
+  },
+  delete: async ({
+    stack,
+    logger,
+  }: DeleteCustomStackProps<
+    TestingCustomStackHandlerConfig,
+    CustomStackState
+  >): Promise<DeleteCustomStackResult> => {
+    logger.info(`About to delete custom stack '${stack.name}'`);
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      logger.info(`Initiating stack deletion`);
+      await client.send(new DeleteStackCommand({ StackName: stack.name }));
+
+      logger.info(`Waiting for stack deletion to complete`);
+      await waitUntilStackDeleteComplete(
+        { client, maxWaitTime: 2 * 60 * 1000 },
+        { StackName: stack.name },
+      );
+
+      logger.info(`Stack deletion complete`);
+
+      return {
+        success: true,
+      };
+    } catch (e) {
+      const error = e as any;
+      return { success: false, message: error.message, error };
+    }
+  },
+  create: async ({
+    stack,
+    config,
+    tags,
+    parameters,
+    logger,
+  }: CreateCustomStackProps<TestingCustomStackHandlerConfig>): Promise<
+    CreateCustomStackResult<CustomStackState>
+  > => {
+    logger.info(`About to create custom stack '${stack.name}'`);
+
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      logger.info(`Initiating stack creation`);
+      await client.send(
+        new CreateStackCommand({
+          StackName: stack.name,
+          TemplateBody: config.stackTemplate,
+          Tags: Object.entries(tags).map(([Key, Value]) => ({ Key, Value })),
+          Parameters: Object.entries(parameters).map(
+            ([ParameterKey, ParameterValue]) => ({
+              ParameterKey,
+              ParameterValue,
+            }),
+          ),
+        }),
+      );
+      logger.info(`Waiting for stack creation to complete`);
+      await waitUntilStackCreateComplete(
+        { client, maxWaitTime: 3 * 60 * 1000 },
+        { StackName: stack.name },
+      );
+
+      logger.info(`Stack creation complete`);
+      const createdState = await describeStack(client, stack.name);
+
+      if (createdState) {
+        return {
+          createdState,
+          success: true,
+        };
+      }
+
+      throw new Error('Failed to retrieve stack state after creation');
+    } catch (e) {
+      const error = e as any;
+      return { success: false, message: error.message, error };
+    }
+  },
+  update: async ({
+    stack,
+    config,
+    tags,
+    parameters,
+    logger,
+  }: UpdateCustomStackProps<
+    TestingCustomStackHandlerConfig,
+    CustomStackState
+  >): Promise<UpdateCustomStackResult<CustomStackState>> => {
+    logger.info(`About to update custom stack '${stack.name}'`);
+
+    const credentials = await stack.getCredentials();
+
+    const client = new CloudFormationClient({
+      credentials,
+      region: stack.region,
+    });
+
+    try {
+      logger.info(`Initiating stack update`);
+      await client.send(
+        new UpdateStackCommand({
+          StackName: stack.name,
+          TemplateBody: config.stackTemplate,
+          Tags: Object.entries(tags).map(([Key, Value]) => ({ Key, Value })),
+          Parameters: Object.entries(parameters).map(
+            ([ParameterKey, ParameterValue]) => ({
+              ParameterKey,
+              ParameterValue,
+            }),
+          ),
+        }),
+      );
+
+      logger.info(`Waiting for stack update to complete`);
+      await waitUntilStackUpdateComplete(
+        { client, maxWaitTime: 3 * 60 * 1000 },
+        { StackName: stack.name },
+      );
+
+      logger.info(`Stack update complete`);
+
+      const updatedState = await describeStack(client, stack.name);
+
+      if (updatedState) {
+        return {
+          updatedState,
+          success: true,
+        };
+      }
+
+      throw new Error('Failed to retrieve stack state after update');
+    } catch (e) {
+      const error = e as any;
+      return { success: false, message: error.message, error };
+    }
+  },
+};
+```
+
+## Register Custom Stack Handler
+
+To actually use our custom stack handler, we need to register it in `takomo.ts` file located in your project's root directory.
+
+```typescript
+import { TakomoConfig, TakomoConfigProvider } from 'takomo';
+import { myCustomStackHandler } from './src/my-custom-stack.js';
+
+const provider: TakomoConfigProvider = async (): Promise<TakomoConfig> => {
+  return {
+    customStackHandlers: [myCustomStackHandler],
+  };
+};
+
+export default provider;
+```
+
+## Using Custom Stack Handler in Stack Configuration
+
+Now that we have implemented our custom stack handler and registered it in Takomo project configuration, we can start using it in stack configuration files.
+Add a stack configuration file named `my-stack.yml` to the `stacks` directory. Set `customType` to `my-custom-stack` and provide template for your stack with `customConfig` property.
+
+```yaml
+regions: eu-north-1
+customType: my-custom-stack
+customConfig:
+  stackTemplate: |
+    Resources:
+      LogGroup:
+        Type: AWS::Logs::LogGroup
+        Properties: {}
+tags:
+  Project: My example stack
+```
+
+## Conclusion
+
+Now you should be able to implement your own custom stack handlers. Take a look at <ApiLink text="API documentation" source="interfaces/CustomStackHandler.html"/> for more details.
