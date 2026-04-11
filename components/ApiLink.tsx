@@ -6,7 +6,7 @@ export default (props: { text: string; source: string }) => {
   // }
 
   // const apiVersion = process.env.TAKOMO_VERSION!.replace(/\./g, '-')
-  const apiVersion = '9-0-4';
+  const apiVersion = '10-0-0';
 
   return (
     <a
